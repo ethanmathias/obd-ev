@@ -8,11 +8,14 @@ from .config import LoggerConfig
 
 
 class CsvLogger:
-    def __init__(self, cfg: LoggerConfig, fieldnames: List[str]):
+    def __init__(self, cfg: LoggerConfig, fieldnames: List[str], device_id: str = ""):
         self.cfg = cfg
         Path(cfg.output_dir).mkdir(parents=True, exist_ok=True)
         ts = dt.datetime.now().strftime("%Y%m%d_%H%M%S")
-        self.path = Path(cfg.output_dir) / f"drive_{ts}.csv"
+        # Filename includes device_id so uploads from many participants
+        # never collide in the shared cloud folder.
+        tag = f"_{device_id}" if device_id else ""
+        self.path = Path(cfg.output_dir) / f"drive{tag}_{ts}.csv"
         self.fieldnames = ["timestamp"] + fieldnames
         self._fh = self.path.open("w", newline="")
         self._writer = csv.DictWriter(

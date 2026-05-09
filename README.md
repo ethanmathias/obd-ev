@@ -1,33 +1,34 @@
 # obd-ev
 
-Raspberry Pi data logger for vehicles. Auto-connects to a Bluetooth ELM327 OBD-II
-scanner and merges live OBD telemetry with GPS and IMU data into a single CSV
-per drive.
+Raspberry Pi data logger for vehicles, built for distribution to study
+participants. The kit auto-connects to a Bluetooth ELM327 OBD-II scanner,
+merges live OBD telemetry with GPS and IMU data into a CSV per drive, and
+auto-uploads completed logs to a cloud folder whenever it sees the
+participant's home WiFi.
+
+## Design goals
+
+- **Vehicle-agnostic** — queries the car for `supported_commands` at startup
+  and only logs PIDs the vehicle actually responds to. Works on any 1996+
+  OBD-II compliant car.
+- **OBD-adapter-agnostic** — pairs with any ELM327-style Bluetooth adapter
+  (auto-discovers by name pattern).
+- **Zero-touch for participants** — they edit one file on the SD card to set
+  their home WiFi, plug in, and drive.
+- **Resilient** — retries OBD connection until the car starts, queues uploads
+  until the Pi sees home WiFi, no manual intervention to recover from a
+  cold boot in the driveway.
 
 ## Hardware
 
 | Component | Part | Interface | Pi pins |
 |-----------|------|-----------|---------|
-| OBD scanner | ELM327 Bluetooth | Bluetooth SPP | onboard radio |
+| OBD scanner | any ELM327 Bluetooth | Bluetooth SPP | onboard radio |
 | GPS | u-blox NEO-6M (GY-NEO6MV2) | UART | 3.3V, GND, GPIO14/15 |
 | IMU | MPU-6050 (GY-521) | I2C | 3.3V, GND, GPIO2/3 |
 | Host | Raspberry Pi 3A+ or newer | — | — |
 
-Wiring details: see [docs/wiring.md](docs/wiring.md).
-
-## What gets logged
-
-Every row in the output CSV contains a timestamp plus the latest reading from
-each sensor. The fields are:
-
-- **OBD** — RPM, vehicle speed, throttle position, coolant temp, engine load,
-  plus any additional PIDs the connected vehicle reports as supported.
-- **GPS** — latitude, longitude, altitude, ground speed, heading, fix quality.
-- **IMU** — accelerometer X/Y/Z (g), gyroscope X/Y/Z (deg/s).
-
-OBD is the slowest source (~2–5 Hz depending on PID count), so the main loop
-is locked to its cadence. GPS and IMU values are read at the loop tick from
-the latest cached sample.
+Wiring: see [docs/wiring.md](docs/wiring.md).
 
 ## Repo layout
 
@@ -35,59 +36,67 @@ the latest cached sample.
 obd-ev/
 ├── README.md
 ├── requirements.txt
-├── config.yaml.example      # copy to config.yaml and edit
+├── config.yaml.example          # global defaults
+├── obd-ev-wifi.conf.example     # per-participant WiFi (goes on SD boot partition)
 ├── src/obd_ev/
-│   ├── main.py              # entry point
-│   ├── obd_reader.py        # python-obd wrapper, supported-PID discovery
-│   ├── gps_reader.py        # gpsd client, runs in a thread
-│   ├── imu_reader.py        # MPU-6050, runs in a thread w/ low-pass filter
-│   ├── logger.py            # CSV writer
-│   └── config.py            # config loader
+│   ├── main.py                  # entry point, paced by OBD
+│   ├── obd_reader.py            # python-obd, supported-PID discovery, retry
+│   ├── gps_reader.py            # gpsd client, threaded
+│   ├── imu_reader.py            # MPU-6050, threaded, low-pass filtered
+│   ├── logger.py                # CSV writer, device_id-tagged filenames
+│   └── config.py                # YAML loader + env overrides
 ├── scripts/
-│   ├── setup_pi.sh          # one-shot Pi provisioning (apt, pip, raspi-config)
-│   └── rfcomm_bind.sh       # bind the OBD adapter to /dev/rfcomm0
+│   ├── setup_pi.sh              # one-shot Pi provisioning
+│   ├── image_setup.sh           # researcher: pair OBD + configure rclone
+│   ├── obd_pair.py              # auto-bind paired ELM327 (run at every boot)
+│   ├── firstboot_wifi.sh        # apply /boot WiFi config on first boot
+│   └── upload.sh                # rclone upload, idempotent
 ├── systemd/
-│   └── obd-ev.service       # autostart on boot
+│   ├── obd-ev.service           # main logger
+│   ├── obd-ev-pair.service      # rfcomm bind on boot
+│   ├── obd-ev-firstboot.service # WiFi provisioning
+│   ├── obd-ev-upload.service    # one-shot upload
+│   └── obd-ev-upload.timer      # fires every 10 min
 └── docs/
     ├── wiring.md
-    └── pid_reference.md
+    ├── pid_reference.md
+    ├── deployment.md            # researcher imaging guide
+    └── participant.md           # what to put in the box
 ```
 
-## Quickstart
+## Two audiences, two docs
 
-On a fresh Raspberry Pi OS Lite install:
+- **Researchers** building/imaging kits: [docs/deployment.md](docs/deployment.md)
+- **Participants** receiving a kit: [docs/participant.md](docs/participant.md)
 
-```bash
-git clone <this repo> obd-ev
-cd obd-ev
-./scripts/setup_pi.sh           # installs deps, enables I2C/UART
-sudo ./scripts/rfcomm_bind.sh AA:BB:CC:DD:EE:FF   # your ELM327 MAC
-cp config.yaml.example config.yaml
-python -m obd_ev.main
-```
+## How it works at a glance
 
-To autostart on boot:
+1. `obd-ev-firstboot.service` (one-shot) — reads
+   `/boot/firmware/obd-ev-wifi.conf` and registers WiFi networks via
+   NetworkManager.
+2. `obd-ev-pair.service` (one-shot) — binds the paired OBD adapter to
+   `/dev/rfcomm0`.
+3. `obd-ev.service` — connects to OBD (retrying until the car starts), starts
+   GPS and IMU threads, writes one CSV per drive named with the device id and
+   timestamp.
+4. `obd-ev-upload.timer` — every 10 minutes, attempts to upload pending CSVs
+   via rclone. No-op if there's no network or nothing pending. Uploaded files
+   move to `logs/uploaded/`.
 
-```bash
-sudo cp systemd/obd-ev.service /etc/systemd/system/
-sudo systemctl enable --now obd-ev
-```
+## Cloud storage
 
-## Configuration
-
-`config.yaml` controls device paths, log location, sample rate, and which
-optional PIDs to attempt. The defaults work for the wiring above.
+Any rclone backend works (Box, Google Drive, Dropbox, S3…). Configured once
+during imaging via `rclone config`. The remote name in `/etc/default/obd-ev`
+must match what's in `rclone.conf` (default: `obd-ev`).
 
 ## Notes on data quality
 
-- **Acceleration.** Forward/braking acceleration is more accurate when derived
-  from the GPS speed delta than from the MPU-6050 (no gravity / mounting-angle
-  problem). The IMU is logged raw and is most useful for lateral G and bumps.
-- **OBD support varies.** Only PID `0x00` is truly mandatory. The reader
-  queries `supported_commands` on connect and only logs PIDs the vehicle
-  actually responds to. See [docs/pid_reference.md](docs/pid_reference.md).
-- **GPS cold start.** First fix can take 30s–2min after power-on. Mount with
-  clear sky view.
+- **Acceleration.** GPS speed-delta gives cleaner forward/braking acceleration
+  than the IMU (no gravity / mounting-angle problem). The IMU is logged raw
+  and is most useful for lateral G and bumps.
+- **OBD coverage.** Only PID `0x00` is truly mandatory. The reader filters by
+  `supported_commands` — see [docs/pid_reference.md](docs/pid_reference.md).
+- **GPS cold start.** First fix can take 30s–2min. Mount with sky view.
 
 ## License
 

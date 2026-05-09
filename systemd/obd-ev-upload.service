@@ -1,0 +1,10 @@
+[Unit]
+Description=Upload pending obd-ev CSV logs to cloud
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=pi
+EnvironmentFile=-/etc/default/obd-ev
+ExecStart=/home/pi/obd-ev/scripts/upload.sh

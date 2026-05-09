@@ -1,10 +1,13 @@
 # Copy this file to config.yaml and edit for your setup.
+# For participant kits, the defaults below are correct - the only per-device
+# config is /boot/firmware/obd-ev-wifi.conf and /etc/default/obd-ev.
 
 obd:
-  port: /dev/rfcomm0      # set to null to auto-scan
+  port: /dev/rfcomm0      # set by obd-ev-pair.service at boot
   baudrate: 38400
   fast: false             # required for most ELM327 BT clones on the Pi
   timeout: 30
+  reconnect_seconds: 15   # retry interval if the adapter isn't ready yet
   # Core PIDs always attempted. Anything else the car reports as supported
   # is added automatically.
   core_pids:
@@ -29,3 +32,12 @@ logger:
   output_dir: ./logs
   rotate_each_run: true   # one CSV per startup, named with timestamp
   flush_every: 10         # rows
+  # Uploaded files are moved here so we don't re-upload them. Cleared
+  # manually when the device returns from a participant.
+  uploaded_subdir: uploaded
+
+# Each device gets a tag stored in every CSV row so logs from many
+# participants don't get mixed up after upload. Set per-device in
+# /etc/default/obd-ev (env var OBD_EV_DEVICE_ID); falls back to hostname.
+device:
+  id: null

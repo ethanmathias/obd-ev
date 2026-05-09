@@ -34,9 +34,9 @@ def main() -> int:
     imu_reader = IMUReader(cfg.imu)
     imu_reader.start()
 
-    fieldnames = obd_reader.field_names() + GPS_FIELDS + IMU_FIELDS
-    csv_log = CsvLogger(cfg.logger, fieldnames)
-    log.info("logging to %s", csv_log.path)
+    fieldnames = ["device_id"] + obd_reader.field_names() + GPS_FIELDS + IMU_FIELDS
+    csv_log = CsvLogger(cfg.logger, fieldnames, device_id=cfg.device.id)
+    log.info("logging to %s as device_id=%s", csv_log.path, cfg.device.id)
 
     stop = False
 
@@ -48,7 +48,7 @@ def main() -> int:
 
     try:
         while not stop:
-            row = {}
+            row = {"device_id": cfg.device.id}
             row.update(obd_reader.read())     # paces the loop
             row.update(gps_reader.latest())
             row.update(imu_reader.latest())

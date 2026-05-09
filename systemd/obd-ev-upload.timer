@@ -1,0 +1,14 @@
+[Unit]
+Description=Periodically upload obd-ev CSV logs
+
+[Timer]
+# Try shortly after boot (Pi just connected to home WiFi)...
+OnBootSec=2min
+# ...and every 10 minutes while the Pi is up. Each run is a no-op if there's
+# nothing pending or no internet.
+OnUnitActiveSec=10min
+Persistent=true
+Unit=obd-ev-upload.service
+
+[Install]
+WantedBy=timers.target

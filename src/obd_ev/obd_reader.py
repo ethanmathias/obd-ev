@@ -15,15 +15,20 @@ class OBDReader:
         self.commands: List[obd.OBDCommand] = []
 
     def connect(self) -> None:
+        """Block until the OBD adapter is reachable. Retries forever — the Pi
+        may boot before the car is started or before the BT link comes up."""
+        import time
         kwargs = dict(fast=self.cfg.fast, timeout=self.cfg.timeout,
                       baudrate=self.cfg.baudrate)
-        if self.cfg.port:
-            self.connection = obd.OBD(self.cfg.port, **kwargs)
-        else:
-            self.connection = obd.OBD(**kwargs)
-
-        if not self.connection.is_connected():
-            raise RuntimeError("OBD connection failed")
+        while True:
+            if self.cfg.port:
+                self.connection = obd.OBD(self.cfg.port, **kwargs)
+            else:
+                self.connection = obd.OBD(**kwargs)
+            if self.connection.is_connected():
+                break
+            log.warning("OBD not connected, retrying in %ds", self.cfg.reconnect_seconds)
+            time.sleep(self.cfg.reconnect_seconds)
 
         supported = set(self.connection.supported_commands)
         chosen: List[obd.OBDCommand] = []
