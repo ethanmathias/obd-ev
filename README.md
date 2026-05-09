@@ -79,7 +79,7 @@ obd-ev/
 3. `obd-ev.service` — connects to OBD (retrying until the car starts), starts
    GPS and IMU threads, writes one CSV per drive named with the device id and
    timestamp.
-4. `obd-ev-upload.timer` — every 10 minutes, attempts to upload pending CSVs
+4. `obd-ev-upload.timer` — every minute, attempts to upload pending CSVs
    via rclone. No-op if there's no network or nothing pending. Uploaded files
    move to `logs/uploaded/`.
 

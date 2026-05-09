@@ -72,7 +72,7 @@ For each kit:
 3. `obd-ev-pair.service` binds the (already-paired) ELM327 to `/dev/rfcomm0`.
 4. `obd-ev.service` starts logging. Retries OBD connection every 15s if the
    car isn't running yet.
-5. `obd-ev-upload.timer` fires every 10 minutes. When the Pi is in WiFi range
+5. `obd-ev-upload.timer` fires every minute. When the Pi is in WiFi range
    at home, pending CSVs upload to the configured rclone remote.
 
 ## When a kit comes back
