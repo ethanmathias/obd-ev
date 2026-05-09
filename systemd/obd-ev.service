@@ -1,0 +1,15 @@
+[Unit]
+Description=obd-ev vehicle data logger
+After=network.target bluetooth.service rfcomm-bind.service gpsd.service
+Wants=rfcomm-bind.service gpsd.service
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/obd-ev
+ExecStart=/usr/bin/python3 -m obd_ev.main --config /home/pi/obd-ev/config.yaml
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

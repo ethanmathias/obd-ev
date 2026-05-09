@@ -1,0 +1,31 @@
+# Copy this file to config.yaml and edit for your setup.
+
+obd:
+  port: /dev/rfcomm0      # set to null to auto-scan
+  baudrate: 38400
+  fast: false             # required for most ELM327 BT clones on the Pi
+  timeout: 30
+  # Core PIDs always attempted. Anything else the car reports as supported
+  # is added automatically.
+  core_pids:
+    - RPM
+    - SPEED
+    - THROTTLE_POS
+    - COOLANT_TEMP
+    - ENGINE_LOAD
+
+gps:
+  enabled: true
+  host: 127.0.0.1
+  port: 2947              # gpsd default
+
+imu:
+  enabled: true
+  i2c_address: 0x68
+  sample_hz: 100
+  lowpass_alpha: 0.1      # 0..1, lower = smoother but more lag
+
+logger:
+  output_dir: ./logs
+  rotate_each_run: true   # one CSV per startup, named with timestamp
+  flush_every: 10         # rows
