@@ -9,11 +9,15 @@
 set -euo pipefail
 
 echo "=== OBD adapter pairing ==="
-echo "Power on the ELM327 (plug into a car or 12V source) and put it in"
-echo "pairing mode. Press Enter to start scanning."
-read -r
+if grep -Eq '^[[:space:]]*transport:[[:space:]]*ble[[:space:]]*$' "$(dirname "$0")/../config.yaml" 2>/dev/null; then
+    echo "config.yaml sets obd.transport=ble; skipping RFCOMM pairing."
+else
+    echo "Power on the ELM327 (plug into a car or 12V source) and put it in"
+    echo "pairing mode. Press Enter to start scanning."
+    read -r
 
-sudo python3 "$(dirname "$0")/obd_pair.py" --discover --scan-seconds 30
+    sudo python3 "$(dirname "$0")/obd_pair.py" --discover --scan-seconds 30
+fi
 
 echo
 echo "=== rclone configuration ==="

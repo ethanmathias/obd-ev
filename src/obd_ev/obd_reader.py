@@ -3,6 +3,7 @@ from typing import Dict, List, Optional
 
 import obd
 
+from .ble_obd import BleOBDReader
 from .config import OBDConfig
 
 log = logging.getLogger(__name__)
@@ -11,6 +12,7 @@ log = logging.getLogger(__name__)
 class OBDReader:
     def __init__(self, cfg: OBDConfig):
         self.cfg = cfg
+        self.ble_reader: Optional[BleOBDReader] = None
         self.connection: Optional[obd.OBD] = None
         self.commands: List[obd.OBDCommand] = []
 
@@ -18,6 +20,20 @@ class OBDReader:
         """Block until the OBD adapter is reachable. Retries forever — the Pi
         may boot before the car is started or before the BT link comes up."""
         import time
+        if self.cfg.transport == "ble":
+            self.ble_reader = BleOBDReader(self.cfg)
+            while True:
+                try:
+                    self.ble_reader.connect()
+                    return
+                except Exception as exc:
+                    log.warning(
+                        "BLE OBD not connected (%s), retrying in %ds",
+                        exc,
+                        self.cfg.reconnect_seconds,
+                    )
+                    time.sleep(self.cfg.reconnect_seconds)
+
         kwargs = dict(fast=self.cfg.fast, timeout=self.cfg.timeout,
                       baudrate=self.cfg.baudrate)
         while True:
@@ -53,6 +69,9 @@ class OBDReader:
         log.info("OBD ready, %d commands subscribed", len(chosen))
 
     def read(self) -> Dict[str, float]:
+        if self.ble_reader:
+            return self.ble_reader.read()
+
         out: Dict[str, float] = {}
         if not self.connection or not self.connection.is_connected():
             return out
@@ -69,8 +88,12 @@ class OBDReader:
         return out
 
     def field_names(self) -> List[str]:
+        if self.ble_reader:
+            return self.ble_reader.field_names()
         return [c.name for c in self.commands]
 
     def close(self) -> None:
+        if self.ble_reader:
+            self.ble_reader.close()
         if self.connection:
             self.connection.close()

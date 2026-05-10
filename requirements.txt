@@ -1,4 +1,5 @@
 obd>=0.7.2
+bleak>=0.22
 pyserial>=3.5
 gps>=3.19
 mpu6050-raspberrypi>=1.2

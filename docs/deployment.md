@@ -29,6 +29,10 @@ paired, and rclone authenticated against your shared cloud folder.
    ```
    - Follow prompts. The OBD adapter must be powered (plugged into a car or a
      12V bench supply) and in pairing mode.
+   - For BLE-only adapters such as some VEEPEAK models, first copy
+     `config.yaml.example` to `config.yaml` and set `obd.transport: ble`.
+     `image_setup.sh` will skip RFCOMM pairing; the logger will connect over
+     BLE directly.
    - For `rclone config`, name the remote **`obd-ev`** and pick `box` or
      `drive`. The OAuth flow will give you a URL — open it in a browser on
      your laptop and paste back the auth code.
