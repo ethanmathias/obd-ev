@@ -125,10 +125,8 @@ def bluetoothctl_pair_session(
 
     try:
         send("power on")
-        send(f"agent {'KeyboardOnly' if pin else 'NoInputNoOutput'}")
+        send("agent KeyboardDisplay")
         send("default-agent")
-        if not is_paired(mac):
-            send(f"remove {mac}")  # clear failed/stale attempts before retrying
         time.sleep(1)
         out += read_available()
         send(f"pair {mac}")
