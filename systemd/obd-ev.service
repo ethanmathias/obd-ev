@@ -8,6 +8,7 @@ Type=simple
 User=@INSTALL_USER@
 WorkingDirectory=@REPO_DIR@
 EnvironmentFile=-/etc/default/obd-ev
+Environment=PYTHONPATH=@REPO_DIR@/src
 ExecStart=@VENV_DIR@/bin/python -m obd_ev.main --config @REPO_DIR@/config.yaml
 Restart=on-failure
 RestartSec=5
