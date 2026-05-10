@@ -15,7 +15,10 @@ boot to be deterministic. Discovery is a deliberate, manual step.
 from __future__ import annotations
 
 import argparse
+import os
+import pty
 import re
+import select
 import subprocess
 import sys
 import time
@@ -82,26 +85,97 @@ def bluetoothctl_script(commands: List[str], timeout: int = 30) -> str:
     return out
 
 
-def try_pair(mac: str, pin: Optional[str] = None, timeout: int = 20) -> bool:
-    if pin:
-        commands = [
-            "agent KeyboardDisplay", "default-agent",
-            f"pair {mac}",
-            pin,
-            f"trust {mac}",
-        ]
-    else:
-        commands = [
-            "agent NoInputNoOutput", "default-agent",
-            f"pair {mac}",
-            f"trust {mac}",
-        ]
-    out = bluetoothctl_script(commands, timeout=timeout)
-    return (
-        "Pairing successful" in out
-        or "AlreadyExists" in out
-        or is_paired(mac)
+def bluetoothctl_pair_session(
+    mac: str,
+    pin: Optional[str],
+    timeout: int = 30,
+) -> Tuple[bool, str]:
+    """Run pairing through a PTY so bluetoothctl prompts behave interactively."""
+    master, slave = pty.openpty()
+    proc = subprocess.Popen(
+        ["bluetoothctl"],
+        stdin=slave,
+        stdout=slave,
+        stderr=slave,
+        text=False,
+        close_fds=True,
     )
+    os.close(slave)
+
+    out = ""
+
+    def send(line: str) -> None:
+        os.write(master, f"{line}\n".encode())
+
+    def read_available(wait: float = 0.2) -> str:
+        chunk = ""
+        while True:
+            ready, _, _ = select.select([master], [], [], wait)
+            if not ready:
+                return chunk
+            try:
+                data = os.read(master, 4096)
+            except OSError:
+                return chunk
+            if not data:
+                return chunk
+            chunk += data.decode(errors="replace")
+            wait = 0
+
+    try:
+        send("power on")
+        send(f"agent {'KeyboardOnly' if pin else 'NoInputNoOutput'}")
+        send("default-agent")
+        send(f"remove {mac}")  # clear failed/stale attempts before retrying
+        time.sleep(1)
+        out += read_available()
+        send(f"pair {mac}")
+
+        deadline = time.monotonic() + timeout
+        sent_pin = False
+        while time.monotonic() < deadline:
+            out += read_available()
+            lower = out.lower()
+            if "pairing successful" in lower or is_paired(mac):
+                send(f"trust {mac}")
+                time.sleep(0.5)
+                out += read_available()
+                return True, out
+            if "failed to pair" in lower or "authenticationfailed" in lower:
+                return False, out
+            if "confirm passkey" in lower:
+                send("yes")
+                out = ""
+                continue
+            if pin and not sent_pin and (
+                "request pin code" in lower
+                or "enter pin code" in lower
+                or "pin code" in lower
+                or "passkey" in lower
+            ):
+                send(pin)
+                sent_pin = True
+                out = ""
+                continue
+            time.sleep(0.2)
+        out += read_available()
+        return is_paired(mac), out
+    finally:
+        try:
+            send("quit")
+        except OSError:
+            pass
+        try:
+            proc.terminate()
+            proc.wait(timeout=2)
+        except subprocess.TimeoutExpired:
+            proc.kill()
+        os.close(master)
+
+
+def try_pair(mac: str, pin: Optional[str] = None, timeout: int = 20) -> bool:
+    ok, _ = bluetoothctl_pair_session(mac, pin, timeout=timeout)
+    return ok
 
 
 def discover_and_pair(
