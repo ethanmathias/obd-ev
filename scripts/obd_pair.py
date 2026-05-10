@@ -177,11 +177,15 @@ def bluetoothctl_pair_session(
 def try_pair(mac: str, pin: Optional[str] = None, timeout: int = 20) -> bool:
     label = f"PIN {pin}" if pin else "no-PIN pairing"
     print(f"  trying {label}", file=sys.stderr)
-    ok, _ = bluetoothctl_pair_session(mac, pin, timeout=timeout)
+    ok, out = bluetoothctl_pair_session(mac, pin, timeout=timeout)
     if ok:
         print(f"  {label} succeeded", file=sys.stderr)
     else:
         print(f"  {label} did not work", file=sys.stderr)
+        if os.environ.get("OBD_EV_PAIR_DEBUG"):
+            print("  bluetoothctl output:", file=sys.stderr)
+            for line in out.splitlines():
+                print(f"    {line}", file=sys.stderr)
     return ok
 
 
