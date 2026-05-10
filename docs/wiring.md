@@ -15,8 +15,8 @@ with GPIO numbers in parentheses.
 The serial console must be disabled for the UART to be available — `setup_pi.sh`
 handles this via `raspi-config nonint do_serial 2`.
 
-Device path: `/dev/ttyAMA0` (or `/dev/serial0`). gpsd is configured to read
-from there.
+Device path: `/dev/serial0`. Raspberry Pi OS maps that stable alias to the
+GPIO UART for the current board, so it is safer than hardcoding `/dev/ttyAMA0`.
 
 ## IMU — GY-521 (MPU-6050)
 
