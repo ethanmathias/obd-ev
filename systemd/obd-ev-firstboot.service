@@ -6,7 +6,7 @@ ConditionPathExists=|/boot/obd-ev-wifi.conf
 
 [Service]
 Type=oneshot
-ExecStart=/home/pi/obd-ev/scripts/firstboot_wifi.sh
+ExecStart=@REPO_DIR@/scripts/firstboot_wifi.sh
 RemainAfterExit=yes
 
 [Install]

@@ -8,13 +8,14 @@ participant kit.
 Do this once. The result is a Pi with all software installed, the OBD adapter
 paired, and rclone authenticated against your shared cloud folder.
 
-1. **Flash Raspberry Pi OS Lite (64-bit).** Use `rpi-imager`. Set username
-   `pi`, enable SSH, and configure your *own* WiFi (not the participant's)
-   so you can finish setup over the network.
+1. **Flash Raspberry Pi OS Lite (64-bit).** Use `rpi-imager`. Set any
+   username, enable SSH, and configure your *own* WiFi (not the
+   participant's) so you can finish setup over the network. The setup script
+   installs services for whichever user runs it.
 
 2. **Clone and provision.**
    ```bash
-   ssh pi@raspberrypi.local
+   ssh <username>@raspberrypi.local
    git clone https://github.com/ethanmathias/obd-ev
    cd obd-ev
    ./scripts/setup_pi.sh
@@ -78,7 +79,7 @@ For each kit:
 ## When a kit comes back
 
 ```bash
-ssh pi@<device>
+ssh <username>@<device>
 cd ~/obd-ev/logs/uploaded
 rm *.csv         # already in the cloud
 sudo journalctl --vacuum-time=1d

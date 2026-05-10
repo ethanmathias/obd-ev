@@ -7,7 +7,7 @@ Before=obd-ev.service
 [Service]
 Type=oneshot
 ExecStartPre=/bin/sleep 5
-ExecStart=/usr/bin/python3 /home/pi/obd-ev/scripts/obd_pair.py
+ExecStart=@VENV_DIR@/bin/python @REPO_DIR@/scripts/obd_pair.py
 RemainAfterExit=yes
 # Don't fail the whole boot if the OBD adapter isn't plugged in yet -
 # the main service will retry connecting.

@@ -5,9 +5,9 @@
 # no network, rclone fails fast and we just try again next tick.
 set -euo pipefail
 
-LOG_DIR="${OBD_EV_LOG_DIR:-/home/pi/obd-ev/logs}"
+LOG_DIR="${OBD_EV_LOG_DIR:-$HOME/obd-ev/logs}"
 REMOTE="${OBD_EV_REMOTE:-obd-ev:obd-ev-uploads}"   # rclone remote:path
-RCLONE_CONF="${OBD_EV_RCLONE_CONF:-/home/pi/.config/rclone/rclone.conf}"
+RCLONE_CONF="${OBD_EV_RCLONE_CONF:-$HOME/.config/rclone/rclone.conf}"
 
 mkdir -p "$LOG_DIR/uploaded"
 

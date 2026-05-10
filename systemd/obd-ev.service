@@ -5,10 +5,10 @@ Wants=obd-ev-pair.service gpsd.service
 
 [Service]
 Type=simple
-User=pi
-WorkingDirectory=/home/pi/obd-ev
+User=@INSTALL_USER@
+WorkingDirectory=@REPO_DIR@
 EnvironmentFile=-/etc/default/obd-ev
-ExecStart=/usr/bin/python3 -m obd_ev.main --config /home/pi/obd-ev/config.yaml
+ExecStart=@VENV_DIR@/bin/python -m obd_ev.main --config @REPO_DIR@/config.yaml
 Restart=on-failure
 RestartSec=5
 

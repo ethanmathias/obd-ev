@@ -5,6 +5,6 @@ Wants=network-online.target
 
 [Service]
 Type=oneshot
-User=pi
+User=@INSTALL_USER@
 EnvironmentFile=-/etc/default/obd-ev
-ExecStart=/home/pi/obd-ev/scripts/upload.sh
+ExecStart=@REPO_DIR@/scripts/upload.sh
