@@ -32,7 +32,7 @@ python3 -m venv --system-site-packages "$VENV_DIR"
 "$VENV_DIR/bin/python" -m pip install -r "$REPO_DIR/requirements.txt"
 
 echo "[4/5] gpsd default device"
-sudo sed -i 's|^DEVICES=.*|DEVICES="/dev/serial0"|' /etc/default/gpsd
+sudo sed -i 's|^DEVICES=.*|DEVICES="/dev/ttyAMA0"|' /etc/default/gpsd
 sudo sed -i 's|^GPSD_OPTIONS=.*|GPSD_OPTIONS="-n"|' /etc/default/gpsd
 sudo systemctl enable --now gpsd
 

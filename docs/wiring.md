@@ -15,8 +15,9 @@ with GPIO numbers in parentheses.
 The serial console must be disabled for the UART to be available — `setup_pi.sh`
 handles this via `raspi-config nonint do_serial 2`.
 
-Device path: `/dev/serial0`. Raspberry Pi OS maps that stable alias to the
-GPIO UART for the current board, so it is safer than hardcoding `/dev/ttyAMA0`.
+Device path on Raspberry Pi 5 GPIO pins 8/10: `/dev/ttyAMA0`.
+Do not use `/dev/serial0` for this project on Pi 5; it can point to the
+dedicated debug UART (`/dev/ttyAMA10`) instead of the 40-pin header UART.
 
 ## IMU — GY-521 (MPU-6050)
 
