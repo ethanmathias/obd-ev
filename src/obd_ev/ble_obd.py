@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import re
+import subprocess
 import threading
 import time
 from concurrent.futures import Future
@@ -64,11 +65,17 @@ class BleElm327:
 
         if self.cfg.ble_address:
             log.info("connecting to BLE OBD adapter at %s", self.cfg.ble_address)
+            subprocess.run(
+                ["bluetoothctl", "disconnect", self.cfg.ble_address],
+                capture_output=True,
+                text=True,
+                timeout=5,
+            )
             self.client = BleakClient(self.cfg.ble_address, timeout=self.cfg.timeout)
             try:
                 await self.client.connect()
-            except Exception:
-                log.warning("direct BLE connect failed, falling back to scan")
+            except Exception as exc:
+                log.warning("direct BLE connect failed (%s), falling back to scan", exc)
                 self.client = None
 
         if self.client is None:
