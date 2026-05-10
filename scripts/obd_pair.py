@@ -54,6 +54,11 @@ def already_bound_to(mac: str) -> bool:
     return mac.lower() in out.lower()
 
 
+def is_paired(mac: str) -> bool:
+    out = run(["bluetoothctl", "info", mac]).stdout
+    return "Paired: yes" in out
+
+
 def bind(mac: str, channel: int = 1) -> None:
     run(["rfcomm", "release", "0"])
     r = run(["rfcomm", "bind", "0", mac, str(channel)])
@@ -77,7 +82,32 @@ def bluetoothctl_script(commands: List[str], timeout: int = 30) -> str:
     return out
 
 
-def discover_and_pair(scan_seconds: int = 20) -> Tuple[str, str]:
+def try_pair(mac: str, pin: Optional[str] = None, timeout: int = 20) -> bool:
+    if pin:
+        commands = [
+            "agent KeyboardDisplay", "default-agent",
+            f"pair {mac}",
+            pin,
+            f"trust {mac}",
+        ]
+    else:
+        commands = [
+            "agent NoInputNoOutput", "default-agent",
+            f"pair {mac}",
+            f"trust {mac}",
+        ]
+    out = bluetoothctl_script(commands, timeout=timeout)
+    return (
+        "Pairing successful" in out
+        or "AlreadyExists" in out
+        or is_paired(mac)
+    )
+
+
+def discover_and_pair(
+    scan_seconds: int = 20,
+    pins: Optional[List[str]] = None,
+) -> Tuple[str, str]:
     print(f"Scanning {scan_seconds}s for OBD adapters...", file=sys.stderr)
     bluetoothctl_script([
         "power on", "agent on", "default-agent",
@@ -95,19 +125,18 @@ def discover_and_pair(scan_seconds: int = 20) -> Tuple[str, str]:
     mac, name = found
     print(f"Found {name} at {mac}, pairing...", file=sys.stderr)
 
-    for pin in COMMON_PINS:
-        out = bluetoothctl_script([
-            "agent on", "default-agent",
-            f"pair {mac}",
-            pin,  # most ELM327 clones prompt for a PIN
-            f"trust {mac}",
-        ], timeout=20)
-        if "Pairing successful" in out or "AlreadyExists" in out:
+    print("  trying no-PIN pairing", file=sys.stderr)
+    if try_pair(mac):
+        return mac, name
+
+    pin_list = pins or COMMON_PINS
+    for pin in pin_list:
+        if try_pair(mac, pin):
             return mac, name
         print(f"  PIN {pin} did not work, trying next", file=sys.stderr)
         time.sleep(1)
 
-    raise RuntimeError(f"could not pair {mac} with common PINs {COMMON_PINS}")
+    raise RuntimeError(f"could not pair {mac} with no-PIN or PINs {pin_list}")
 
 
 def main() -> int:
@@ -115,10 +144,12 @@ def main() -> int:
     ap.add_argument("--discover", action="store_true",
                     help="scan + pair a new adapter (run during imaging)")
     ap.add_argument("--scan-seconds", type=int, default=20)
+    ap.add_argument("--pin", action="append",
+                    help="PIN to try when pairing; can be repeated")
     args = ap.parse_args()
 
     if args.discover:
-        mac, name = discover_and_pair(args.scan_seconds)
+        mac, name = discover_and_pair(args.scan_seconds, args.pin)
     else:
         match = find_obd(list_paired())
         if not match:
