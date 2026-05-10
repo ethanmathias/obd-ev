@@ -42,3 +42,8 @@ for csv in "${csvs[@]}"; do
         echo "upload failed for $name (will retry)" >&2
     fi
 done
+
+uploaded=("$LOG_DIR"/uploaded/drive_*.csv)
+if [ ${#uploaded[@]} -gt 256 ]; then
+    ls -1t "$LOG_DIR"/uploaded/drive_*.csv | tail -n +257 | xargs -r rm -f
+fi
