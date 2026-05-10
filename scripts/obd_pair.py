@@ -26,6 +26,7 @@ from typing import List, Optional, Tuple
 
 OBD_NAME_RE = re.compile(r"(ELM327|OBDII|OBD-II|OBD2|V-?LINK|VEEPEAK|KONNWEI)", re.I)
 COMMON_PINS = ["1234", "0000", "6789"]
+PAIR_TIMEOUT = 12
 
 
 def run(cmd: List[str], **kw) -> subprocess.CompletedProcess:
@@ -88,7 +89,7 @@ def bluetoothctl_script(commands: List[str], timeout: int = 30) -> str:
 def bluetoothctl_pair_session(
     mac: str,
     pin: Optional[str],
-    timeout: int = 30,
+    timeout: int = PAIR_TIMEOUT,
 ) -> Tuple[bool, str]:
     """Run pairing through a PTY so bluetoothctl prompts behave interactively."""
     master, slave = pty.openpty()
@@ -174,7 +175,13 @@ def bluetoothctl_pair_session(
 
 
 def try_pair(mac: str, pin: Optional[str] = None, timeout: int = 20) -> bool:
+    label = f"PIN {pin}" if pin else "no-PIN pairing"
+    print(f"  trying {label}", file=sys.stderr)
     ok, _ = bluetoothctl_pair_session(mac, pin, timeout=timeout)
+    if ok:
+        print(f"  {label} succeeded", file=sys.stderr)
+    else:
+        print(f"  {label} did not work", file=sys.stderr)
     return ok
 
 
@@ -199,18 +206,19 @@ def discover_and_pair(
     mac, name = found
     print(f"Found {name} at {mac}, pairing...", file=sys.stderr)
 
-    print("  trying no-PIN pairing", file=sys.stderr)
-    if try_pair(mac):
-        return mac, name
+    if pins is None:
+        if try_pair(mac):
+            return mac, name
 
     pin_list = pins or COMMON_PINS
     for pin in pin_list:
         if try_pair(mac, pin):
             return mac, name
-        print(f"  PIN {pin} did not work, trying next", file=sys.stderr)
         time.sleep(1)
 
-    raise RuntimeError(f"could not pair {mac} with no-PIN or PINs {pin_list}")
+    if pins is None:
+        raise RuntimeError(f"could not pair {mac} with no-PIN or PINs {pin_list}")
+    raise RuntimeError(f"could not pair {mac} with PINs {pin_list}")
 
 
 def main() -> int:
