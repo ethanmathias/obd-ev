@@ -37,9 +37,9 @@ You should see a device at `68`.
 
 ## OBD scanner
 
-ELM327 over Bluetooth — no GPIO wiring. Pair and bind once with
-`scripts/rfcomm_bind.sh <MAC>`, then it appears as `/dev/rfcomm0` on every
-boot.
+BLE ELM327 over Bluetooth LE — no GPIO wiring. Set the adapter MAC in
+`config.yaml` as `obd.ble_address`, or leave it blank to discover by
+`obd.ble_name`.
 
 ## Power
 

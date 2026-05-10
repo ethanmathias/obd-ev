@@ -1,7 +1,7 @@
 [Unit]
 Description=obd-ev vehicle data logger
-After=network.target bluetooth.service obd-ev-pair.service gpsd.service
-Wants=obd-ev-pair.service gpsd.service
+After=network.target bluetooth.service gpsd.service
+Wants=gpsd.service
 
 [Service]
 Type=simple

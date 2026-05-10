@@ -3,8 +3,8 @@
 # Idempotent: safe to re-run.
 #
 # This sets up the device side of the kit. After this completes, run
-# `scripts/image_setup.sh` once to pair the OBD adapter and configure rclone,
-# then bake the SD card image for distribution.
+# `scripts/image_setup.sh` once to configure rclone, then bake the SD card
+# image for distribution.
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
@@ -16,7 +16,7 @@ echo "[1/5] apt packages"
 sudo apt-get update
 sudo apt-get install -y \
     python3-pip python3-venv \
-    bluetooth bluez bluez-tools \
+    bluetooth bluez \
     gpsd gpsd-clients python3-gps \
     i2c-tools \
     rclone \
@@ -37,6 +37,8 @@ sudo sed -i 's|^GPSD_OPTIONS=.*|GPSD_OPTIONS="-n"|' /etc/default/gpsd
 sudo systemctl enable --now gpsd
 
 echo "[5/5] install systemd units"
+sudo systemctl disable --now obd-ev-pair.service >/dev/null 2>&1 || true
+sudo rm -f /etc/systemd/system/obd-ev-pair.service
 tmp_units="$(mktemp -d)"
 cp "$REPO_DIR"/systemd/*.service "$tmp_units"/
 cp "$REPO_DIR"/systemd/*.timer "$tmp_units"/
@@ -50,7 +52,6 @@ sudo cp "$tmp_units"/*.timer   /etc/systemd/system/
 rm -rf "$tmp_units"
 sudo systemctl daemon-reload
 sudo systemctl enable obd-ev-firstboot.service
-sudo systemctl enable obd-ev-pair.service
 sudo systemctl enable obd-ev.service
 sudo systemctl enable obd-ev-upload.timer
 
@@ -63,4 +64,4 @@ OBD_EV_RCLONE_CONF=$INSTALL_HOME/.config/rclone/rclone.conf
 EOF
 fi
 
-echo "Done. Next: scripts/image_setup.sh (pair OBD, configure rclone)."
+echo "Done. Next: scripts/image_setup.sh (configure rclone)."

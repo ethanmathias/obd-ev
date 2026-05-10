@@ -3,19 +3,15 @@
 # config is /boot/firmware/obd-ev-wifi.conf and /etc/default/obd-ev.
 
 obd:
-  # transport: rfcomm for Classic Bluetooth/USB serial, ble for BLE adapters
-  transport: rfcomm
-  port: /dev/rfcomm0      # set by obd-ev-pair.service at boot
-  ble_address: null       # optional, e.g. 8C:DE:52:DD:FD:37
-  ble_name: VEEPEAK       # used if ble_address is null
-  ble_write_uuid: null    # optional override if auto-detection fails
-  ble_notify_uuid: null   # optional override if auto-detection fails
-  baudrate: 38400
-  fast: false             # required for most ELM327 BT clones on the Pi
+  # BLE ELM327 adapter settings. Set ble_address to the adapter MAC printed by
+  # `bluetoothctl devices`, or leave null to discover by ble_name.
+  ble_address: null
+  ble_name: VEEPEAK
+  ble_write_uuid: null    # optional override, usually auto-detected
+  ble_notify_uuid: null   # optional override, usually auto-detected
   timeout: 30
   reconnect_seconds: 15   # retry interval if the adapter isn't ready yet
-  # Core PIDs always attempted. Anything else the car reports as supported
-  # is added automatically.
+  # Core PIDs logged over BLE.
   core_pids:
     - RPM
     - SPEED

@@ -5,8 +5,9 @@ participant kit.
 
 ## One-time master image
 
-Do this once. The result is a Pi with all software installed, the OBD adapter
-paired, and rclone authenticated against your shared cloud folder.
+Do this once. The result is a Pi with all software installed, BLE OBD adapter
+settings in `config.yaml`, and rclone authenticated against your shared cloud
+folder.
 
 1. **Flash Raspberry Pi OS Lite (64-bit).** Use `rpi-imager`. Set any
    username, enable SSH, and configure your *own* WiFi (not the
@@ -22,17 +23,22 @@ paired, and rclone authenticated against your shared cloud folder.
    sudo reboot
    ```
 
-3. **Pair the OBD adapter and configure rclone.**
+3. **Configure the BLE OBD adapter and rclone.**
+   Copy the example config and set the adapter address if you know it:
    ```bash
-   cd obd-ev
+   cp -n config.yaml.example config.yaml
+   nano config.yaml
+   ```
+   In `config.yaml`, set:
+   ```yaml
+   obd:
+     ble_address: 8C:DE:52:DD:FD:37   # your adapter MAC, or null to discover by name
+     ble_name: VEEPEAK
+   ```
+   Then configure cloud upload:
+   ```bash
    ./scripts/image_setup.sh
    ```
-   - Follow prompts. The OBD adapter must be powered (plugged into a car or a
-     12V bench supply) and in pairing mode.
-   - For BLE-only adapters such as some VEEPEAK models, first copy
-     `config.yaml.example` to `config.yaml` and set `obd.transport: ble`.
-     `image_setup.sh` will skip RFCOMM pairing; the logger will connect over
-     BLE directly.
    - For `rclone config`, name the remote **`obd-ev`** and pick `box` or
      `drive`. The OAuth flow will give you a URL — open it in a browser on
      your laptop and paste back the auth code.
@@ -74,10 +80,9 @@ For each kit:
 2. `obd-ev-firstboot.service` reads `/boot/firmware/obd-ev-wifi.conf`,
    creates connection profiles, renames the file to `.applied` so it doesn't
    re-process.
-3. `obd-ev-pair.service` binds the (already-paired) ELM327 to `/dev/rfcomm0`.
-4. `obd-ev.service` starts logging. Retries OBD connection every 15s if the
+3. `obd-ev.service` starts logging. Retries BLE OBD connection every 15s if the
    car isn't running yet.
-5. `obd-ev-upload.timer` fires every minute. When the Pi is in WiFi range
+4. `obd-ev-upload.timer` fires every minute. When the Pi is in WiFi range
    at home, pending CSVs upload to the configured rclone remote.
 
 ## When a kit comes back

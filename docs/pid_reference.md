@@ -4,14 +4,14 @@ OBD-II standardises a set of "Mode 01" PIDs (SAE J1979). Only `0x00` is truly
 mandatory — it's a bitmask of which other PIDs the ECU supports. Everything
 else is optional, even though most modern cars implement a common subset.
 
-The reader queries `connection.supported_commands` on connect and only logs
-PIDs the vehicle actually responds to.
+The BLE reader logs the configured core PIDs below. If a vehicle does not
+return a value for a PID, that field is left blank for that row.
 
 ## Core PIDs (configured by default)
 
 These are nearly universal across 1996+ vehicles:
 
-| python-obd name | PID  | Description |
+| Field name      | PID  | Description |
 |-----------------|------|-------------|
 | `RPM`           | 0x0C | Engine RPM |
 | `SPEED`         | 0x0D | Vehicle speed (km/h) |
@@ -21,7 +21,7 @@ These are nearly universal across 1996+ vehicles:
 
 ## Common-but-not-guaranteed PIDs
 
-Auto-added if the car supports them:
+These are good future additions, but are not logged by default:
 
 - `MAF` (0x10) — mass air flow (g/s)
 - `INTAKE_TEMP` (0x0F) — intake air temp (°C)

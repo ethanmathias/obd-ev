@@ -8,14 +8,10 @@ import yaml
 
 @dataclass
 class OBDConfig:
-    transport: str = "rfcomm"
-    port: Optional[str] = None
     ble_address: Optional[str] = None
     ble_name: str = "VEEPEAK"
     ble_write_uuid: Optional[str] = None
     ble_notify_uuid: Optional[str] = None
-    baudrate: int = 38400
-    fast: bool = False
     timeout: int = 30
     reconnect_seconds: int = 15
     core_pids: List[str] = field(default_factory=lambda: [
