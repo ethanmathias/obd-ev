@@ -1,7 +1,13 @@
 # Deployment guide (researcher)
 
 This describes how to build a master SD card image, then customize it for each
-participant kit.
+participant kit. The intended study workflow is:
+
+1. The Pi logs one CSV per driving session.
+2. CSVs stay on the Pi while the participant is away from home.
+3. When the Pi reconnects to a configured home WiFi network, the upload timer
+   copies completed CSVs to the rclone cloud remote and moves them locally to
+   `logs/uploaded/`.
 
 ## One-time master image
 
@@ -66,8 +72,11 @@ For each kit:
 1. Flash the master image to a fresh SD card.
 2. Mount the SD card on your laptop. The boot partition will be visible.
 3. Copy `obd-ev-wifi.conf.example` from the repo into the boot partition,
-   rename to **`obd-ev-wifi.conf`**, and fill in the participant's home WiFi
-   SSID and password. Multiple networks are supported — see the file.
+   rename it to **`obd-ev-wifi.conf`**, and fill in the participant's home
+   WiFi SSID and password. On a laptop this file sits at the top level of the
+   visible `bootfs` drive; on the running Pi it appears at
+   `/boot/firmware/obd-ev-wifi.conf`. Multiple networks are supported — see
+   the file.
 4. (Optional) Edit `/etc/default/obd-ev` on the rootfs to set
    `OBD_EV_DEVICE_ID=P003` (or however you tag participants). This shows up
    in every CSV row and in the uploaded filename, so logs from many kits
@@ -95,3 +104,26 @@ sudo journalctl --vacuum-time=1d
 ```
 
 Then re-flash the SD card and re-personalize for the next participant.
+
+## Quick checks in the field
+
+Check that WiFi profiles were created:
+
+```bash
+nmcli connection show
+journalctl -u obd-ev-firstboot --no-pager
+```
+
+Check that logging is active:
+
+```bash
+journalctl -u obd-ev -f
+find ~/obd-ev/logs -type f -name '*.csv' -print
+```
+
+Force an upload attempt after joining WiFi:
+
+```bash
+sudo systemctl start obd-ev-upload
+journalctl -u obd-ev-upload --no-pager -n 50
+```

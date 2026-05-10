@@ -18,7 +18,8 @@ You only need to do this once, before the first drive:
 2. **Plug the SD card into your computer** with the included adapter. A
    drive named `bootfs` will appear.
 3. **Open the file `obd-ev-wifi.conf`** on that drive in any text editor
-   (Notepad, TextEdit, anything).
+   (Notepad, TextEdit, anything). If you do not see it, contact the
+   researcher.
 4. Replace the example values with your home WiFi:
    ```
    ssid=YourHomeWiFiName
@@ -34,7 +35,8 @@ You only need to do this once, before the first drive:
 3. Drive normally. There's nothing to press or check — the device records
    automatically while the car is running.
 4. When you park at home, the device automatically uploads its data over your
-   home WiFi.
+   home WiFi. Leave the Pi powered for a few minutes after parking so it has
+   time to connect and upload.
 
 You can leave everything plugged in between drives. The device only records
 when the car is running.
@@ -46,6 +48,8 @@ when the car is running.
   recording. Just drive normally and the data uploads when you get home.
 - **Switching WiFi networks?** Contact the researcher. Don't try to reconfigure
   yourself — easier to swap the SD card.
+- **Changed your WiFi password?** Contact the researcher before the next drive
+  so they can update the SD card.
 
 ## Privacy
 

@@ -11,8 +11,9 @@ RCLONE_CONF="${OBD_EV_RCLONE_CONF:-$HOME/.config/rclone/rclone.conf}"
 
 mkdir -p "$LOG_DIR/uploaded"
 
-# Quick connectivity test - skip silently if offline.
-if ! ping -c1 -W2 1.1.1.1 >/dev/null 2>&1; then
+# Wait briefly for NetworkManager. If the Pi is away from home WiFi, this
+# exits quietly and the systemd timer will try again on the next tick.
+if command -v nm-online >/dev/null 2>&1 && ! nm-online -q -t 10; then
     exit 0
 fi
 

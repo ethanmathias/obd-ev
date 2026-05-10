@@ -78,8 +78,8 @@ obd-ev/
    GPS and IMU threads, writes one CSV per drive named with the device id and
    timestamp.
 3. `obd-ev-upload.timer` — every minute, attempts to upload pending CSVs
-   via rclone. No-op if there's no network or nothing pending. Uploaded files
-   move to `logs/uploaded/`.
+   via rclone. No-op if the participant is away from a configured WiFi network
+   or if nothing is pending. Uploaded files move to `logs/uploaded/`.
 
 ## Cloud storage
 

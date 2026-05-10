@@ -23,13 +23,17 @@ if [ ! -f "$CONF" ]; then
     exit 0
 fi
 
-# Split file into blocks separated by lines of dashes.
-awk -v RS='---\n' '{print > "/tmp/wifi_block_" NR ".tmp"}' "$CONF"
+tmp_dir="$(mktemp -d)"
+trap 'rm -rf "$tmp_dir"' EXIT
 
-for block in /tmp/wifi_block_*.tmp; do
+# Split file into blocks separated by lines of dashes.
+awk -v RS='---\n' '{print > "'"$tmp_dir"'/wifi_block_" NR ".tmp"}' "$CONF"
+
+added=0
+for block in "$tmp_dir"/wifi_block_*.tmp; do
     [ -s "$block" ] || continue
-    ssid=$(grep -E '^ssid=' "$block" | head -1 | cut -d= -f2- | tr -d '\r')
-    psk=$(grep -E '^psk='  "$block" | head -1 | cut -d= -f2- | tr -d '\r')
+    ssid=$(grep -E '^[[:space:]]*ssid=' "$block" | head -1 | cut -d= -f2- | tr -d '\r' || true)
+    psk=$(grep -E '^[[:space:]]*psk='  "$block" | head -1 | cut -d= -f2- | tr -d '\r' || true)
     [ -z "$ssid" ] && continue
 
     echo "adding network: $ssid"
@@ -42,9 +46,13 @@ for block in /tmp/wifi_block_*.tmp; do
             wifi-sec.key-mgmt wpa-psk wifi-sec.psk "$psk" || true
     fi
     nmcli connection modify "$ssid" connection.autoconnect yes
+    added=$((added + 1))
 done
 
-rm -f /tmp/wifi_block_*.tmp
+if [ "$added" -eq 0 ]; then
+    echo "no wifi networks found in $CONF"
+    exit 1
+fi
 
 # Mark this run done so we don't re-process on every boot.
 mv "$CONF" "${CONF}.applied"
