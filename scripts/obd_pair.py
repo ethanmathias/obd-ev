@@ -63,7 +63,23 @@ def is_paired(mac: str) -> bool:
     return "Paired: yes" in out
 
 
-def bind(mac: str, channel: int = 1) -> None:
+def sdp_channel(mac: str) -> int:
+    """Find the RFCOMM channel for the adapter's Serial Port service."""
+    out = run(["sdptool", "browse", mac], timeout=20).stdout
+    in_serial = False
+    for line in out.splitlines():
+        if "Service Name:" in line:
+            in_serial = "Serial Port" in line
+        if in_serial:
+            m = re.search(r"Channel:\s*(\d+)", line)
+            if m:
+                return int(m.group(1))
+    # Most ELM327 clones use channel 1; keep it as a fallback.
+    return 1
+
+
+def bind(mac: str, channel: Optional[int] = None) -> None:
+    channel = channel or sdp_channel(mac)
     run(["rfcomm", "release", "0"])
     r = run(["rfcomm", "bind", "0", mac, str(channel)])
     if r.returncode != 0:
