@@ -62,22 +62,26 @@ class BleElm327:
         if BleakClient is None or BleakScanner is None:
             raise RuntimeError("BLE transport requires the 'bleak' Python package")
 
-        device = None
         if self.cfg.ble_address:
-            device = await BleakScanner.find_device_by_address(
-                self.cfg.ble_address, timeout=self.cfg.timeout
-            )
-        if device is None:
+            log.info("connecting to BLE OBD adapter at %s", self.cfg.ble_address)
+            self.client = BleakClient(self.cfg.ble_address, timeout=self.cfg.timeout)
+            try:
+                await self.client.connect()
+            except Exception:
+                log.warning("direct BLE connect failed, falling back to scan")
+                self.client = None
+
+        if self.client is None:
             device = await BleakScanner.find_device_by_filter(
                 lambda d, _: bool(d.name and self.cfg.ble_name.lower() in d.name.lower()),
                 timeout=self.cfg.timeout,
             )
-        if device is None:
-            raise RuntimeError("BLE OBD adapter not found")
+            if device is None:
+                raise RuntimeError("BLE OBD adapter not found")
+            log.info("connecting to BLE OBD adapter %s (%s)", device.name, device.address)
+            self.client = BleakClient(device, timeout=self.cfg.timeout)
+            await self.client.connect()
 
-        log.info("connecting to BLE OBD adapter %s (%s)", device.name, device.address)
-        self.client = BleakClient(device)
-        await self.client.connect()
         self.write_uuid, self.notify_uuid = self._select_characteristics()
         self.notify_event = asyncio.Event()
         await self.client.start_notify(self.notify_uuid, self._on_notify)
