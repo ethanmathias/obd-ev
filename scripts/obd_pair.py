@@ -127,7 +127,8 @@ def bluetoothctl_pair_session(
         send("power on")
         send(f"agent {'KeyboardOnly' if pin else 'NoInputNoOutput'}")
         send("default-agent")
-        send(f"remove {mac}")  # clear failed/stale attempts before retrying
+        if not is_paired(mac):
+            send(f"remove {mac}")  # clear failed/stale attempts before retrying
         time.sleep(1)
         out += read_available()
         send(f"pair {mac}")
@@ -142,7 +143,7 @@ def bluetoothctl_pair_session(
                 time.sleep(0.5)
                 out += read_available()
                 return True, out
-            if "failed to pair" in lower or "authenticationfailed" in lower:
+            if "failed to pair" in lower:
                 return False, out
             if "confirm passkey" in lower:
                 send("yes")
@@ -209,6 +210,11 @@ def discover_and_pair(
 
     mac, name = found
     print(f"Found {name} at {mac}, pairing...", file=sys.stderr)
+
+    if is_paired(mac):
+        print(f"  {name} is already paired; trusting existing pairing", file=sys.stderr)
+        bluetoothctl_script([f"trust {mac}"], timeout=5)
+        return mac, name
 
     if pins is None:
         if try_pair(mac):
