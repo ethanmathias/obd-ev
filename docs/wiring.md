@@ -43,6 +43,5 @@ BLE ELM327 over Bluetooth LE — no GPIO wiring. Set the adapter MAC in
 
 ## Power
 
-In the car, use a 12V→USB adapter rated for **at least 3A** for a Pi 3A+
-(5A USB-C PD if you're on a Pi 5). Underpowered Pis will exhibit Bluetooth
-dropouts that look like OBD bugs.
+In the car, use a USB-C PD supply rated for **5A** for the Pi 5.
+Underpowered Pis will exhibit Bluetooth dropouts that look like OBD bugs.

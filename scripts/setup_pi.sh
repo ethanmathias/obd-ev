@@ -22,7 +22,7 @@ sudo apt-get install -y \
     rclone \
     network-manager
 
-echo "[2/5] enable I2C and serial UART"
+echo "[2/5] enable I2C and GPS UART"
 sudo raspi-config nonint do_i2c 0
 sudo raspi-config nonint do_serial 2
 
@@ -37,8 +37,6 @@ sudo sed -i 's|^GPSD_OPTIONS=.*|GPSD_OPTIONS="-n"|' /etc/default/gpsd
 sudo systemctl enable --now gpsd
 
 echo "[5/5] install systemd units"
-sudo systemctl disable --now obd-ev-pair.service >/dev/null 2>&1 || true
-sudo rm -f /etc/systemd/system/obd-ev-pair.service
 tmp_units="$(mktemp -d)"
 cp "$REPO_DIR"/systemd/*.service "$tmp_units"/
 cp "$REPO_DIR"/systemd/*.timer "$tmp_units"/

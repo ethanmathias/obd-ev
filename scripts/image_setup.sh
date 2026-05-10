@@ -2,8 +2,7 @@
 # Researcher-side imaging step. Run this ONCE per device (or on a master image)
 # to configure rclone with credentials for the upload destination.
 #
-# The BLE OBD adapter is configured in config.yaml and does not need a
-# Classic Bluetooth pairing/binding step.
+# The BLE OBD adapter is configured in config.yaml.
 set -euo pipefail
 
 echo "=== rclone configuration ==="

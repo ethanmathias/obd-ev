@@ -17,7 +17,6 @@
 set -euo pipefail
 
 CONF="/boot/firmware/obd-ev-wifi.conf"
-[ -f "$CONF" ] || CONF="/boot/obd-ev-wifi.conf"   # older Pi OS layout
 
 if [ ! -f "$CONF" ]; then
     echo "no wifi config at $CONF, skipping"

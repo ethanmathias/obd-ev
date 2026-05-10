@@ -26,7 +26,7 @@ participant's home WiFi.
 | OBD scanner | BLE ELM327, e.g. VEEPEAK | Bluetooth LE | onboard radio |
 | GPS | u-blox NEO-6M (GY-NEO6MV2) | UART | 3.3V, GND, GPIO14/15 |
 | IMU | MPU-6050 (GY-521) | I2C | 3.3V, GND, GPIO2/3 |
-| Host | Raspberry Pi 3A+ or newer | — | — |
+| Host | Raspberry Pi 5 | — | — |
 
 Wiring: see [docs/wiring.md](docs/wiring.md).
 

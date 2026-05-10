@@ -2,7 +2,6 @@
 Description=obd-ev first-boot WiFi provisioning
 After=NetworkManager.service
 ConditionPathExists=|/boot/firmware/obd-ev-wifi.conf
-ConditionPathExists=|/boot/obd-ev-wifi.conf
 
 [Service]
 Type=oneshot
