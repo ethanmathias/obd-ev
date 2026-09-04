@@ -1,0 +1,20 @@
+[Unit]
+Description=obd-ev participant WiFi setup portal
+After=NetworkManager.service
+Wants=NetworkManager.service
+# Once a home network has been provisioned this never runs again. To
+# re-provision (the participant changed their password, or the kit is being
+# reissued): rm /var/lib/obd-ev/provisioned.json and reboot.
+ConditionPathExists=!/var/lib/obd-ev/provisioned.json
+
+[Service]
+Type=simple
+# Needs root: it binds port 80 and reconfigures NetworkManager.
+EnvironmentFile=-/etc/default/obd-ev
+Environment=PYTHONPATH=@REPO_DIR@/src
+ExecStart=@VENV_DIR@/bin/python -m obd_ev.provision
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

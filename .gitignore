@@ -10,3 +10,8 @@ logs/
 .DS_Store
 .vscode/
 .idea/
+
+# Cloud credentials - never commit these
+*-sa.json
+service-account*.json
+rclone.conf

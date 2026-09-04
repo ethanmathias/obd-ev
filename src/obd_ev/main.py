@@ -5,10 +5,35 @@ import sys
 import time
 
 from . import config as cfgmod
-from .obd_reader import OBDReader
-from .gps_reader import GPSReader, FIELDS as GPS_FIELDS
-from .imu_reader import IMUReader, FIELDS as IMU_FIELDS
-from .logger import CsvLogger
+from .obd_reader import OBDLink, build_reader
+from .gps_reader import (GPSReader, FIELDS as GPS_FIELDS,
+                         DESCRIPTIONS as GPS_DESCRIPTIONS)
+from .imu_reader import (IMUReader, FIELDS as IMU_FIELDS,
+                         DESCRIPTIONS as IMU_DESCRIPTIONS)
+from .logger import CsvLogger, write_signal_dictionary
+
+
+# Columns the logger itself contributes, before any sensor.
+META_DESCRIPTIONS = [
+    ("timestamp", "Row time, UTC, from the Pi clock (see gps_time)", "unknown"),
+    ("t_mono", "Monotonic seconds since boot; survives a clock correction", "seconds"),
+    ("device_id", "Kit identifier", "unknown"),
+    ("obd_connected", "1 while the vehicle link was up", "scalar"),
+]
+
+
+def _dictionary(link) -> list:
+    """Assemble signals.csv: every column in the trip CSV, described once."""
+    rows = [{"column": c, "name": n, "unit": u, "group": "Meta",
+             "category": "Meta", "source": "logger", "source_id": c}
+            for c, n, u in META_DESCRIPTIONS]
+    rows += link.describe()
+    for source, descriptions in (("gps", GPS_DESCRIPTIONS),
+                                 ("imu", IMU_DESCRIPTIONS)):
+        rows += [{"column": c, "name": n, "unit": u, "group": source.upper(),
+                  "category": source.upper(), "source": source, "source_id": c}
+                 for c, n, u in descriptions]
+    return rows
 
 
 def main() -> int:
@@ -25,18 +50,27 @@ def main() -> int:
 
     cfg = cfgmod.load(args.config)
 
-    obd_reader = OBDReader(cfg.obd)
-    obd_reader.connect()
-
+    # Sensors first. They must record even if the OBD adapter never shows up,
+    # which is the normal case for a car that is parked or an EV that refuses
+    # the handshake.
     gps_reader = GPSReader(cfg.gps)
     gps_reader.start()
-
     imu_reader = IMUReader(cfg.imu)
     imu_reader.start()
 
-    fieldnames = ["device_id"] + obd_reader.field_names() + GPS_FIELDS + IMU_FIELDS
+    link = OBDLink(cfg.obd, lambda: build_reader(cfg))
+    fieldnames = (["device_id", "obd_connected"]
+                  + link.field_names() + GPS_FIELDS + IMU_FIELDS)
     csv_log = CsvLogger(cfg.logger, fieldnames, device_id=cfg.device.id)
-    log.info("logging to %s as device_id=%s", csv_log.path, cfg.device.id)
+    write_signal_dictionary(cfg.logger.output_dir,
+                            _dictionary(link), cfg.device.id)
+    log.info("device_id=%s, %d columns (%d vehicle signals)",
+             cfg.device.id, len(fieldnames), len(link.field_names()))
+    if cfg.vehicle.signalset:
+        log.info("vehicle profile: %s %s",
+                 cfg.vehicle.make_model or cfg.vehicle.signalset,
+                 cfg.vehicle.year or "")
+    link.start()
 
     stop = False
 
@@ -46,17 +80,65 @@ def main() -> int:
     signal.signal(signal.SIGINT, _sig)
     signal.signal(signal.SIGTERM, _sig)
 
+    active_period = 1.0 / max(cfg.logger.max_hz, 0.01)
+    idle_period = 1.0 / max(cfg.logger.idle_hz, 0.001)
+    rotate_after = cfg.logger.rotate_minutes * 60.0
+    last_obd_at = time.monotonic()
+    trip_closed = False
+
     try:
         while not stop:
-            row = {"device_id": cfg.device.id}
-            row.update(obd_reader.read())     # paces the loop
+            started = time.monotonic()
+            row = {
+                "device_id": cfg.device.id,
+                "obd_connected": int(link.connected),
+            }
+            obd_values = link.read()
+
+            # A trip starting: ship the parked rows accumulated since the last
+            # trip ended and give the drive its own file.
+            if obd_values and trip_closed:
+                log.info("vehicle responding again, starting new trip")
+                csv_log.rotate()
+                trip_closed = False
+
+            row.update(obd_values)
             row.update(gps_reader.latest())
             row.update(imu_reader.latest())
             csv_log.write(row)
+
+            now = time.monotonic()
+            if obd_values:
+                last_obd_at = now
+
+            # End the trip once the vehicle has been unreachable for a while,
+            # so the file closes and the upload timer can ship it.
+            gap = now - last_obd_at
+            if not trip_closed and gap > cfg.logger.trip_gap_seconds:
+                log.info("no vehicle data for %.0fs, closing trip (%d rows)",
+                         gap, csv_log.rows)
+                csv_log.rotate()
+                trip_closed = True
+            elif not trip_closed and csv_log.age_seconds > rotate_after:
+                # Bound how much a single power cut can cost. Only while a trip
+                # is running -- a car parked for a week must not turn into
+                # hundreds of near-empty files.
+                log.info("rotating after %.0f min (%d rows)",
+                         csv_log.age_seconds / 60, csv_log.rows)
+                csv_log.rotate()
+
+            period = active_period if link.connected else idle_period
+            remaining = period - (time.monotonic() - started)
+            if remaining > 0:
+                # Sleep in slices so shutdown stays responsive at idle_hz,
+                # where a period can be several seconds.
+                deadline = time.monotonic() + remaining
+                while not stop and time.monotonic() < deadline:
+                    time.sleep(min(0.2, deadline - time.monotonic()))
     finally:
         gps_reader.stop()
         imu_reader.stop()
-        obd_reader.close()
+        link.close()
         csv_log.close()
         log.info("shutdown clean")
     return 0

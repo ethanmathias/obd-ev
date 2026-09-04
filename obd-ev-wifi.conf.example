@@ -1,6 +1,14 @@
-# Drop this file (renamed to `obd-ev-wifi.conf`) onto the BOOT partition of
-# the SD card before first boot. Each block describes one network. The Pi will
-# auto-connect to whichever is in range.
+# RESEARCHER USE ONLY - do not put participant credentials in this file.
+#
+# This writes a WiFi passphrase in plaintext to a FAT partition that anyone
+# holding the SD card can read. Participants configure their home network
+# through the device's own setup portal instead, which never stores the
+# passphrase at all (see docs/participant.md).
+#
+# Use this only to preload your own lab network at imaging time. Drop the file
+# (renamed to `obd-ev-wifi.conf`) onto the BOOT partition before first boot.
+# Each block describes one network; the Pi auto-connects to whichever is in
+# range.
 #
 # Lines starting with # are ignored. Blank lines are fine. Separate networks
 # with a line of three dashes.

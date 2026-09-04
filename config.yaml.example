@@ -1,23 +1,74 @@
 # Copy this file to config.yaml and edit for your setup.
-# For participant kits, the defaults below are correct - the only per-device
-# config is /boot/firmware/obd-ev-wifi.conf and /etc/default/obd-ev.
+# For participant kits the defaults below are close to correct - the per-device
+# settings are the vehicle profile here plus /etc/default/obd-ev.
 
 obd:
-  # BLE ELM327 adapter settings. Set ble_address to the adapter MAC printed by
+  # BLE ELM327 adapter. Set ble_address to the adapter MAC printed by
   # `bluetoothctl devices`, or leave null to discover by ble_name.
   ble_address: null
   ble_name: VEEPEAK
-  ble_write_uuid: null    # optional override, usually auto-detected
-  ble_notify_uuid: null   # optional override, usually auto-detected
-  timeout: 30
-  reconnect_seconds: 15   # retry interval if the adapter isn't ready yet
-  # Core PIDs logged over BLE.
+  ble_write_uuid: null      # optional override, usually auto-detected
+  ble_notify_uuid: null     # optional override, usually auto-detected
+  timeout: 30               # budget for the BLE link + ELM327 handshake
+  command_timeout: 1.0      # per-request budget; keep small, a hung adapter
+                            # otherwise stalls the sample loop for `timeout`
+  reconnect_seconds: 15     # retry interval while the car is off
+  max_read_failures: 5      # silent cycles before forcing a reconnect
+  adaptive_timing: 1        # ELM327 ATAT: 0=off 1=adaptive 2=aggressive
+  response_timeout: "32"    # ELM327 ATST, 4ms units, hex ("32" = 200ms)
+  probe_supported: true     # ask the ECU which PIDs it has, skip the rest
+
+  # --- Generic Mode 01, used only when no vehicle signalset is configured ---
+  # Polled every cycle.
   core_pids:
-    - RPM
     - SPEED
-    - THROTTLE_POS
-    - COOLANT_TEMP
+    - HV_BATTERY_LIFE          # 0x5B, EV/hybrid pack state of charge
+    - CONTROL_MODULE_VOLTAGE   # 0x42
+    - ACCEL_PEDAL_D            # 0x49, driver demand
+    - ACCEL_PEDAL_E            # 0x4A
+    - RELATIVE_ACCEL_POS       # 0x5A
+    - ACTUAL_TORQUE            # 0x62
+    - RPM                      # meaningless on most EVs; harmless if absent
     - ENGINE_LOAD
+    - THROTTLE_POS
+  # Polled every slow_every_n cycles - values that barely move.
+  slow_pids:
+    - AMBIENT_AIR_TEMP
+    - COOLANT_TEMP
+    - RUN_TIME
+    - ODOMETER
+    - BAROMETRIC_PRESSURE
+    - FUEL_LEVEL
+  slow_every_n: 20
+
+# Vehicle-specific OBDb signalset. This is where the real EV data is: pack
+# voltage and current, per-cell temperatures, true state of charge, per-wheel
+# speed, steering angle. Generic Mode 01 above has none of that.
+#
+#   scripts/fetch_signalset.py --list ioniq
+#   scripts/fetch_signalset.py Hyundai-IONIQ-5 --year 2024 --summary
+#
+# Leave signalset null for an unknown vehicle and the generic PIDs are used.
+#
+# For a fleet, do NOT set these here: this file is baked into the master image
+# and the car differs per participant. Set them per kit in /etc/default/obd-ev,
+# which overrides this block:
+#
+#   OBD_EV_VEHICLE=Chevrolet-Bolt-EUV     # resolves to vehicles/<name>.json
+#   OBD_EV_VEHICLE_YEAR=2023
+#
+# A name with no matching file falls back to generic Mode 01 with an error in
+# the journal, rather than taking the kit offline.
+vehicle:
+  signalset: null                # e.g. vehicles/Hyundai-IONIQ-5.json
+  make_model: null               # e.g. Hyundai-IONIQ-5, recorded for the study
+  year: null                     # e.g. 2024, selects year-filtered commands
+  min_period: 0.25               # floor on request period, seconds
+  default_period: 1.0            # for commands with no declared frequency
+  max_commands: 0                # 0 = every command in the signalset
+  disable_after: 5               # retire a command unanswered this many times
+  include_paths: []              # e.g. [Battery, Movement] to narrow collection
+  exclude_paths: []              # e.g. [DTCs]
 
 gps:
   enabled: true
@@ -31,15 +82,18 @@ imu:
   lowpass_alpha: 0.1      # 0..1, lower = smoother but more lag
 
 logger:
-  output_dir: ./logs
-  rotate_each_run: true   # one CSV per startup, named with timestamp
-  flush_every: 10         # rows
-  # Uploaded files are moved here so we don't re-upload them. Cleared
-  # manually when the device returns from a participant.
+  output_dir: ./logs      # OBD_EV_LOG_DIR overrides this, so upload.sh agrees
+  flush_every: 10         # rows between fsyncs
+  max_hz: 10.0            # ceiling on row rate; the OBD read usually paces it
+  idle_hz: 0.2            # row rate while the vehicle is unreachable (parked)
+  rotate_minutes: 15      # bound on how much one power cut can cost
+  trip_gap_seconds: 120   # vehicle unreachable this long ends the trip
+  # Uploaded files are moved here so we don't re-upload them. Cleared when the
+  # device returns from a participant.
   uploaded_subdir: uploaded
 
-# Each device gets a tag stored in every CSV row so logs from many
-# participants don't get mixed up after upload. Set per-device in
-# /etc/default/obd-ev (env var OBD_EV_DEVICE_ID); falls back to hostname.
+# Each device tags every CSV row so logs from many participants don't get
+# mixed up after upload. Set per-device in /etc/default/obd-ev
+# (OBD_EV_DEVICE_ID); falls back to hostname.
 device:
   id: null

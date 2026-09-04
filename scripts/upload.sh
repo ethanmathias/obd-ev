@@ -18,6 +18,15 @@ if command -v nm-online >/dev/null 2>&1 && ! nm-online -q -t 10; then
 fi
 
 shopt -s nullglob
+
+# The data dictionary describes every column in the trip files, so it has to
+# reach the cloud folder too. It is small, fixed for the run, and rewritten on
+# each boot, so just overwrite it every time rather than tracking it.
+for dict_file in "$LOG_DIR"/signals*.csv; do
+    rclone --config "$RCLONE_CONF" copyto "$dict_file" \
+        "$REMOTE/$(basename "$dict_file")" --retries 2 >/dev/null 2>&1 || true
+done
+
 csvs=("$LOG_DIR"/drive_*.csv)
 [ ${#csvs[@]} -eq 0 ] && exit 0
 

@@ -1,0 +1,8 @@
+#!/bin/sh
+# NetworkManager dispatcher hook: upload the moment the Pi joins a network,
+# instead of waiting up to a minute for the next timer tick. The participant
+# may only be in WiFi range for a short time after parking.
+#
+# $1 = interface, $2 = action
+[ "$2" = "up" ] || exit 0
+exec systemctl start --no-block obd-ev-upload.service
