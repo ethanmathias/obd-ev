@@ -65,6 +65,8 @@ obd-ev/
 │   ├── setup_pi.sh              # one-shot Pi provisioning
 │   ├── image_setup.sh           # researcher: configure rclone
 │   ├── fetch_signalset.py       # vendor a vehicle profile from OBDb
+│   ├── select_vehicle.py        # pick this kit's car from a list
+│   ├── preflight.py             # pre-ship checks, exits non-zero on failure
 │   ├── authorize_kit.sh         # per-kit cloud authorization
 │   ├── validate_obdb.py         # replay OBDb's own test vectors
 │   ├── firstboot_wifi.sh        # lab-network preload (researcher only)
@@ -138,8 +140,19 @@ and fingerprints the token so you can confirm no two kits match. See
 
 ## The data files
 
-Each trip produces one CSV, and every run also writes `signals_<device>.csv` —
-a data dictionary describing every column in it. Both are uploaded.
+Each trip gets its own folder, containing one or more CSV parts and a
+`signals_<device>.csv` data dictionary describing every column in them:
+
+```
+obd-ev-uploads/P003/20260906_142201_a3f9c1d2/
+    drive_P003_20260906_142201.csv
+    drive_P003_20260906_143701.csv   # part, after a 15-minute rotation
+    signals_P003.csv
+```
+
+Device id is the top level, so many kits can share one cloud folder. Trip
+folders are named `<timestamp>_<boot id>` — the boot id keeps them unique even
+though the Pi has no RTC and boots with an unset clock.
 
 Column names are derived from the vehicle profile's own signal names and units,
 so the CSV is readable without a decoder ring:

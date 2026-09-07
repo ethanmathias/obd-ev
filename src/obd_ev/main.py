@@ -10,7 +10,7 @@ from .gps_reader import (GPSReader, FIELDS as GPS_FIELDS,
                          DESCRIPTIONS as GPS_DESCRIPTIONS)
 from .imu_reader import (IMUReader, FIELDS as IMU_FIELDS,
                          DESCRIPTIONS as IMU_DESCRIPTIONS)
-from .logger import CsvLogger, write_signal_dictionary
+from .logger import CsvLogger
 
 
 # Columns the logger itself contributes, before any sensor.
@@ -61,9 +61,8 @@ def main() -> int:
     link = OBDLink(cfg.obd, lambda: build_reader(cfg))
     fieldnames = (["device_id", "obd_connected"]
                   + link.field_names() + GPS_FIELDS + IMU_FIELDS)
-    csv_log = CsvLogger(cfg.logger, fieldnames, device_id=cfg.device.id)
-    write_signal_dictionary(cfg.logger.output_dir,
-                            _dictionary(link), cfg.device.id)
+    csv_log = CsvLogger(cfg.logger, fieldnames, device_id=cfg.device.id,
+                        dictionary=_dictionary(link))
     log.info("device_id=%s, %d columns (%d vehicle signals)",
              cfg.device.id, len(fieldnames), len(link.field_names()))
     if cfg.vehicle.signalset:
@@ -98,8 +97,8 @@ def main() -> int:
             # A trip starting: ship the parked rows accumulated since the last
             # trip ended and give the drive its own file.
             if obd_values and trip_closed:
-                log.info("vehicle responding again, starting new trip")
-                csv_log.rotate()
+                log.info("vehicle responding again")
+                csv_log.new_trip()
                 trip_closed = False
 
             row.update(obd_values)

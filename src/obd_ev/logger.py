@@ -3,6 +3,7 @@ import datetime as dt
 import logging
 import os
 import time
+import uuid
 from pathlib import Path
 from typing import Dict, List, Optional
 
@@ -16,12 +17,30 @@ def utc_now_iso() -> str:
     return dt.datetime.now(dt.timezone.utc).isoformat()
 
 
+def _boot_id() -> str:
+    """Short identifier that changes on every boot and never repeats.
+
+    The Pi has no RTC, so at boot the clock is whatever it was at shutdown
+    until GPS or NTP corrects it. Two power cycles can therefore produce the
+    same wall-clock timestamp. Mixing the kernel's boot id into trip names
+    makes them unique regardless of what the clock believes.
+    """
+    try:
+        return Path("/proc/sys/kernel/random/boot_id").read_text().strip()[:8]
+    except OSError:
+        return uuid.uuid4().hex[:8]
+
+
+BOOT_ID = _boot_id()
+
+
 def write_signal_dictionary(output_dir, rows: List[Dict], device_id: str = "") -> Path:
     """Write signals.csv: one row per CSV column, saying what it is.
 
-    Every uploaded trip file is wide and machine-named; this is what makes it
-    reviewable without reading the code or the vendor signalset. Written once
-    per run and uploaded alongside the logs.
+    Written into each trip folder rather than once per device. The schema can
+    change between trips -- a vehicle profile is updated, a kit is reassigned --
+    and a dictionary that describes the data next to it stays correct where a
+    single shared one would silently start lying about older trips.
     """
     tag = f"_{device_id}" if device_id else ""
     path = Path(output_dir) / f"signals{tag}.csv"
@@ -31,48 +50,82 @@ def write_signal_dictionary(output_dir, rows: List[Dict], device_id: str = "") -
         writer.writeheader()
         for row in rows:
             writer.writerow({f: row.get(f, "") for f in DICTIONARY_FIELDS})
-    log.info("wrote %s (%d columns documented)", path, len(rows))
     return path
 
 
 class CsvLogger:
-    """One CSV per trip segment.
+    """One folder per trip, one or more CSV parts inside it.
 
-    Rotation is not just hygiene: `upload.sh` never uploads the file the logger
-    is currently writing, so a file that is never closed is never uploaded. A
-    kit powered from an always-live OBD port would otherwise accumulate one
-    enormous CSV and upload nothing at all.
+    Layout under `output_dir`:
+
+        20260906_142201_a3f9c1d2/       <- a trip
+            drive_P003_20260906_142201.csv
+            drive_P003_20260906_143701.csv   <- part, after a 15-minute rotation
+            signals_P003.csv
+        .current                        <- path of the file being written now
+
+    A trip ends when the vehicle goes away and comes back, or when the kit
+    loses power -- which on most cars is the moment the ignition goes off, so
+    in practice one trip is one power cycle.
+
+    Parts exist because power is cut without warning: rotating mid-trip bounds
+    how much a single unclean shutdown can cost, and closes files so the
+    uploader can ship them.
     """
 
-    def __init__(self, cfg: LoggerConfig, fieldnames: List[str], device_id: str = ""):
+    def __init__(self, cfg: LoggerConfig, fieldnames: List[str],
+                 device_id: str = "", dictionary: Optional[List[Dict]] = None):
         self.cfg = cfg
         self.device_id = device_id
-        self.dir = Path(cfg.output_dir)
-        self.dir.mkdir(parents=True, exist_ok=True)
+        self.dictionary = dictionary or []
+        self.root = Path(cfg.output_dir)
+        self.root.mkdir(parents=True, exist_ok=True)
         self.fieldnames = ["timestamp", "t_mono"] + fieldnames
         self._fh = None
         self._writer = None
         self.path: Optional[Path] = None
+        self.trip_dir: Optional[Path] = None
+        self.trip_id: Optional[str] = None
         self._n = 0
         self._opened_at = 0.0
-        self.open()
+        self._last_flush = 0.0
+        self.new_trip()
 
-    def _next_path(self) -> Path:
-        # device_id in the filename keeps uploads from many participants from
-        # colliding in the shared cloud folder.
+    # -- trip and part management -------------------------------------------
+
+    def _new_trip_id(self) -> str:
+        stamp = dt.datetime.now().strftime("%Y%m%d_%H%M%S")
+        base = f"{stamp}_{BOOT_ID}"
+        candidate, seq = base, 2
+        while (self.root / candidate).exists():
+            candidate = f"{base}_{seq}"
+            seq += 1
+        return candidate
+
+    def new_trip(self) -> None:
+        """Close whatever is open and begin a new trip folder."""
+        self.close()
+        self.trip_id = self._new_trip_id()
+        self.trip_dir = self.root / self.trip_id
+        self.trip_dir.mkdir(parents=True, exist_ok=True)
+        if self.dictionary:
+            write_signal_dictionary(self.trip_dir, self.dictionary,
+                                    self.device_id)
+        self._open_part()
+        log.info("trip %s started", self.trip_id)
+
+    def _next_part_path(self) -> Path:
         tag = f"_{self.device_id}" if self.device_id else ""
         stamp = dt.datetime.now().strftime("%Y%m%d_%H%M%S")
-        path = self.dir / f"drive{tag}_{stamp}.csv"
-        # A rotation inside the same second, or a clock that has not been set
-        # yet, must not overwrite the file we just closed.
-        seq = 1
+        path = self.trip_dir / f"drive{tag}_{stamp}.csv"
+        seq = 2
         while path.exists():
-            path = self.dir / f"drive{tag}_{stamp}_{seq}.csv"
+            path = self.trip_dir / f"drive{tag}_{stamp}_{seq}.csv"
             seq += 1
         return path
 
-    def open(self) -> None:
-        self.path = self._next_path()
+    def _open_part(self) -> None:
+        self.path = self._next_part_path()
         self._fh = self.path.open("w", newline="")
         self._writer = csv.DictWriter(
             self._fh, fieldnames=self.fieldnames, extrasaction="ignore"
@@ -81,16 +134,50 @@ class CsvLogger:
         self._fh.flush()
         self._n = 0
         self._opened_at = time.monotonic()
+        self._last_flush = self._opened_at
+        self._mark_current(self.path)
         log.info("logging to %s", self.path)
+
+    def rotate(self) -> None:
+        """Start a new part within the same trip. The closed part becomes
+        eligible for upload; the uploader never touches the open one."""
+        empty = self._n == 0
+        closing = self.path
+        self.close()
+        if empty and closing is not None:
+            closing.unlink(missing_ok=True)   # don't ship a header-only file
+        self._open_part()
+
+    # -- pointer file the uploader reads ------------------------------------
+
+    def _mark_current(self, path: Optional[Path]) -> None:
+        marker = self.root / ".current"
+        try:
+            if path is None:
+                marker.unlink(missing_ok=True)
+            else:
+                marker.write_text(str(path) + "\n")
+        except OSError as exc:
+            log.debug("could not update %s: %s", marker, exc)
+
+    # -- writing ------------------------------------------------------------
 
     def write(self, row: Dict) -> None:
         row.setdefault("timestamp", utc_now_iso())
         row.setdefault("t_mono", round(time.monotonic(), 3))
         self._writer.writerow(row)
         self._n += 1
-        if self._n % self.cfg.flush_every == 0:
+
+        # Flush on whichever comes first: a row count, or a wall-clock
+        # interval. The count alone is not enough -- at the sub-1Hz row rates
+        # a slow BLE link produces, ten rows can be a minute of driving, and
+        # the ignition cutting power takes all of it.
+        now = time.monotonic()
+        if (self._n % self.cfg.flush_every == 0
+                or now - self._last_flush >= self.cfg.flush_seconds):
             self._fh.flush()
             os.fsync(self._fh.fileno())
+            self._last_flush = now
 
     @property
     def rows(self) -> int:
@@ -100,17 +187,6 @@ class CsvLogger:
     def age_seconds(self) -> float:
         return time.monotonic() - self._opened_at
 
-    def rotate(self) -> None:
-        """Close the current segment and start a new one. The closed file
-        becomes eligible for upload on the next timer tick."""
-        empty = self._n == 0
-        closing = self.path
-        self.close()
-        if empty and closing is not None:
-            # Nothing was recorded; don't ship a header-only file.
-            closing.unlink(missing_ok=True)
-        self.open()
-
     def close(self) -> None:
         if self._fh is None:
             return
@@ -119,3 +195,4 @@ class CsvLogger:
         self._fh.close()
         self._fh = None
         self._writer = None
+        self._mark_current(None)

@@ -1,0 +1,14 @@
+{
+ "make_model": "Chevrolet-Bolt-EUV",
+ "years": [
+  2022,
+  2023
+ ],
+ "generations": [
+  {
+   "name": "First Generation",
+   "start_year": 2022,
+   "end_year": 2023
+  }
+ ]
+}

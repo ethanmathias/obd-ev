@@ -84,7 +84,11 @@ class IMUConfig:
 @dataclass
 class LoggerConfig:
     output_dir: str = "./logs"
+    # Flush on whichever comes first. The row count alone is not enough: at
+    # sub-1Hz row rates ten rows can be a minute of driving, and on most cars
+    # the ignition cuts power to the Pi with no warning.
     flush_every: int = 10
+    flush_seconds: float = 2.0
     uploaded_subdir: str = "uploaded"
     # Upper bound on the row rate. The OBD read usually paces the loop well
     # below this; the cap only matters when OBD is disconnected or very fast.

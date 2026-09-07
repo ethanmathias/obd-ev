@@ -1,0 +1,231 @@
+#!/usr/bin/env python3
+"""Choose this kit's vehicle from the profiles on the image, and record it.
+
+Typing `OBD_EV_VEHICLE` by hand is the riskiest step in per-kit setup, because
+a wrong name fails *silently*: the logger falls back to generic Mode 01 and the
+kit collects a tenth of the data it should, with nothing obviously broken until
+the study is over. Picking from a list removes the possibility.
+
+    scripts/select_vehicle.py                       # interactive picker
+    scripts/select_vehicle.py --list                # show what's on this image
+    scripts/select_vehicle.py --set Chevrolet-Bolt-EUV --year 2023
+    scripts/select_vehicle.py --none                # generic Mode 01
+
+Writes OBD_EV_VEHICLE and OBD_EV_VEHICLE_YEAR into /etc/default/obd-ev,
+leaving every other line of that file untouched.
+"""
+
+import argparse
+import json
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+VEHICLE_DIR = REPO_ROOT / "vehicles"
+ENV_FILE = Path(os.environ.get("OBD_EV_ENV_FILE", "/etc/default/obd-ev"))
+
+sys.path.insert(0, str(REPO_ROOT / "src"))
+
+
+class Profile:
+    def __init__(self, path: Path):
+        self.path = path
+        self.name = path.stem
+        meta_path = path.with_suffix(".meta.json")
+        meta = {}
+        if meta_path.exists():
+            try:
+                meta = json.loads(meta_path.read_text())
+            except ValueError:
+                meta = {}
+        self.years = meta.get("years") or []
+        self.generations = meta.get("generations") or []
+        self._signalset = None
+
+    def signalset(self, year=None):
+        from obd_ev.obdb import SignalSet
+        if self._signalset is None:
+            self._signalset = SignalSet.load(self.path)
+        return self._signalset.for_year(year)
+
+    def summary(self, year=None):
+        ss = self.signalset(year)
+        signals = [s for c in ss.commands for s in c.signals]
+        groups = {}
+        for s in signals:
+            groups[s.path.split(".")[0] or "-"] = \
+                groups.get(s.path.split(".")[0] or "-", 0) + 1
+        return len(ss.commands), len(signals), groups
+
+    @property
+    def year_label(self):
+        if not self.years:
+            return "any year"
+        return f"{self.years[0]}-{self.years[-1]}"
+
+
+def discover():
+    if not VEHICLE_DIR.exists():
+        return []
+    return sorted((Profile(p) for p in VEHICLE_DIR.glob("*.json")
+                   if not p.name.endswith(".meta.json")),
+                  key=lambda p: p.name)
+
+
+def show(profiles):
+    if not profiles:
+        print("No vehicle profiles on this image.\n"
+              "Add one first:  scripts/fetch_signalset.py --list <make>")
+        return
+    print("\nVehicle profiles on this image:\n")
+    for i, p in enumerate(profiles, 1):
+        commands, signals, _ = p.summary()
+        print(f"  {i}) {p.name:<26} {signals:>4} signals  "
+              f"{commands:>3} commands  {p.year_label}")
+    print("  0) (no profile)              generic Mode 01, works on any "
+          "OBD-II vehicle")
+
+
+def ask_year(profile):
+    if not profile.years:
+        raw = input("Model year (blank to skip): ").strip()
+        return int(raw) if raw.isdigit() else None
+    if len(profile.years) == 1:
+        print(f"Model year: {profile.years[0]} (only year for this profile)")
+        return profile.years[0]
+    options = ", ".join(str(y) for y in profile.years)
+    while True:
+        raw = input(f"Model year [{options}]: ").strip()
+        if raw.isdigit() and int(raw) in profile.years:
+            return int(raw)
+        if raw.isdigit():
+            confirm = input(f"  {raw} is outside the known range for this "
+                            f"model. Use it anyway? [y/N] ").strip().lower()
+            if confirm == "y":
+                return int(raw)
+            continue
+        print("  Enter one of the listed years.")
+
+
+def describe(profile, year):
+    commands, signals, groups = profile.summary(year)
+    print(f"\nThis kit will collect {signals} signals from {commands} commands"
+          f"{f' for model year {year}' if year else ''}:")
+    for group, n in sorted(groups.items(), key=lambda kv: -kv[1])[:8]:
+        print(f"    {n:>4}  {group}")
+    if commands > 40:
+        print(f"\n  Note: {commands} commands is a lot for a BLE adapter. If the"
+              f"\n  achieved row rate is too low, narrow it with "
+              f"vehicle.exclude_paths\n  in config.yaml.")
+
+
+def write_env(vehicle, year):
+    """Update the two keys in place, preserving the rest of the file."""
+    lines = []
+    if ENV_FILE.exists():
+        lines = ENV_FILE.read_text().splitlines()
+    else:
+        print(f"note: {ENV_FILE} does not exist yet; creating it")
+
+    wanted = {}
+    if vehicle:
+        wanted["OBD_EV_VEHICLE"] = vehicle
+        if year:
+            wanted["OBD_EV_VEHICLE_YEAR"] = str(year)
+
+    out, seen = [], set()
+    for line in lines:
+        key = line.split("=", 1)[0].strip() if "=" in line else ""
+        if key in ("OBD_EV_VEHICLE", "OBD_EV_VEHICLE_YEAR"):
+            if key in wanted:
+                out.append(f"{key}={wanted[key]}")
+                seen.add(key)
+            # dropping the line is how "no profile" is expressed
+            continue
+        out.append(line)
+    for key, value in wanted.items():
+        if key not in seen:
+            out.append(f"{key}={value}")
+
+    body = "\n".join(out).rstrip("\n") + "\n"
+    try:
+        ENV_FILE.write_text(body)
+    except PermissionError:
+        subprocess.run(["sudo", "tee", str(ENV_FILE)], input=body, text=True,
+                       stdout=subprocess.DEVNULL, check=True)
+    print(f"\nWrote {ENV_FILE}:")
+    for key in ("OBD_EV_VEHICLE", "OBD_EV_VEHICLE_YEAR"):
+        value = wanted.get(key)
+        print(f"  {key}={value}" if value else f"  {key} (unset)")
+    print("\nRestart to apply:  sudo systemctl restart obd-ev")
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--list", action="store_true",
+                        help="show available profiles and exit")
+    parser.add_argument("--set", metavar="NAME",
+                        help="select this profile without prompting")
+    parser.add_argument("--year", type=int)
+    parser.add_argument("--none", action="store_true",
+                        help="clear the profile; use generic Mode 01")
+    args = parser.parse_args()
+
+    profiles = discover()
+
+    if args.list:
+        show(profiles)
+        return 0
+
+    if args.none:
+        write_env(None, None)
+        return 0
+
+    if args.set:
+        match = next((p for p in profiles if p.name.lower() == args.set.lower()),
+                     None)
+        if match is None:
+            print(f"No profile named {args.set!r} on this image.", file=sys.stderr)
+            show(profiles)
+            return 1
+        describe(match, args.year)
+        write_env(match.name, args.year)
+        return 0
+
+    if not profiles:
+        show(profiles)
+        return 1
+
+    show(profiles)
+    while True:
+        raw = input(f"\nSelect [0-{len(profiles)}]: ").strip()
+        if raw == "0":
+            describe_none()
+            write_env(None, None)
+            return 0
+        if raw.isdigit() and 1 <= int(raw) <= len(profiles):
+            profile = profiles[int(raw) - 1]
+            break
+        print("  Enter one of the listed numbers.")
+
+    year = ask_year(profile)
+    describe(profile, year)
+    if input("\nWrite this to the kit? [y/N] ").strip().lower() != "y":
+        print("Nothing written.")
+        return 1
+    write_env(profile.name, year)
+    return 0
+
+
+def describe_none():
+    print("\nThis kit will use generic Mode 01: about 16 widely supported PIDs,\n"
+          "probed against whatever the vehicle actually answers. Works on any\n"
+          "OBD-II vehicle, but yields far less than a vehicle profile.")
+
+
+if __name__ == "__main__":
+    sys.exit(main())

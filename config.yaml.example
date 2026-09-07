@@ -83,7 +83,9 @@ imu:
 
 logger:
   output_dir: ./logs      # OBD_EV_LOG_DIR overrides this, so upload.sh agrees
-  flush_every: 10         # rows between fsyncs
+  flush_every: 10         # rows between fsyncs...
+  flush_seconds: 2.0      # ...or this long, whichever comes first. Bounds how
+                          # much data an ignition-off power cut can take.
   max_hz: 10.0            # ceiling on row rate; the OBD read usually paces it
   idle_hz: 0.2            # row rate while the vehicle is unreachable (parked)
   rotate_minutes: 15      # bound on how much one power cut can cost

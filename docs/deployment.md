@@ -96,26 +96,43 @@ The study workflow is:
 ## Per-participant customization
 
 1. Flash the master image to a fresh SD card.
-2. Mount the rootfs and edit `/etc/default/obd-ev`. This is the only
-   per-participant file:
+2. Set the kit identifier and setup-AP password in `/etc/default/obd-ev`:
    ```sh
-   # Kit identifier. Appears in every CSV row, in the uploaded filename, and
-   # in the setup network name (OBD-EV-Setup-P003).
+   # Appears in every CSV row, in the upload path, and in the setup network
+   # name (OBD-EV-Setup-P003).
    OBD_EV_DEVICE_ID=P003
-
-   # Which car this kit is going into. The name is the OBDb repo name, and
-   # must match a file already fetched into vehicles/ on the master image.
-   OBD_EV_VEHICLE=Chevrolet-Bolt-EUV
-   OBD_EV_VEHICLE_YEAR=2023
 
    # Password for this kit's setup network. Goes on the label.
    OBD_EV_AP_PASSWORD=<printed on the kit label>
    ```
-   Omit `OBD_EV_VEHICLE` entirely if the participant's car is unknown or
-   unsupported — the kit then logs the generic Mode 01 set, which works on any
-   OBD-II compliant vehicle. `OBD_EV_VEHICLE_YEAR` selects year-filtered
-   commands and is worth setting whenever you know it.
-3. **Give this kit its own cloud authorization:**
+
+3. **Pick the vehicle from a list** rather than typing it:
+   ```bash
+   ./scripts/select_vehicle.py
+   ```
+   ```
+   Vehicle profiles on this image:
+
+     1) Chevrolet-Bolt-EUV          107 signals  107 commands  2022-2023
+     2) Hyundai-IONIQ-5             381 signals   33 commands  2021-2027
+     0) (no profile)              generic Mode 01, works on any OBD-II vehicle
+
+   Select [0-2]: 1
+   Model year [2022, 2023]: 2023
+   ```
+   It shows what will be collected, validates the model year against the
+   vehicle's known generations, and writes `OBD_EV_VEHICLE` /
+   `OBD_EV_VEHICLE_YEAR` without disturbing the rest of the file.
+
+   Use the picker rather than editing by hand. A mistyped vehicle name is the
+   worst failure mode in this whole setup because it is **silent**: the kit
+   falls back to generic Mode 01 and collects a fraction of the data with
+   nothing visibly wrong. Choose `0` deliberately if the participant's car
+   isn't supported.
+
+   Scriptable equivalents: `--set Chevrolet-Bolt-EUV --year 2023`, `--none`,
+   `--list`.
+4. **Give this kit its own cloud authorization:**
    ```bash
    ./scripts/authorize_kit.sh
    ```
@@ -124,8 +141,18 @@ The study workflow is:
    stops uploads on every other kit. The script verifies a real upload and
    records a token fingerprint; note it in your build log and confirm no two
    kits match. See [docs/cloud_setup.md](cloud_setup.md).
-4. **Label the kit** with the setup network name and setup password.
-5. Ship it. Participant WiFi credentials are never handled by you — the
+5. **Run the preflight check.** It exits non-zero if anything would stop this
+   kit collecting or uploading:
+   ```bash
+   ./scripts/preflight.py
+   ```
+   It verifies the vehicle profile actually resolves, the IMU answers on I2C,
+   gpsd is producing fixes, the upload credential is this kit's own, the
+   services are enabled, and that the setup portal will still run for the
+   participant. Every check is something with no visible symptom in the field.
+
+6. **Label the kit** with the setup network name and setup password.
+7. Ship it. Participant WiFi credentials are never handled by you — the
    participant enters them on the device itself.
 
 These variables override `config.yaml`, because `config.yaml` is baked into the
@@ -200,32 +227,57 @@ sudo reboot
 
 ## What lands in the cloud folder
 
+Every kit uploads into the same folder, so the layout is keyed by device first
+and trip second:
+
 ```
-drive_P003_20260901_143022.csv     one trip, all columns
-drive_P003_20260901_145510.csv
-signals_P003.csv                   data dictionary for this kit
+obd-ev-uploads/
+  P003/
+    20260906_142201_a3f9c1d2/          <- one trip
+      drive_P003_20260906_142201.csv
+      drive_P003_20260906_143701.csv   <- part, after a 15-minute rotation
+      signals_P003.csv                 <- data dictionary for these files
+    20260906_181044_7b2e0a55/
+      ...
+  P004/
+    ...
 ```
 
-`signals_P003.csv` documents every column in the trip files — readable name,
-unit, top-level `group`, the OBDb signal id and command it came from, and the
-polling period. It is rewritten each boot and re-uploaded each time, so it
-always matches the vehicle profile the kit is actually running.
+**Trip folder names are `<timestamp>_<boot id>`.** The timestamp is from the Pi
+clock, which has no RTC and is wrong until GPS or NTP corrects it — so two
+power cycles can genuinely report the same wall time. The kernel boot id makes
+the folder unique regardless, and a same-second collision within one boot gets a
+numeric suffix. Sort by the `timestamp` column inside the files, not by folder
+name, when the ordering has to be exact.
 
-Column names are normalized from the signalset (`lateral_acceleration_mps2`,
-`state_of_charge_pct`). Where two signals would produce the same name, the
-second keeps its vendor id as the column instead, so no column is ever
-silently overwritten — check `source_id` in the dictionary if a name looks odd.
+`signals_<device>.csv` is written into **each** trip folder rather than once per
+device. The schema changes if a vehicle profile is updated or a kit reassigned,
+and a dictionary sitting next to the data it describes stays correct where a
+single shared one would silently start lying about older trips.
+
+Locally the same layout appears under `logs/`, and uploaded trips move to
+`logs/uploaded/<trip>/` — kept as a re-verification copy, pruned to the most
+recent `OBD_EV_KEEP_TRIPS` (default 64) once the card has shipped them.
 
 ## Trip files and uploads
 
-`upload.sh` never uploads the file the logger is currently writing, so a file
-only ships once it has been rotated. Rotation happens when:
+The logger records the file it currently has open in `logs/.current`, and
+`upload.sh` skips exactly that file — but only while `obd-ev` is actually
+running. After an unclean shutdown the marker is stale and the file it names is
+complete, so it uploads normally on the next tick.
 
-- the vehicle has been unreachable for `logger.trip_gap_seconds` (trip over),
-- the vehicle answers again after a gap (a new trip starts), or
-- an active trip passes `logger.rotate_minutes`.
+A **new trip folder** starts when the logger starts, and when the vehicle
+answers again after being unreachable for `logger.trip_gap_seconds`.
 
-A car parked for a week produces one idle file, not hundreds.
+A **new part** inside the current trip starts every `logger.rotate_minutes`,
+and when a trip goes quiet. Parts exist because power is cut without warning:
+rotating bounds how much one unclean shutdown can cost, and closing a file is
+what makes it eligible for upload.
+
+On most cars the Pi loses power the moment the ignition goes off, so in practice
+**one trip is one power cycle** and the `trip_gap_seconds` path rarely fires.
+A car parked for a week with the port still live produces one idle part, not
+hundreds of files.
 
 ## Cloud credentials for a fleet
 

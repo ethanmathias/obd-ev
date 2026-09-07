@@ -28,6 +28,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 RAW = "https://raw.githubusercontent.com/OBDb/{name}/main/signalsets/v3/default.json"
+GENERATIONS = "https://raw.githubusercontent.com/OBDb/{name}/main/generations.yaml"
 SEARCH = "https://api.github.com/search/repositories?q=org:OBDb+{q}+in:name&per_page=40"
 
 
@@ -35,6 +36,47 @@ def _get(url: str) -> bytes:
     req = urllib.request.Request(url, headers={"User-Agent": "obd-ev/fetch-signalset"})
     with urllib.request.urlopen(req, timeout=30) as resp:
         return resp.read()
+
+
+def fetch_years(name: str) -> dict:
+    """Vendor the model years from the vehicle's generations.yaml.
+
+    Kept as a compact JSON sidecar so `select_vehicle.py` can offer a real
+    year list instead of asking someone to type one. Missing upstream data is
+    not fatal -- the picker just accepts any year.
+    """
+    meta = {"make_model": name, "years": [], "generations": []}
+    try:
+        raw = _get(GENERATIONS.format(name=name)).decode()
+    except Exception as exc:
+        print(f"  (no generations.yaml: {exc})")
+        return meta
+    try:
+        import yaml
+        doc = yaml.safe_load(raw) or {}
+    except Exception as exc:
+        print(f"  (could not parse generations.yaml: {exc})")
+        return meta
+
+    import datetime
+    horizon = datetime.date.today().year + 1
+    years = set()
+    for gen in doc.get("generations") or []:
+        start = gen.get("start_year")
+        if not isinstance(start, int):
+            continue
+        end = gen.get("end_year")
+        if not isinstance(end, int):
+            end = horizon            # still in production
+        for y in range(start, min(end, horizon) + 1):
+            years.add(y)
+        meta["generations"].append({
+            "name": gen.get("name", ""),
+            "start_year": start,
+            "end_year": gen.get("end_year"),
+        })
+    meta["years"] = sorted(years)
+    return meta
 
 
 def list_vehicles(query: str) -> int:
@@ -120,6 +162,13 @@ def main() -> int:
     out.write_text(json.dumps(signalset, indent=1) + "\n")
     print(f"wrote {out.relative_to(REPO_ROOT) if out.is_relative_to(REPO_ROOT) else out}"
           f" ({len(body)} bytes) from {url}")
+
+    meta = fetch_years(args.vehicle)
+    meta_path = out.with_suffix(".meta.json")
+    meta_path.write_text(json.dumps(meta, indent=1) + "\n")
+    if meta["years"]:
+        print(f"wrote {meta_path.name}: model years "
+              f"{meta['years'][0]}-{meta['years'][-1]}")
 
     if args.summary or args.year:
         summarize(signalset, args.year)
