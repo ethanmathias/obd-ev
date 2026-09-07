@@ -81,7 +81,10 @@ echo "[8/8] default env file"
 if [ ! -f /etc/default/obd-ev ]; then
     # The setup access point needs a WPA2 password of its own. It is printed
     # on the kit's label; a random one per device is fine and preferable.
-    ap_password="$(tr -dc 'a-z2-9' </dev/urandom | head -c 10)"
+    # Not `tr ... | head -c 10`: head closes the pipe, tr dies of SIGPIPE, and
+    # `set -o pipefail` above turns that into a fatal error.
+    ap_password="$(LC_ALL=C dd if=/dev/urandom bs=256 count=1 2>/dev/null \
+        | LC_ALL=C tr -dc 'a-z2-9' | cut -c1-10)"
     sudo tee /etc/default/obd-ev >/dev/null <<ENVEOF
 OBD_EV_LOG_DIR=$REPO_DIR/logs
 OBD_EV_REMOTE=obd-ev:obd-ev-uploads

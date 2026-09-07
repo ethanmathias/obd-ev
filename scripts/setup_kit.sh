@@ -43,6 +43,15 @@ ask() {                       # ask <prompt> <default> -> echoes the answer
     fi
 }
 
+random_password() {
+    # dd exits 0, tr consumes all of its output so never sees SIGPIPE, and cut
+    # exits 0 -- so this survives `set -o pipefail`. The obvious
+    # `tr -dc ... | head -c 10` does not: head closes the pipe early, tr dies
+    # of SIGPIPE, and pipefail turns that into a fatal error mid-setup.
+    LC_ALL=C dd if=/dev/urandom bs=256 count=1 2>/dev/null \
+        | LC_ALL=C tr -dc 'a-z2-9' | cut -c1-10
+}
+
 env_get() {                   # current value of a key, if the file exists
     [ -f "$ENV_FILE" ] || return 0
     sed -n "s/^$1=//p" "$ENV_FILE" | tail -1
@@ -73,7 +82,7 @@ DEVICE_ID="$(ask 'Kit / participant id (e.g. P003)' "$(env_get OBD_EV_DEVICE_ID)
 DEVICE_ID="${DEVICE_ID// /-}"
 
 default_ap="$(env_get OBD_EV_AP_PASSWORD)"
-[ -z "$default_ap" ] && default_ap="$(tr -dc 'a-z2-9' </dev/urandom | head -c 10)"
+[ -z "$default_ap" ] && default_ap="$(random_password)"
 AP_PASSWORD="$(ask 'Password for this kit'\''s setup WiFi (goes on the label)' "$default_ap")"
 while [ "${#AP_PASSWORD}" -lt 8 ]; do
     warn "Must be at least 8 characters."
@@ -147,7 +156,7 @@ import hashlib, json, sys
 try: r = json.load(sys.stdin)
 except Exception: print("none"); raise SystemExit
 t = (r.get("obd-ev") or {}).get("token", "")
-print(hashlib.sha256(t.encode()).hexdigest()[:12] if t else "none")')"
+print(hashlib.sha256(t.encode()).hexdigest()[:12] if t else "none")' || true)"
         printf '{"device_id":"%s","token_fingerprint":"%s","authorized_at":"%s"}\n' \
             "$DEVICE_ID" "$fp" "$(date -Is)" | sudo tee /var/lib/obd-ev/upload-authorized.json >/dev/null
         note "credential fingerprint $fp"
@@ -172,12 +181,16 @@ set -e
 # -- 6. hand-off ------------------------------------------------------------
 
 step 6 "Label this kit"
+# env_get succeeds with empty output when a key is absent, so `|| echo` would
+# never fire; pick the fallback explicitly.
+KIT_VEHICLE="$(env_get OBD_EV_VEHICLE)"
+KIT_VEHICLE_YEAR="$(env_get OBD_EV_VEHICLE_YEAR)"
 cat <<SUMMARY
 
   ${bold}Kit id${reset}              $DEVICE_ID
   ${bold}Setup WiFi${reset}          OBD-EV-Setup-$DEVICE_ID
   ${bold}Setup password${reset}      $AP_PASSWORD
-  ${bold}Vehicle${reset}             $(env_get OBD_EV_VEHICLE || echo 'generic Mode 01') $(env_get OBD_EV_VEHICLE_YEAR)
+  ${bold}Vehicle${reset}             ${KIT_VEHICLE:-generic Mode 01} ${KIT_VEHICLE_YEAR:-}
 
   Write the setup WiFi name and password on the kit. The participant needs
   them once, to tell the device their home network.
