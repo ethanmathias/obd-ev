@@ -45,10 +45,13 @@ The study workflow is:
    Fetch **one profile per vehicle model in the study**, into the master image,
    so any kit can be assigned to any of those cars later without re-imaging:
    ```bash
-   ./scripts/fetch_signalset.py --list bolt
+   ./scripts/select_vehicle.py --search bolt      # search the catalogue
    ./scripts/fetch_signalset.py Chevrolet-Bolt-EUV --year 2023 --summary
    ./scripts/fetch_signalset.py Hyundai-IONIQ-5   --year 2024 --summary
    ```
+   `vehicles/index.json` is the catalogue of every OBDb vehicle that actually
+   has data — 205 of 733 repos; the rest are empty placeholders. Regenerate it
+   with `./scripts/build_index.py` when you want to pick up new models.
    Each writes `vehicles/<Make-Model>.json`. Read the `--summary` output before
    committing to a model: coverage varies enormously. A 2024 IONIQ 5 exposes
    381 signals including steering, yaw and acceleration; a Bolt EUV exposes 107,
@@ -129,6 +132,10 @@ The study workflow is:
    falls back to generic Mode 01 and collects a fraction of the data with
    nothing visibly wrong. Choose `0` deliberately if the participant's car
    isn't supported.
+
+   `--all` or `--search <term>` widens the list to the whole catalogue rather
+   than just what is on the image; picking one that isn't installed downloads
+   it first, so that step needs network.
 
    Scriptable equivalents: `--set Chevrolet-Bolt-EUV --year 2023`, `--none`,
    `--list`.

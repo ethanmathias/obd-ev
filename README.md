@@ -66,6 +66,7 @@ obd-ev/
 │   ├── image_setup.sh           # researcher: configure rclone
 │   ├── fetch_signalset.py       # vendor a vehicle profile from OBDb
 │   ├── select_vehicle.py        # pick this kit's car from a list
+│   ├── build_index.py           # refresh the OBDb vehicle catalogue
 │   ├── preflight.py             # pre-ship checks, exits non-zero on failure
 │   ├── authorize_kit.sh         # per-kit cloud authorization
 │   ├── validate_obdb.py         # replay OBDb's own test vectors
@@ -107,9 +108,14 @@ obd-ev/
 ## Vehicle profiles
 
 ```bash
-scripts/fetch_signalset.py --list ioniq
-scripts/fetch_signalset.py Hyundai-IONIQ-5 --year 2024 --summary
+scripts/select_vehicle.py --search bolt     # search 205 known vehicles
+scripts/select_vehicle.py                   # pick from what's on this image
 ```
+
+Picking a vehicle that isn't on the image downloads it first. The catalogue in
+`vehicles/index.json` lists only the OBDb repos that actually contain data —
+of 733 repos, **205 have commands and 57% are empty placeholders**, so browsing
+the raw org listing is mostly noise. Refresh it with `scripts/build_index.py`.
 
 ```yaml
 vehicle:

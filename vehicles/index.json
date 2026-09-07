@@ -1,0 +1,7509 @@
+{
+ "generated_at": "2026-09-07T03:02:14.038158+00:00",
+ "source": "https://github.com/OBDb",
+ "repos_scanned": 733,
+ "vehicles": [
+  {
+   "name": "Acura",
+   "commands": 21,
+   "signals": 39,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 11,
+    "ECU": 9,
+    "Tires": 8,
+    "Transmission": 3,
+    "Climate": 2,
+    "Fuel": 2,
+    "Trips": 2,
+    "Clocks": 2
+   },
+   "years": []
+  },
+  {
+   "name": "Acura-TLX",
+   "commands": 13,
+   "signals": 28,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "ECU": 9,
+    "Tires": 8,
+    "Engine": 4,
+    "Climate": 2,
+    "Transmission": 2,
+    "Fuel": 1,
+    "Trips": 1,
+    "Clocks": 1
+   },
+   "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ]
+  },
+  {
+   "name": "Aiways",
+   "commands": 28,
+   "signals": 29,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 18,
+    "Drivetrain": 8,
+    "Engine": 1,
+    "Movement": 1,
+    "Stats": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Aiways-U5",
+   "commands": 28,
+   "signals": 29,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 18,
+    "Drivetrain": 8,
+    "Engine": 1,
+    "Movement": 1,
+    "Stats": 1
+   },
+   "years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+   ]
+  },
+  {
+   "name": "Alfa-Romeo",
+   "commands": 28,
+   "signals": 64,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 38,
+    "Transmission": 6,
+    "Doors": 5,
+    "Control": 4,
+    "Movement": 4,
+    "GPS": 3,
+    "Orientation": 2,
+    "Battery": 1,
+    "Details": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Audi",
+   "commands": 945,
+   "signals": 1607,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 839,
+    "Engine": 306,
+    "Transmission": 160,
+    "Tires": 58,
+    "Movement": 58,
+    "Trips": 43,
+    "Climate": 39,
+    "Drivetrain": 32,
+    "Control": 21,
+    "Fuel": 18,
+    "Stats": 14,
+    "Fluids": 6,
+    "Brakes": 3,
+    "ECU": 3,
+    "DTCs": 3,
+    "GPS": 2,
+    "-": 1,
+    "Clocks": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Audi-A1",
+   "commands": 1,
+   "signals": 1,
+   "services": [
+    "01"
+   ],
+   "groups": {
+    "Fuel": 1
+   },
+   "years": [
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Audi-A4",
+   "commands": 31,
+   "signals": 31,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Stats": 8,
+    "Trips": 6,
+    "Tires": 4,
+    "Movement": 4,
+    "Engine": 2,
+    "Fuel": 2,
+    "Climate": 2,
+    "Fluids": 2,
+    "Transmission": 1
+   },
+   "years": [
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ]
+  },
+  {
+   "name": "Audi-A6",
+   "commands": 31,
+   "signals": 31,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Stats": 8,
+    "Trips": 6,
+    "Tires": 4,
+    "Movement": 4,
+    "Engine": 2,
+    "Fuel": 2,
+    "Climate": 2,
+    "Fluids": 2,
+    "Transmission": 1
+   },
+   "years": [
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Audi-Q3",
+   "commands": 448,
+   "signals": 478,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 206,
+    "Transmission": 156,
+    "Battery": 25,
+    "Tires": 20,
+    "Movement": 19,
+    "Trips": 14,
+    "Climate": 12,
+    "Fuel": 11,
+    "Drivetrain": 5,
+    "Control": 5,
+    "Brakes": 3,
+    "Fluids": 1,
+    "-": 1
+   },
+   "years": [
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Audi-Q4-e-tron",
+   "commands": 1,
+   "signals": 1,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 1
+   },
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Audi-RS-3",
+   "commands": 31,
+   "signals": 31,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Stats": 8,
+    "Trips": 6,
+    "Tires": 4,
+    "Movement": 4,
+    "Engine": 2,
+    "Fuel": 2,
+    "Climate": 2,
+    "Fluids": 2,
+    "Transmission": 1
+   },
+   "years": [
+    2011,
+    2012,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Audi-SQ5",
+   "commands": 31,
+   "signals": 31,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Stats": 8,
+    "Trips": 6,
+    "Tires": 4,
+    "Movement": 4,
+    "Engine": 2,
+    "Fuel": 2,
+    "Climate": 2,
+    "Fluids": 2,
+    "Transmission": 1
+   },
+   "years": [
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ]
+  },
+  {
+   "name": "Audi-SQ7",
+   "commands": 59,
+   "signals": 73,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Trips": 14,
+    "Battery": 13,
+    "Movement": 10,
+    "Control": 8,
+    "Engine": 8,
+    "Stats": 5,
+    "Climate": 4,
+    "Fluids": 3,
+    "DTCs": 3,
+    "GPS": 2,
+    "Transmission": 2,
+    "Clocks": 1
+   },
+   "years": [
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Audi-TT",
+   "commands": 15,
+   "signals": 19,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 8,
+    "Trips": 5,
+    "Movement": 4,
+    "Climate": 1,
+    "Engine": 1
+   },
+   "years": [
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+   ]
+  },
+  {
+   "name": "BMW",
+   "commands": 46,
+   "signals": 106,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Battery": 39,
+    "Engine": 17,
+    "Trips": 14,
+    "Movement": 10,
+    "Tires": 7,
+    "Doors": 7,
+    "Transmission": 6,
+    "Fuel": 2,
+    "Control": 1,
+    "Fluids": 1,
+    "Windows": 1,
+    "Climate": 1
+   },
+   "years": []
+  },
+  {
+   "name": "BMW-3-Series",
+   "commands": 17,
+   "signals": 33,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Movement": 8,
+    "Doors": 7,
+    "Engine": 6,
+    "Transmission": 5,
+    "Trips": 3,
+    "Tires": 2,
+    "Windows": 1,
+    "Climate": 1
+   },
+   "years": [
+    1975,
+    1976,
+    1977,
+    1978,
+    1979,
+    1980,
+    1981,
+    1982,
+    1983,
+    1984,
+    1985,
+    1986,
+    1987,
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "BMW-4-Series",
+   "commands": 10,
+   "signals": 16,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Movement": 8,
+    "Engine": 6,
+    "Trips": 2
+   },
+   "years": [
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "BMW-5-Series",
+   "commands": 30,
+   "signals": 76,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 32,
+    "Trips": 13,
+    "Movement": 8,
+    "Doors": 7,
+    "Transmission": 6,
+    "Engine": 4,
+    "Tires": 2,
+    "Control": 1,
+    "Fluids": 1,
+    "Windows": 1,
+    "Climate": 1
+   },
+   "years": [
+    1972,
+    1973,
+    1974,
+    1975,
+    1976,
+    1977,
+    1978,
+    1979,
+    1980,
+    1981,
+    1982,
+    1983,
+    1984,
+    1985,
+    1986,
+    1987,
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "BMW-X1",
+   "commands": 8,
+   "signals": 20,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Doors": 7,
+    "Movement": 5,
+    "Trips": 3,
+    "Transmission": 2,
+    "Engine": 1,
+    "Windows": 1,
+    "Climate": 1
+   },
+   "years": [
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "BMW-X2",
+   "commands": 3,
+   "signals": 7,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Movement": 5,
+    "Trips": 2
+   },
+   "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "BMW-X3",
+   "commands": 12,
+   "signals": 26,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Doors": 7,
+    "Transmission": 5,
+    "Movement": 5,
+    "Trips": 3,
+    "Engine": 2,
+    "Tires": 2,
+    "Windows": 1,
+    "Climate": 1
+   },
+   "years": [
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "BMW-X5",
+   "commands": 37,
+   "signals": 83,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 32,
+    "Trips": 13,
+    "Engine": 10,
+    "Movement": 8,
+    "Doors": 7,
+    "Transmission": 6,
+    "Tires": 2,
+    "Fuel": 1,
+    "Control": 1,
+    "Fluids": 1,
+    "Windows": 1,
+    "Climate": 1
+   },
+   "years": [
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "BMW-X7",
+   "commands": 12,
+   "signals": 26,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Doors": 7,
+    "Transmission": 5,
+    "Movement": 5,
+    "Trips": 3,
+    "Engine": 2,
+    "Tires": 2,
+    "Windows": 1,
+    "Climate": 1
+   },
+   "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "BMW-Z4",
+   "commands": 23,
+   "signals": 48,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Trips": 14,
+    "Movement": 8,
+    "Engine": 8,
+    "Doors": 7,
+    "Transmission": 5,
+    "Tires": 2,
+    "Windows": 1,
+    "Fluids": 1,
+    "Control": 1,
+    "Climate": 1
+   },
+   "years": [
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "BMW-i3",
+   "commands": 16,
+   "signals": 62,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 36,
+    "Trips": 11,
+    "Doors": 8,
+    "Movement": 5,
+    "Climate": 1,
+    "Transmission": 1
+   },
+   "years": [
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022
+   ]
+  },
+  {
+   "name": "BMW-i3s",
+   "commands": 16,
+   "signals": 62,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 36,
+    "Trips": 11,
+    "Doors": 8,
+    "Movement": 5,
+    "Climate": 1,
+    "Transmission": 1
+   },
+   "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022
+   ]
+  },
+  {
+   "name": "BMW-i4",
+   "commands": 2,
+   "signals": 3,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Trips": 2,
+    "Movement": 1
+   },
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "BMW-i5",
+   "commands": 33,
+   "signals": 86,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 38,
+    "Trips": 14,
+    "Movement": 8,
+    "Engine": 8,
+    "Doors": 7,
+    "Transmission": 5,
+    "Tires": 2,
+    "Control": 1,
+    "Fluids": 1,
+    "Windows": 1,
+    "Climate": 1
+   },
+   "years": [
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "BMW-iX3",
+   "commands": 5,
+   "signals": 9,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Movement": 5,
+    "Battery": 2,
+    "Trips": 2
+   },
+   "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "name": "Bentley",
+   "commands": 945,
+   "signals": 1608,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 839,
+    "Engine": 306,
+    "Transmission": 160,
+    "Movement": 62,
+    "Tires": 58,
+    "Trips": 43,
+    "Climate": 39,
+    "Drivetrain": 32,
+    "Control": 21,
+    "Fuel": 18,
+    "Stats": 11,
+    "Fluids": 6,
+    "Brakes": 3,
+    "ECU": 3,
+    "DTCs": 3,
+    "GPS": 2,
+    "-": 1,
+    "Clocks": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Buick",
+   "commands": 146,
+   "signals": 158,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 113,
+    "Engine": 16,
+    "Tires": 12,
+    "Movement": 9,
+    "Fuel": 2,
+    "Orientation": 2,
+    "Clocks": 1,
+    "Transmission": 1,
+    "Trips": 1,
+    "Control": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Cadillac",
+   "commands": 146,
+   "signals": 158,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 113,
+    "Engine": 16,
+    "Tires": 12,
+    "Movement": 9,
+    "Fuel": 2,
+    "Orientation": 2,
+    "Clocks": 1,
+    "Transmission": 1,
+    "Trips": 1,
+    "Control": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Chevrolet",
+   "commands": 198,
+   "signals": 212,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 115,
+    "Engine": 57,
+    "Tires": 12,
+    "Fuel": 12,
+    "Movement": 6,
+    "Trips": 3,
+    "Transmission": 3,
+    "Orientation": 2,
+    "Clocks": 1,
+    "Control": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Chevrolet-Blazer",
+   "commands": 21,
+   "signals": 21,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 19,
+    "Clocks": 1,
+    "Movement": 1
+   },
+   "years": [
+    1969,
+    1970,
+    1971,
+    1972,
+    1973,
+    1974,
+    1975,
+    1976,
+    1977,
+    1978,
+    1979,
+    1980,
+    1981,
+    1982,
+    1983,
+    1984,
+    1985,
+    1986,
+    1987,
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Chevrolet-Bolt-EUV",
+   "commands": 107,
+   "signals": 107,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 106,
+    "Movement": 1
+   },
+   "years": [
+    2022,
+    2023
+   ]
+  },
+  {
+   "name": "Chevrolet-Bolt-EV",
+   "commands": 107,
+   "signals": 107,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 106,
+    "Movement": 1
+   },
+   "years": [
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Chevrolet-Corvette",
+   "commands": 24,
+   "signals": 28,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 16,
+    "Movement": 4,
+    "Fuel": 2,
+    "Orientation": 2,
+    "Battery": 1,
+    "Transmission": 1,
+    "Trips": 1,
+    "Control": 1
+   },
+   "years": [
+    1953,
+    1954,
+    1955,
+    1956,
+    1957,
+    1958,
+    1959,
+    1960,
+    1961,
+    1962,
+    1963,
+    1964,
+    1965,
+    1966,
+    1967,
+    1968,
+    1969,
+    1970,
+    1971,
+    1972,
+    1973,
+    1974,
+    1975,
+    1976,
+    1977,
+    1978,
+    1979,
+    1980,
+    1981,
+    1982,
+    1984,
+    1985,
+    1986,
+    1987,
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Chevrolet-Equinox-EV",
+   "commands": 4,
+   "signals": 6,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 6
+   },
+   "years": [
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Chevrolet-Silverado-1500",
+   "commands": 52,
+   "signals": 55,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 31,
+    "Fuel": 10,
+    "Tires": 4,
+    "Transmission": 3,
+    "Movement": 2,
+    "Trips": 2,
+    "Battery": 2,
+    "Clocks": 1
+   },
+   "years": [
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Chrysler",
+   "commands": 28,
+   "signals": 64,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 38,
+    "Transmission": 6,
+    "Doors": 5,
+    "Control": 4,
+    "Movement": 4,
+    "GPS": 3,
+    "Orientation": 2,
+    "Battery": 1,
+    "Details": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Citroen",
+   "commands": 28,
+   "signals": 64,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 38,
+    "Transmission": 6,
+    "Doors": 5,
+    "Control": 4,
+    "Movement": 4,
+    "GPS": 3,
+    "Orientation": 2,
+    "Battery": 1,
+    "Details": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Citroen-eC4-X",
+   "commands": 1,
+   "signals": 1,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 1
+   },
+   "years": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Cupra",
+   "commands": 945,
+   "signals": 1608,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 839,
+    "Engine": 306,
+    "Transmission": 160,
+    "Movement": 62,
+    "Tires": 58,
+    "Trips": 43,
+    "Climate": 39,
+    "Drivetrain": 32,
+    "Control": 21,
+    "Fuel": 18,
+    "Stats": 11,
+    "Fluids": 6,
+    "Brakes": 3,
+    "ECU": 3,
+    "DTCs": 3,
+    "GPS": 2,
+    "-": 1,
+    "Clocks": 1
+   },
+   "years": []
+  },
+  {
+   "name": "DS",
+   "commands": 28,
+   "signals": 64,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 38,
+    "Transmission": 6,
+    "Doors": 5,
+    "Control": 4,
+    "Movement": 4,
+    "GPS": 3,
+    "Orientation": 2,
+    "Battery": 1,
+    "Details": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Dacia",
+   "commands": 148,
+   "signals": 177,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 117,
+    "Movement": 24,
+    "Drivetrain": 10,
+    "Electrical": 6,
+    "Transmission": 5,
+    "Trips": 4,
+    "Battery": 3,
+    "ECU": 3,
+    "Climate": 3,
+    "Fuel": 2
+   },
+   "years": []
+  },
+  {
+   "name": "Dacia-Duster",
+   "commands": 109,
+   "signals": 119,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 86,
+    "Drivetrain": 9,
+    "Movement": 9,
+    "Transmission": 4,
+    "Electrical": 4,
+    "Climate": 3,
+    "Battery": 2,
+    "Fuel": 2
+   },
+   "years": [
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Daihatsu",
+   "commands": 168,
+   "signals": 573,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Engine": 150,
+    "Battery": 124,
+    "Tires": 92,
+    "Control": 39,
+    "Movement": 34,
+    "DTCs": 23,
+    "Climate": 18,
+    "Transmission": 16,
+    "Orientation": 16,
+    "Fuel": 14,
+    "Cruise control": 13,
+    "Trips": 10,
+    "Seatbelts": 7,
+    "Lights": 7,
+    "ECU": 3,
+    "Fluids": 2,
+    "Electrical": 2,
+    "Details": 1,
+    "Brakes": 1,
+    "Drivetrain": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Datsun",
+   "commands": 32,
+   "signals": 34,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Battery": 15,
+    "Tires": 4,
+    "Climate": 4,
+    "Engine": 4,
+    "Trips": 2,
+    "Movement": 1,
+    "Control": 1,
+    "Fuel": 1,
+    "Cruise control": 1,
+    "Fluids": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Dodge",
+   "commands": 82,
+   "signals": 116,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Tires": 37,
+    "Engine": 23,
+    "Emissions": 18,
+    "Transmission": 9,
+    "Movement": 9,
+    "Doors": 5,
+    "Control": 4,
+    "Battery": 3,
+    "GPS": 3,
+    "Orientation": 2,
+    "Trips": 1,
+    "DTCs": 1,
+    "Details": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Dodge-Durango",
+   "commands": 11,
+   "signals": 25,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 16,
+    "Control": 3,
+    "GPS": 3,
+    "Transmission": 3
+   },
+   "years": [
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Fiat",
+   "commands": 82,
+   "signals": 116,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Tires": 37,
+    "Engine": 24,
+    "Emissions": 18,
+    "Movement": 9,
+    "Transmission": 8,
+    "Doors": 5,
+    "Control": 4,
+    "Battery": 3,
+    "GPS": 3,
+    "Orientation": 2,
+    "Trips": 1,
+    "DTCs": 1,
+    "Details": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Ford",
+   "commands": 204,
+   "signals": 227,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 61,
+    "Engine": 61,
+    "-": 37,
+    "Drivetrain": 10,
+    "Tires": 9,
+    "Climate": 9,
+    "Trips": 8,
+    "Movement": 8,
+    "Doors": 7,
+    "Transmission": 7,
+    "Control": 4,
+    "Fuel": 3,
+    "Lights": 2,
+    "Cruise control": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Ford-Bronco",
+   "commands": 10,
+   "signals": 10,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 6,
+    "Engine": 3,
+    "Fuel": 1
+   },
+   "years": [
+    1966,
+    1967,
+    1968,
+    1969,
+    1970,
+    1971,
+    1972,
+    1973,
+    1974,
+    1975,
+    1976,
+    1977,
+    1978,
+    1979,
+    1980,
+    1981,
+    1982,
+    1983,
+    1984,
+    1985,
+    1986,
+    1987,
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Ford-Bronco-Sport",
+   "commands": 39,
+   "signals": 39,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "-": 25,
+    "Tires": 6,
+    "Trips": 2,
+    "Transmission": 2,
+    "Control": 1,
+    "Cruise control": 1,
+    "Engine": 1,
+    "Fuel": 1
+   },
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Ford-Edge",
+   "commands": 66,
+   "signals": 70,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "-": 27,
+    "Battery": 8,
+    "Tires": 7,
+    "Doors": 7,
+    "Engine": 7,
+    "Fuel": 3,
+    "Transmission": 3,
+    "Trips": 2,
+    "Lights": 2,
+    "Climate": 2,
+    "Control": 1,
+    "Cruise control": 1
+   },
+   "years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "name": "Ford-Escape",
+   "commands": 113,
+   "signals": 113,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 73,
+    "Tires": 7,
+    "Movement": 7,
+    "Transmission": 7,
+    "Climate": 6,
+    "Trips": 4,
+    "Battery": 3,
+    "Control": 3,
+    "Fuel": 2,
+    "Cruise control": 1
+   },
+   "years": [
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "name": "Ford-Explorer",
+   "commands": 38,
+   "signals": 38,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "-": 27,
+    "Tires": 6,
+    "Transmission": 2,
+    "Engine": 1,
+    "Trips": 1,
+    "Fuel": 1
+   },
+   "years": [
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Ford-F-150",
+   "commands": 116,
+   "signals": 116,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 76,
+    "Tires": 7,
+    "Movement": 7,
+    "Transmission": 7,
+    "Climate": 6,
+    "Trips": 4,
+    "Battery": 3,
+    "Control": 3,
+    "Fuel": 2,
+    "Cruise control": 1
+   },
+   "years": [
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Ford-F-150-Lightning",
+   "commands": 23,
+   "signals": 23,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 8,
+    "Tires": 5,
+    "Trips": 2,
+    "Control": 2,
+    "Transmission": 2,
+    "Climate": 2,
+    "Cruise control": 1,
+    "-": 1
+   },
+   "years": [
+    2022,
+    2023,
+    2024,
+    2025
+   ]
+  },
+  {
+   "name": "Ford-F-350",
+   "commands": 13,
+   "signals": 13,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 6,
+    "Transmission": 3,
+    "Trips": 1,
+    "Control": 1,
+    "Cruise control": 1,
+    "Fuel": 1
+   },
+   "years": [
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Ford-Fiesta",
+   "commands": 7,
+   "signals": 7,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 5,
+    "Trips": 2
+   },
+   "years": [
+    1976,
+    1977,
+    1978,
+    1979,
+    1980,
+    1981,
+    1982,
+    1983,
+    1984,
+    1985,
+    1986,
+    1987,
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+   ]
+  },
+  {
+   "name": "Ford-Focus",
+   "commands": 111,
+   "signals": 115,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 76,
+    "Transmission": 8,
+    "Tires": 7,
+    "Doors": 7,
+    "Climate": 6,
+    "Trips": 5,
+    "Fuel": 2,
+    "Lights": 2,
+    "Control": 1,
+    "Movement": 1
+   },
+   "years": [
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ]
+  },
+  {
+   "name": "Ford-Fusion",
+   "commands": 5,
+   "signals": 5,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 4,
+    "Trips": 1
+   },
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020
+   ]
+  },
+  {
+   "name": "Ford-Fusion-Energi",
+   "commands": 52,
+   "signals": 64,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "-": 36,
+    "Tires": 9,
+    "Engine": 5,
+    "Trips": 4,
+    "Fuel": 3,
+    "Control": 2,
+    "Transmission": 2,
+    "Climate": 2,
+    "Cruise control": 1
+   },
+   "years": [
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020
+   ]
+  },
+  {
+   "name": "Ford-Mustang",
+   "commands": 27,
+   "signals": 27,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "-": 27
+   },
+   "years": [
+    1964,
+    1965,
+    1966,
+    1967,
+    1968,
+    1969,
+    1970,
+    1971,
+    1972,
+    1973,
+    1974,
+    1975,
+    1976,
+    1977,
+    1978,
+    1979,
+    1980,
+    1981,
+    1982,
+    1983,
+    1984,
+    1985,
+    1986,
+    1987,
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Ford-Mustang-Mach-E",
+   "commands": 81,
+   "signals": 84,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 58,
+    "Drivetrain": 10,
+    "Climate": 5,
+    "Tires": 4,
+    "Trips": 2,
+    "Engine": 2,
+    "Transmission": 2,
+    "Movement": 1
+   },
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Ford-Ranger",
+   "commands": 8,
+   "signals": 8,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 4,
+    "Transmission": 3,
+    "Fuel": 1
+   },
+   "years": [
+    1983,
+    1984,
+    1985,
+    1986,
+    1987,
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Ford-Taurus",
+   "commands": 105,
+   "signals": 105,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 72,
+    "Tires": 7,
+    "Movement": 7,
+    "Transmission": 6,
+    "Climate": 5,
+    "Battery": 3,
+    "Control": 3,
+    "Trips": 1,
+    "Fuel": 1
+   },
+   "years": [
+    1986,
+    1987,
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019
+   ]
+  },
+  {
+   "name": "Ford-Transit-Connect",
+   "commands": 5,
+   "signals": 5,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 4,
+    "Transmission": 1
+   },
+   "years": [
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "GMC",
+   "commands": 198,
+   "signals": 212,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 115,
+    "Engine": 56,
+    "Tires": 16,
+    "Fuel": 12,
+    "Transmission": 4,
+    "Trips": 3,
+    "Movement": 2,
+    "Orientation": 2,
+    "Clocks": 1,
+    "Control": 1
+   },
+   "years": []
+  },
+  {
+   "name": "GMC-Sierra-1500",
+   "commands": 7,
+   "signals": 13,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 12,
+    "Movement": 1
+   },
+   "years": [
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "GMC-Yukon",
+   "commands": 52,
+   "signals": 55,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 31,
+    "Fuel": 10,
+    "Tires": 4,
+    "Transmission": 3,
+    "Movement": 2,
+    "Trips": 2,
+    "Battery": 2,
+    "Clocks": 1
+   },
+   "years": [
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Haval-Jolion",
+   "commands": 62,
+   "signals": 69,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 34,
+    "Transmission": 15,
+    "Movement": 8,
+    "Fuel": 4,
+    "Trips": 3,
+    "Climate": 2,
+    "Drivetrain": 2,
+    "Battery": 1
+   },
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Haval-Jolion-HEV",
+   "commands": 99,
+   "signals": 103,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 36,
+    "Battery": 26,
+    "Transmission": 15,
+    "Drivetrain": 11,
+    "Climate": 4,
+    "Fuel": 4,
+    "Movement": 4,
+    "Trips": 3
+   },
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Holden",
+   "commands": 146,
+   "signals": 158,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 113,
+    "Engine": 16,
+    "Tires": 12,
+    "Movement": 9,
+    "Fuel": 2,
+    "Orientation": 2,
+    "Clocks": 1,
+    "Transmission": 1,
+    "Trips": 1,
+    "Control": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Honda",
+   "commands": 36,
+   "signals": 251,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 189,
+    "Engine": 29,
+    "Tires": 9,
+    "Electrical": 6,
+    "ECU": 5,
+    "Transmission": 4,
+    "Trips": 3,
+    "Climate": 2,
+    "Fuel": 2,
+    "Clocks": 2
+   },
+   "years": []
+  },
+  {
+   "name": "Honda-Accord",
+   "commands": 3,
+   "signals": 4,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Trips": 1,
+    "Clocks": 1,
+    "Transmission": 1,
+    "Climate": 1
+   },
+   "years": [
+    1976,
+    1977,
+    1978,
+    1979,
+    1980,
+    1981,
+    1982,
+    1983,
+    1984,
+    1985,
+    1986,
+    1987,
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Honda-CR-V",
+   "commands": 1,
+   "signals": 2,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Trips": 1,
+    "Clocks": 1
+   },
+   "years": [
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Honda-Civic",
+   "commands": 31,
+   "signals": 236,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 189,
+    "Engine": 29,
+    "Electrical": 6,
+    "Trips": 3,
+    "Climate": 2,
+    "Fuel": 2,
+    "Clocks": 2,
+    "Transmission": 2,
+    "Tires": 1
+   },
+   "years": [
+    1972,
+    1973,
+    1974,
+    1975,
+    1976,
+    1977,
+    1978,
+    1979,
+    1980,
+    1981,
+    1982,
+    1983,
+    1984,
+    1985,
+    1986,
+    1987,
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Hyundai",
+   "commands": 79,
+   "signals": 825,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Battery": 481,
+    "Engine": 137,
+    "Movement": 54,
+    "Tires": 54,
+    "Transmission": 17,
+    "Control": 16,
+    "Climate": 13,
+    "ECU": 10,
+    "Fuel": 9,
+    "Doors": 8,
+    "Lights": 8,
+    "Seatbelts": 7,
+    "Trips": 6,
+    "Orientation": 3,
+    "Electrical": 2
+   },
+   "years": []
+  },
+  {
+   "name": "Hyundai-Elantra",
+   "commands": 31,
+   "signals": 163,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Engine": 55,
+    "Tires": 32,
+    "Movement": 19,
+    "Battery": 10,
+    "ECU": 10,
+    "Doors": 8,
+    "Fuel": 8,
+    "Lights": 6,
+    "Seatbelts": 5,
+    "Control": 4,
+    "Climate": 2,
+    "Trips": 2,
+    "Transmission": 1,
+    "Electrical": 1
+   },
+   "years": [
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Hyundai-IONIQ-5",
+   "commands": 34,
+   "signals": 389,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Battery": 324,
+    "Engine": 18,
+    "Movement": 13,
+    "Tires": 9,
+    "Climate": 9,
+    "Control": 5,
+    "Transmission": 4,
+    "Orientation": 3,
+    "Lights": 2,
+    "Trips": 2
+   },
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Hyundai-IONIQ-6",
+   "commands": 13,
+   "signals": 209,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 203,
+    "Tires": 4,
+    "Movement": 1,
+    "Trips": 1
+   },
+   "years": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Hyundai-IONIQ-Electric",
+   "commands": 5,
+   "signals": 102,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Battery": 98,
+    "Tires": 4
+   },
+   "years": [
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022
+   ]
+  },
+  {
+   "name": "Hyundai-IONIQ-PlugIn-Hybrid",
+   "commands": 5,
+   "signals": 102,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Battery": 98,
+    "Tires": 4
+   },
+   "years": [
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022
+   ]
+  },
+  {
+   "name": "Hyundai-Kona",
+   "commands": 6,
+   "signals": 29,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 12,
+    "Engine": 6,
+    "Movement": 5,
+    "Climate": 2,
+    "Trips": 2,
+    "Fuel": 1,
+    "Electrical": 1
+   },
+   "years": [
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Hyundai-Kona-Electric",
+   "commands": 8,
+   "signals": 146,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Battery": 133,
+    "Tires": 8,
+    "Trips": 2,
+    "Movement": 1,
+    "Stats": 1,
+    "Engine": 1
+   },
+   "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Hyundai-Santa-Fe",
+   "commands": 37,
+   "signals": 184,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Engine": 87,
+    "Movement": 25,
+    "Tires": 13,
+    "Battery": 12,
+    "Fuel": 9,
+    "Doors": 8,
+    "Control": 7,
+    "Lights": 7,
+    "Seatbelts": 5,
+    "Trips": 5,
+    "Transmission": 3,
+    "Electrical": 2,
+    "Climate": 1
+   },
+   "years": [
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Hyundai-Santa-Fe-Hybrid",
+   "commands": 8,
+   "signals": 86,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 78,
+    "Tires": 4,
+    "Movement": 4
+   },
+   "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Hyundai-Sonata",
+   "commands": 28,
+   "signals": 146,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Engine": 46,
+    "Tires": 24,
+    "Movement": 19,
+    "Battery": 10,
+    "ECU": 10,
+    "Doors": 8,
+    "Fuel": 8,
+    "Lights": 6,
+    "Seatbelts": 5,
+    "Control": 4,
+    "Climate": 2,
+    "Trips": 2,
+    "Transmission": 1,
+    "Electrical": 1
+   },
+   "years": [
+    1985,
+    1986,
+    1987,
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Hyundai-Tucson",
+   "commands": 2,
+   "signals": 7,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 4,
+    "Trips": 2,
+    "Fuel": 1
+   },
+   "years": [
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Hyundai-Tucson-Hybrid",
+   "commands": 4,
+   "signals": 8,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Tires": 4,
+    "Trips": 2,
+    "Control": 1,
+    "Engine": 1
+   },
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Hyundai-Veloster",
+   "commands": 14,
+   "signals": 63,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 15,
+    "Tires": 12,
+    "Battery": 10,
+    "Doors": 7,
+    "Lights": 4,
+    "Movement": 4,
+    "Seatbelts": 2,
+    "Transmission": 2,
+    "Trips": 2,
+    "Control": 1,
+    "Windshield": 1,
+    "Climate": 1,
+    "Fuel": 1,
+    "Electrical": 1
+   },
+   "years": [
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022
+   ]
+  },
+  {
+   "name": "INFINITI",
+   "commands": 32,
+   "signals": 34,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Battery": 15,
+    "Tires": 4,
+    "Climate": 4,
+    "Engine": 4,
+    "Trips": 2,
+    "Movement": 1,
+    "Control": 1,
+    "Fuel": 1,
+    "Cruise control": 1,
+    "Fluids": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Jaguar",
+   "commands": 57,
+   "signals": 62,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 27,
+    "Engine": 15,
+    "Tires": 8,
+    "Movement": 5,
+    "Fuel": 3,
+    "Control": 2,
+    "Transmission": 1,
+    "Climate": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Jaguar-E-PACE",
+   "commands": 57,
+   "signals": 61,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 27,
+    "Engine": 15,
+    "Tires": 8,
+    "Movement": 4,
+    "Fuel": 3,
+    "Control": 2,
+    "Transmission": 1,
+    "Climate": 1
+   },
+   "years": [
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Jaguar-F-PACE",
+   "commands": 7,
+   "signals": 7,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 4,
+    "Movement": 2,
+    "Climate": 1
+   },
+   "years": [
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ]
+  },
+  {
+   "name": "Jaguar-I-PACE",
+   "commands": 15,
+   "signals": 15,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 7,
+    "Tires": 4,
+    "Movement": 3,
+    "Climate": 1
+   },
+   "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "name": "Jeep",
+   "commands": 82,
+   "signals": 116,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Tires": 37,
+    "Engine": 24,
+    "Emissions": 18,
+    "Movement": 9,
+    "Transmission": 8,
+    "Doors": 5,
+    "Control": 4,
+    "Battery": 3,
+    "GPS": 3,
+    "Orientation": 2,
+    "Trips": 1,
+    "DTCs": 1,
+    "Details": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Jeep-Grand-Cherokee",
+   "commands": 21,
+   "signals": 38,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Tires": 17,
+    "Doors": 5,
+    "Engine": 4,
+    "Movement": 4,
+    "Transmission": 3,
+    "Orientation": 2,
+    "Trips": 1,
+    "Details": 1,
+    "Control": 1
+   },
+   "years": [
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Jeep-Renegade",
+   "commands": 57,
+   "signals": 59,
+   "services": [
+    "01",
+    "22"
+   ],
+   "groups": {
+    "Engine": 20,
+    "Emissions": 19,
+    "Transmission": 10,
+    "Movement": 5,
+    "Battery": 2,
+    "DTCs": 1,
+    "Tires": 1,
+    "Details": 1
+   },
+   "years": [
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Kia",
+   "commands": 79,
+   "signals": 820,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Battery": 481,
+    "Engine": 131,
+    "Movement": 58,
+    "Tires": 52,
+    "Transmission": 18,
+    "Control": 15,
+    "Climate": 13,
+    "ECU": 10,
+    "Fuel": 9,
+    "Doors": 8,
+    "Lights": 8,
+    "Seatbelts": 7,
+    "Trips": 5,
+    "Orientation": 3,
+    "Electrical": 1,
+    "Stats": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Kia-EV6",
+   "commands": 13,
+   "signals": 210,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 203,
+    "Tires": 4,
+    "Trips": 2,
+    "Movement": 1
+   },
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Kia-EV9",
+   "commands": 12,
+   "signals": 204,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 191,
+    "Tires": 8,
+    "Climate": 2,
+    "Trips": 2,
+    "Movement": 1
+   },
+   "years": [
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Kia-Forte",
+   "commands": 20,
+   "signals": 79,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Engine": 23,
+    "Movement": 13,
+    "Tires": 12,
+    "Doors": 7,
+    "Transmission": 7,
+    "Control": 4,
+    "Lights": 4,
+    "Seatbelts": 2,
+    "Climate": 2,
+    "Trips": 2,
+    "Fuel": 1,
+    "Electrical": 1,
+    "Battery": 1
+   },
+   "years": [
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "name": "Kia-K5",
+   "commands": 17,
+   "signals": 96,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 21,
+    "Tires": 16,
+    "Movement": 12,
+    "Battery": 9,
+    "Doors": 8,
+    "Transmission": 8,
+    "Lights": 7,
+    "Seatbelts": 5,
+    "Control": 4,
+    "Climate": 3,
+    "Trips": 2,
+    "Fuel": 1
+   },
+   "years": [
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Kia-Niro-EV",
+   "commands": 8,
+   "signals": 146,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Battery": 133,
+    "Tires": 8,
+    "Trips": 2,
+    "Movement": 1,
+    "Stats": 1,
+    "Engine": 1
+   },
+   "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Kia-Optima",
+   "commands": 1,
+   "signals": 4,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 4
+   },
+   "years": [
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Kia-Seltos",
+   "commands": 14,
+   "signals": 97,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 45,
+    "Tires": 20,
+    "Battery": 14,
+    "Transmission": 7,
+    "Movement": 6,
+    "Climate": 2,
+    "Trips": 2,
+    "Fuel": 1
+   },
+   "years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Kia-Soul",
+   "commands": 6,
+   "signals": 18,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Engine": 5,
+    "Tires": 4,
+    "Movement": 4,
+    "Transmission": 3,
+    "Fuel": 1,
+    "Battery": 1
+   },
+   "years": [
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ]
+  },
+  {
+   "name": "Kia-Sportage",
+   "commands": 24,
+   "signals": 218,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Battery": 147,
+    "Engine": 27,
+    "Tires": 16,
+    "Movement": 13,
+    "Transmission": 6,
+    "Control": 3,
+    "Climate": 2,
+    "Trips": 2,
+    "Fuel": 1,
+    "Stats": 1
+   },
+   "years": [
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Kia-Sportage-HEV",
+   "commands": 3,
+   "signals": 3,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 3
+   },
+   "years": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Kia-Telluride",
+   "commands": 26,
+   "signals": 113,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Engine": 25,
+    "Movement": 23,
+    "Tires": 22,
+    "Doors": 8,
+    "Transmission": 8,
+    "Seatbelts": 7,
+    "Control": 6,
+    "Lights": 5,
+    "Climate": 4,
+    "Trips": 2,
+    "Fuel": 1,
+    "Electrical": 1,
+    "Battery": 1
+   },
+   "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Lamborghini",
+   "commands": 945,
+   "signals": 1608,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 839,
+    "Engine": 306,
+    "Transmission": 160,
+    "Movement": 62,
+    "Tires": 58,
+    "Trips": 43,
+    "Climate": 39,
+    "Drivetrain": 32,
+    "Control": 21,
+    "Fuel": 18,
+    "Stats": 11,
+    "Fluids": 6,
+    "Brakes": 3,
+    "ECU": 3,
+    "DTCs": 3,
+    "GPS": 2,
+    "-": 1,
+    "Clocks": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Land-Rover",
+   "commands": 19,
+   "signals": 19,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 8,
+    "Tires": 4,
+    "Movement": 3,
+    "Fuel": 3,
+    "Climate": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Land-Rover-Defender",
+   "commands": 4,
+   "signals": 4,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Fuel": 3,
+    "Battery": 1
+   },
+   "years": [
+    1983,
+    1984,
+    1985,
+    1986,
+    1987,
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Lexus",
+   "commands": 175,
+   "signals": 645,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Engine": 195,
+    "Battery": 140,
+    "Tires": 95,
+    "Movement": 39,
+    "Control": 38,
+    "DTCs": 23,
+    "Transmission": 18,
+    "Climate": 18,
+    "Orientation": 16,
+    "Fuel": 14,
+    "Cruise control": 13,
+    "Trips": 10,
+    "Lights": 9,
+    "Seatbelts": 7,
+    "ECU": 3,
+    "Fluids": 2,
+    "Electrical": 2,
+    "Details": 1,
+    "Brakes": 1,
+    "Drivetrain": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Lexus-IS",
+   "commands": 34,
+   "signals": 63,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Engine": 24,
+    "Tires": 14,
+    "Transmission": 5,
+    "Movement": 5,
+    "Fuel": 4,
+    "Control": 3,
+    "Trips": 3,
+    "Orientation": 3,
+    "Brakes": 1,
+    "Cruise control": 1
+   },
+   "years": [
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Lexus-RX",
+   "commands": 112,
+   "signals": 357,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Engine": 163,
+    "Control": 33,
+    "Battery": 30,
+    "Movement": 24,
+    "DTCs": 23,
+    "Climate": 18,
+    "Tires": 17,
+    "Cruise control": 13,
+    "Orientation": 11,
+    "Fuel": 8,
+    "Transmission": 7,
+    "Trips": 5,
+    "Lights": 3,
+    "ECU": 1,
+    "Electrical": 1
+   },
+   "years": [
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Lincoln",
+   "commands": 68,
+   "signals": 74,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "-": 27,
+    "Tires": 9,
+    "Battery": 8,
+    "Doors": 7,
+    "Engine": 7,
+    "Trips": 4,
+    "Fuel": 3,
+    "Transmission": 3,
+    "Lights": 2,
+    "Climate": 2,
+    "Control": 1,
+    "Cruise control": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Lotus",
+   "commands": 2,
+   "signals": 2,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Control": 1,
+    "Battery": 1
+   },
+   "years": []
+  },
+  {
+   "name": "MG",
+   "commands": 38,
+   "signals": 112,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 110,
+    "Trips": 1,
+    "ECU": 1
+   },
+   "years": []
+  },
+  {
+   "name": "MG-MG4",
+   "commands": 43,
+   "signals": 116,
+   "services": [
+    "01",
+    "22"
+   ],
+   "groups": {
+    "Battery": 111,
+    "Trips": 1,
+    "ECU": 1,
+    "Engine": 1,
+    "Movement": 1,
+    "Climate": 1
+   },
+   "years": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "MG-ZS-EV",
+   "commands": 51,
+   "signals": 136,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 117,
+    "Tires": 8,
+    "Doors": 6,
+    "Trips": 2,
+    "Engine": 1,
+    "Movement": 1,
+    "Climate": 1
+   },
+   "years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "MINI",
+   "commands": 46,
+   "signals": 106,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Battery": 39,
+    "Engine": 18,
+    "Trips": 14,
+    "Movement": 9,
+    "Tires": 7,
+    "Doors": 7,
+    "Transmission": 6,
+    "Fuel": 2,
+    "Control": 1,
+    "Fluids": 1,
+    "Windows": 1,
+    "Climate": 1
+   },
+   "years": []
+  },
+  {
+   "name": "MINI-Cooper",
+   "commands": 13,
+   "signals": 31,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Movement": 7,
+    "Doors": 7,
+    "Engine": 5,
+    "Tires": 5,
+    "Transmission": 2,
+    "Trips": 2,
+    "Fuel": 1,
+    "Windows": 1,
+    "Climate": 1
+   },
+   "years": [
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "MINI-Cooper-SE",
+   "commands": 7,
+   "signals": 12,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 6,
+    "Trips": 5,
+    "Movement": 1
+   },
+   "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Maserati",
+   "commands": 28,
+   "signals": 64,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 38,
+    "Transmission": 6,
+    "Doors": 5,
+    "Control": 4,
+    "Movement": 4,
+    "GPS": 3,
+    "Orientation": 2,
+    "Battery": 1,
+    "Details": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Mazda",
+   "commands": 351,
+   "signals": 552,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Battery": 174,
+    "Engine": 145,
+    "Tires": 80,
+    "-": 37,
+    "Movement": 19,
+    "Transmission": 14,
+    "Fuel": 12,
+    "Trips": 12,
+    "Climate": 11,
+    "Control": 10,
+    "Drivetrain": 10,
+    "Doors": 7,
+    "Emissions": 5,
+    "Cruise control": 4,
+    "Orientation": 3,
+    "DTCs": 3,
+    "Lights": 2,
+    "Fluids": 2,
+    "Brakes": 1,
+    "Electrical": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Mazda-3",
+   "commands": 41,
+   "signals": 47,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 24,
+    "Engine": 17,
+    "Fuel": 3,
+    "Fluids": 2,
+    "Cruise control": 1
+   },
+   "years": [
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Mazda-6",
+   "commands": 22,
+   "signals": 22,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 11,
+    "Tires": 8,
+    "Fuel": 1,
+    "DTCs": 1,
+    "Transmission": 1
+   },
+   "years": [
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ]
+  },
+  {
+   "name": "Mazda-CX-3",
+   "commands": 22,
+   "signals": 22,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 11,
+    "Tires": 8,
+    "Fuel": 2,
+    "Transmission": 1
+   },
+   "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Mazda-CX-5",
+   "commands": 56,
+   "signals": 67,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 41,
+    "Tires": 9,
+    "Fuel": 5,
+    "Emissions": 5,
+    "Transmission": 4,
+    "Cruise control": 2,
+    "DTCs": 1
+   },
+   "years": [
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Mazda-CX-50",
+   "commands": 87,
+   "signals": 221,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Battery": 112,
+    "Engine": 39,
+    "Tires": 32,
+    "Movement": 11,
+    "Fuel": 6,
+    "Control": 5,
+    "Trips": 4,
+    "Orientation": 3,
+    "Transmission": 3,
+    "Climate": 2,
+    "Brakes": 1,
+    "Electrical": 1,
+    "Cruise control": 1,
+    "DTCs": 1
+   },
+   "years": [
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Mazda-CX-9",
+   "commands": 22,
+   "signals": 22,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 11,
+    "Tires": 8,
+    "Fuel": 1,
+    "DTCs": 1,
+    "Transmission": 1
+   },
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "name": "Mazda-CX-90",
+   "commands": 13,
+   "signals": 13,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 8,
+    "Engine": 3,
+    "Fuel": 2
+   },
+   "years": [
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Mazda-MX-5",
+   "commands": 68,
+   "signals": 85,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 43,
+    "Tires": 25,
+    "Transmission": 5,
+    "Emissions": 5,
+    "Fuel": 3,
+    "DTCs": 3,
+    "Cruise control": 1
+   },
+   "years": [
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Mercedes-Benz",
+   "commands": 11,
+   "signals": 27,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Movement": 8,
+    "Battery": 7,
+    "Orientation": 7,
+    "Engine": 3,
+    "Trips": 1,
+    "Control": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Mercedes-Benz-EQA",
+   "commands": 11,
+   "signals": 19,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 7,
+    "Movement": 4,
+    "Orientation": 3,
+    "Engine": 3,
+    "Control": 1,
+    "Trips": 1
+   },
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Mercedes-Benz-G-Class",
+   "commands": 2,
+   "signals": 10,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Orientation": 5,
+    "Movement": 4,
+    "Control": 1
+   },
+   "years": [
+    1979,
+    1980,
+    1981,
+    1982,
+    1983,
+    1984,
+    1985,
+    1986,
+    1987,
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Nissan",
+   "commands": 46,
+   "signals": 49,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Battery": 15,
+    "Tires": 12,
+    "Climate": 7,
+    "Control": 5,
+    "Engine": 4,
+    "Cruise control": 3,
+    "Trips": 2,
+    "Movement": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Nissan-Altima",
+   "commands": 18,
+   "signals": 19,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 8,
+    "Control": 4,
+    "Cruise control": 3,
+    "Climate": 3,
+    "Trips": 1
+   },
+   "years": [
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Nissan-Leaf",
+   "commands": 29,
+   "signals": 31,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Battery": 15,
+    "Tires": 4,
+    "Climate": 4,
+    "Engine": 4,
+    "Trips": 2,
+    "Movement": 1,
+    "Control": 1
+   },
+   "years": [
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Nissan-Patrol",
+   "commands": 5,
+   "signals": 5,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 4,
+    "Trips": 1
+   },
+   "years": [
+    1951,
+    1952,
+    1953,
+    1954,
+    1955,
+    1956,
+    1957,
+    1958,
+    1959,
+    1960,
+    1961,
+    1962,
+    1963,
+    1964,
+    1965,
+    1966,
+    1967,
+    1968,
+    1969,
+    1970,
+    1971,
+    1972,
+    1973,
+    1974,
+    1975,
+    1976,
+    1977,
+    1978,
+    1979,
+    1980,
+    1981,
+    1982,
+    1983,
+    1984,
+    1985,
+    1986,
+    1987,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "NissanInfiniti",
+   "commands": 51,
+   "signals": 63,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 29,
+    "Control": 15,
+    "Monitors": 5,
+    "Fuel": 4,
+    "Cruise control": 4,
+    "Battery": 3,
+    "Movement": 1,
+    "Climate": 1,
+    "DTCs": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Peugeot",
+   "commands": 28,
+   "signals": 64,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 38,
+    "Transmission": 6,
+    "Doors": 5,
+    "Control": 4,
+    "Movement": 4,
+    "GPS": 3,
+    "Orientation": 2,
+    "Battery": 1,
+    "Details": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Polestar",
+   "commands": 2,
+   "signals": 2,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Control": 1,
+    "Battery": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Polestar-2",
+   "commands": 2,
+   "signals": 2,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Control": 1,
+    "Battery": 1
+   },
+   "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Porsche",
+   "commands": 945,
+   "signals": 1608,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 839,
+    "Engine": 306,
+    "Transmission": 160,
+    "Movement": 62,
+    "Tires": 58,
+    "Trips": 43,
+    "Climate": 39,
+    "Drivetrain": 32,
+    "Control": 21,
+    "Fuel": 18,
+    "Stats": 11,
+    "Fluids": 6,
+    "Brakes": 3,
+    "ECU": 3,
+    "DTCs": 3,
+    "GPS": 2,
+    "-": 1,
+    "Clocks": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Porsche-911",
+   "commands": 23,
+   "signals": 46,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 24,
+    "Movement": 8,
+    "Stats": 5,
+    "Control": 4,
+    "Trips": 2,
+    "Fluids": 2,
+    "Engine": 1
+   },
+   "years": [
+    1964,
+    1965,
+    1966,
+    1967,
+    1968,
+    1969,
+    1970,
+    1971,
+    1972,
+    1973,
+    1974,
+    1975,
+    1976,
+    1977,
+    1978,
+    1979,
+    1980,
+    1981,
+    1982,
+    1983,
+    1984,
+    1985,
+    1986,
+    1987,
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Porsche-Cayenne",
+   "commands": 28,
+   "signals": 28,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Stats": 8,
+    "Battery": 7,
+    "Tires": 4,
+    "Movement": 4,
+    "Fluids": 2,
+    "Climate": 1,
+    "Engine": 1,
+    "Transmission": 1
+   },
+   "years": [
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Porsche-Macan",
+   "commands": 19,
+   "signals": 42,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 24,
+    "Stats": 5,
+    "Trips": 4,
+    "Control": 4,
+    "Movement": 4,
+    "Transmission": 1
+   },
+   "years": [
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Porsche-Macan-Electric",
+   "commands": 14,
+   "signals": 29,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 12,
+    "Trips": 8,
+    "Stats": 5,
+    "Tires": 4
+   },
+   "years": [
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Porsche-Taycan",
+   "commands": 168,
+   "signals": 653,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 593,
+    "Engine": 22,
+    "Climate": 11,
+    "Trips": 9,
+    "Movement": 6,
+    "Control": 5,
+    "DTCs": 3,
+    "Drivetrain": 2,
+    "Clocks": 1,
+    "Stats": 1
+   },
+   "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Ram",
+   "commands": 82,
+   "signals": 116,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Tires": 37,
+    "Engine": 23,
+    "Emissions": 18,
+    "Transmission": 9,
+    "Movement": 9,
+    "Doors": 5,
+    "Control": 4,
+    "Battery": 3,
+    "GPS": 3,
+    "Orientation": 2,
+    "Trips": 1,
+    "DTCs": 1,
+    "Details": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Ram-1500",
+   "commands": 4,
+   "signals": 7,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 4,
+    "Transmission": 3
+   },
+   "years": [
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Renault",
+   "commands": 148,
+   "signals": 177,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 115,
+    "Movement": 24,
+    "Drivetrain": 10,
+    "Electrical": 6,
+    "Transmission": 5,
+    "Trips": 4,
+    "Battery": 3,
+    "ECU": 3,
+    "Climate": 3,
+    "Fuel": 2,
+    "Control": 2
+   },
+   "years": []
+  },
+  {
+   "name": "Renault-Kadjar",
+   "commands": 1,
+   "signals": 1,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Trips": 1
+   },
+   "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Renault-Megane",
+   "commands": 108,
+   "signals": 127,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 87,
+    "Movement": 17,
+    "Electrical": 6,
+    "ECU": 3,
+    "Trips": 3,
+    "Transmission": 3,
+    "Climate": 3,
+    "Battery": 2,
+    "Control": 2,
+    "Drivetrain": 1
+   },
+   "years": [
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Rolls-Royce",
+   "commands": 30,
+   "signals": 82,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 39,
+    "Trips": 12,
+    "Movement": 8,
+    "Engine": 7,
+    "Doors": 7,
+    "Transmission": 5,
+    "Tires": 2,
+    "Windows": 1,
+    "Climate": 1
+   },
+   "years": []
+  },
+  {
+   "name": "SAEJ1979",
+   "commands": 103,
+   "signals": 294,
+   "services": [
+    "01"
+   ],
+   "groups": {
+    "Engine": 173,
+    "DTCs": 54,
+    "Fuel": 36,
+    "Battery": 15,
+    "Control": 8,
+    "Movement": 2,
+    "Trips": 2,
+    "OBD": 1,
+    "Clocks": 1,
+    "Climate": 1,
+    "Emissions": 1
+   },
+   "years": []
+  },
+  {
+   "name": "SEAT",
+   "commands": 945,
+   "signals": 1608,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 839,
+    "Engine": 306,
+    "Transmission": 160,
+    "Movement": 62,
+    "Tires": 58,
+    "Trips": 43,
+    "Climate": 39,
+    "Drivetrain": 32,
+    "Control": 21,
+    "Fuel": 18,
+    "Stats": 11,
+    "Fluids": 6,
+    "Brakes": 3,
+    "ECU": 3,
+    "DTCs": 3,
+    "GPS": 2,
+    "-": 1,
+    "Clocks": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Seat-Ibiza",
+   "commands": 3,
+   "signals": 3,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Climate": 1,
+    "Engine": 1,
+    "Trips": 1
+   },
+   "years": [
+    1984,
+    1985,
+    1986,
+    1987,
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Seat-Leon",
+   "commands": 10,
+   "signals": 10,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 3,
+    "Fuel": 3,
+    "Trips": 2,
+    "Climate": 1,
+    "Transmission": 1
+   },
+   "years": [
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Skoda",
+   "commands": 945,
+   "signals": 1608,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 839,
+    "Engine": 306,
+    "Transmission": 160,
+    "Movement": 62,
+    "Tires": 58,
+    "Trips": 43,
+    "Climate": 39,
+    "Drivetrain": 32,
+    "Control": 21,
+    "Fuel": 18,
+    "Stats": 11,
+    "Fluids": 6,
+    "Brakes": 3,
+    "ECU": 3,
+    "DTCs": 3,
+    "GPS": 2,
+    "-": 1,
+    "Clocks": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Subaru",
+   "commands": 141,
+   "signals": 164,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "ECU": 87,
+    "Engine": 19,
+    "Battery": 14,
+    "Tires": 12,
+    "Movement": 9,
+    "Fuel": 6,
+    "Control": 5,
+    "Cruise control": 5,
+    "Trips": 4,
+    "Transmission": 2,
+    "Lights": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Subaru-Crosstrek",
+   "commands": 56,
+   "signals": 62,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "ECU": 30,
+    "Tires": 12,
+    "Movement": 6,
+    "Battery": 4,
+    "Control": 3,
+    "Cruise control": 2,
+    "Trips": 2,
+    "Transmission": 2,
+    "Engine": 1
+   },
+   "years": [
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Subaru-Forester",
+   "commands": 140,
+   "signals": 162,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "ECU": 86,
+    "Engine": 19,
+    "Battery": 14,
+    "Tires": 12,
+    "Movement": 8,
+    "Control": 6,
+    "Fuel": 5,
+    "Cruise control": 5,
+    "Trips": 4,
+    "Transmission": 2,
+    "Lights": 1
+   },
+   "years": [
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Subaru-WRX",
+   "commands": 9,
+   "signals": 15,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 12,
+    "Control": 1,
+    "Fuel": 1,
+    "Trips": 1
+   },
+   "years": [
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Suzuki",
+   "commands": 169,
+   "signals": 594,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Engine": 162,
+    "Battery": 126,
+    "Tires": 88,
+    "Control": 39,
+    "Movement": 37,
+    "DTCs": 23,
+    "Fuel": 22,
+    "Climate": 18,
+    "Transmission": 16,
+    "Orientation": 16,
+    "Cruise control": 13,
+    "Trips": 10,
+    "Seatbelts": 7,
+    "Lights": 7,
+    "ECU": 3,
+    "Fluids": 2,
+    "Electrical": 2,
+    "Details": 1,
+    "Brakes": 1,
+    "Drivetrain": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Suzuki-Splash",
+   "commands": 1,
+   "signals": 25,
+   "services": [
+    "21"
+   ],
+   "groups": {
+    "Engine": 12,
+    "Fuel": 8,
+    "Movement": 3,
+    "Battery": 2
+   },
+   "years": [
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017
+   ]
+  },
+  {
+   "name": "Tata",
+   "commands": 15,
+   "signals": 15,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 7,
+    "Tires": 4,
+    "Movement": 3,
+    "Climate": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Toyota",
+   "commands": 168,
+   "signals": 573,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Engine": 150,
+    "Battery": 124,
+    "Tires": 92,
+    "Control": 39,
+    "Movement": 34,
+    "DTCs": 23,
+    "Climate": 18,
+    "Transmission": 16,
+    "Orientation": 16,
+    "Fuel": 14,
+    "Cruise control": 13,
+    "Trips": 10,
+    "Seatbelts": 7,
+    "Lights": 7,
+    "ECU": 3,
+    "Fluids": 2,
+    "Electrical": 2,
+    "Details": 1,
+    "Brakes": 1,
+    "Drivetrain": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Toyota-4Runner",
+   "commands": 26,
+   "signals": 79,
+   "services": [
+    "21"
+   ],
+   "groups": {
+    "Tires": 26,
+    "Control": 11,
+    "Movement": 10,
+    "Orientation": 10,
+    "Engine": 6,
+    "Climate": 5,
+    "Transmission": 4,
+    "Seatbelts": 2,
+    "Trips": 2,
+    "Details": 1,
+    "Fuel": 1,
+    "Cruise control": 1
+   },
+   "years": [
+    1984,
+    1985,
+    1986,
+    1987,
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Toyota-Camry",
+   "commands": 110,
+   "signals": 299,
+   "services": [
+    "01",
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Engine": 118,
+    "Control": 35,
+    "DTCs": 23,
+    "Tires": 18,
+    "Climate": 17,
+    "Movement": 17,
+    "Battery": 14,
+    "Orientation": 13,
+    "Transmission": 11,
+    "Fuel": 9,
+    "Lights": 9,
+    "ECU": 5,
+    "Seatbelts": 4,
+    "Trips": 3,
+    "Fluids": 1,
+    "Cruise control": 1,
+    "Electrical": 1
+   },
+   "years": [
+    1982,
+    1983,
+    1984,
+    1985,
+    1986,
+    1987,
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Toyota-Corolla",
+   "commands": 11,
+   "signals": 21,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Movement": 4,
+    "Transmission": 4,
+    "Fuel": 3,
+    "Engine": 3,
+    "Orientation": 3,
+    "Trips": 2,
+    "Control": 1,
+    "Cruise control": 1
+   },
+   "years": [
+    1966,
+    1967,
+    1968,
+    1969,
+    1970,
+    1971,
+    1972,
+    1973,
+    1974,
+    1975,
+    1976,
+    1977,
+    1978,
+    1979,
+    1980,
+    1981,
+    1982,
+    1983,
+    1984,
+    1985,
+    1986,
+    1987,
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Toyota-Corolla-Hybrid",
+   "commands": 5,
+   "signals": 14,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 12,
+    "Fuel": 1,
+    "Battery": 1
+   },
+   "years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Toyota-GR-Corolla",
+   "commands": 15,
+   "signals": 29,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Tires": 14,
+    "Engine": 4,
+    "Movement": 4,
+    "Control": 3,
+    "Fuel": 1,
+    "Brakes": 1,
+    "Drivetrain": 1,
+    "Electrical": 1
+   },
+   "years": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Toyota-GR-Supra",
+   "commands": 18,
+   "signals": 27,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Movement": 8,
+    "Engine": 7,
+    "Transmission": 4,
+    "Trips": 4,
+    "Tires": 2,
+    "Control": 1,
+    "Fluids": 1
+   },
+   "years": [
+    1978,
+    1979,
+    1980,
+    1981,
+    1982,
+    1983,
+    1984,
+    1985,
+    1986,
+    1987,
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Toyota-GR86",
+   "commands": 2,
+   "signals": 10,
+   "services": [
+    "21"
+   ],
+   "groups": {
+    "Tires": 10
+   },
+   "years": [
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Toyota-Hilux",
+   "commands": 64,
+   "signals": 220,
+   "services": [
+    "01",
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Engine": 75,
+    "Control": 37,
+    "DTCs": 23,
+    "Movement": 18,
+    "Climate": 15,
+    "Tires": 13,
+    "Orientation": 9,
+    "Transmission": 7,
+    "ECU": 6,
+    "Fuel": 5,
+    "Battery": 4,
+    "Trips": 3,
+    "Seatbelts": 2,
+    "Stats": 1,
+    "Cruise control": 1,
+    "Electrical": 1
+   },
+   "years": [
+    1968,
+    1969,
+    1970,
+    1971,
+    1972,
+    1973,
+    1974,
+    1975,
+    1976,
+    1977,
+    1978,
+    1979,
+    1980,
+    1981,
+    1982,
+    1983,
+    1984,
+    1985,
+    1986,
+    1987,
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Toyota-Land-Cruiser",
+   "commands": 39,
+   "signals": 75,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Tires": 21,
+    "Movement": 14,
+    "Engine": 11,
+    "Trips": 8,
+    "Transmission": 8,
+    "Battery": 5,
+    "Orientation": 3,
+    "Control": 2,
+    "Fluids": 1,
+    "Fuel": 1,
+    "Cruise control": 1
+   },
+   "years": [
+    1960,
+    1961,
+    1962,
+    1963,
+    1964,
+    1965,
+    1966,
+    1967,
+    1968,
+    1969,
+    1970,
+    1971,
+    1972,
+    1973,
+    1974,
+    1975,
+    1976,
+    1977,
+    1978,
+    1979,
+    1980,
+    1981,
+    1982,
+    1983,
+    1984,
+    1985,
+    1986,
+    1987,
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Toyota-Land-Cruiser-Hybrid",
+   "commands": 10,
+   "signals": 25,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Tires": 14,
+    "Orientation": 3,
+    "Battery": 2,
+    "Trips": 1,
+    "Engine": 1,
+    "Control": 1,
+    "Fuel": 1,
+    "Movement": 1,
+    "Cruise control": 1
+   },
+   "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Toyota-Prius",
+   "commands": 56,
+   "signals": 202,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Battery": 104,
+    "Engine": 43,
+    "Tires": 24,
+    "Movement": 9,
+    "Trips": 5,
+    "Control": 5,
+    "Fuel": 4,
+    "Orientation": 3,
+    "Transmission": 2,
+    "Brakes": 1,
+    "Electrical": 1,
+    "Cruise control": 1
+   },
+   "years": [
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Toyota-Prius-Prime",
+   "commands": 6,
+   "signals": 15,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Tires": 12,
+    "Fuel": 2,
+    "Battery": 1
+   },
+   "years": [
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Toyota-RAV4",
+   "commands": 48,
+   "signals": 215,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Engine": 55,
+    "Control": 37,
+    "Tires": 23,
+    "DTCs": 23,
+    "Movement": 18,
+    "Climate": 13,
+    "Cruise control": 13,
+    "Transmission": 7,
+    "Orientation": 6,
+    "Battery": 6,
+    "Fuel": 5,
+    "Trips": 3,
+    "Lights": 2,
+    "Seatbelts": 2,
+    "Details": 1,
+    "Electrical": 1
+   },
+   "years": [
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Toyota-RAV4-Hybrid",
+   "commands": 44,
+   "signals": 177,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Battery": 107,
+    "Tires": 24,
+    "Engine": 19,
+    "Movement": 10,
+    "Control": 5,
+    "Fuel": 3,
+    "Trips": 3,
+    "Orientation": 3,
+    "Brakes": 1,
+    "Electrical": 1,
+    "Cruise control": 1
+   },
+   "years": [
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Toyota-RAV4-Prime",
+   "commands": 5,
+   "signals": 14,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 12,
+    "Fuel": 1,
+    "Battery": 1
+   },
+   "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Toyota-Tacoma",
+   "commands": 87,
+   "signals": 264,
+   "services": [
+    "21",
+    "22"
+   ],
+   "groups": {
+    "Engine": 109,
+    "Control": 34,
+    "DTCs": 23,
+    "Tires": 17,
+    "Movement": 17,
+    "Orientation": 13,
+    "Fuel": 9,
+    "Transmission": 9,
+    "Climate": 8,
+    "Lights": 8,
+    "Battery": 5,
+    "ECU": 5,
+    "Seatbelts": 3,
+    "Trips": 2,
+    "Fluids": 1,
+    "Electrical": 1
+   },
+   "years": [
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Toyota-Venza-Hybrid",
+   "commands": 5,
+   "signals": 14,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 12,
+    "Fuel": 1,
+    "Battery": 1
+   },
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Toyota-bZ4X",
+   "commands": 6,
+   "signals": 8,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 6,
+    "Trips": 1,
+    "Movement": 1
+   },
+   "years": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "VauxhallOpel",
+   "commands": 28,
+   "signals": 64,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 38,
+    "Transmission": 6,
+    "Doors": 5,
+    "Control": 4,
+    "Movement": 4,
+    "GPS": 3,
+    "Orientation": 2,
+    "Battery": 1,
+    "Details": 1
+   },
+   "years": []
+  },
+  {
+   "name": "VauxhallOpel-Corsa-e",
+   "commands": 9,
+   "signals": 9,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 7,
+    "Movement": 1,
+    "Trips": 1
+   },
+   "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Volkswagen",
+   "commands": 945,
+   "signals": 1609,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 840,
+    "Engine": 302,
+    "Transmission": 161,
+    "Movement": 60,
+    "Tires": 54,
+    "Trips": 52,
+    "Climate": 39,
+    "Drivetrain": 32,
+    "Control": 22,
+    "Fuel": 18,
+    "Stats": 14,
+    "Fluids": 5,
+    "ECU": 3,
+    "DTCs": 3,
+    "GPS": 2,
+    "-": 1,
+    "Clocks": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Volkswagen-Amarok",
+   "commands": 29,
+   "signals": 29,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Stats": 8,
+    "Trips": 5,
+    "Tires": 4,
+    "Movement": 4,
+    "Engine": 2,
+    "Fuel": 2,
+    "Climate": 2,
+    "Fluids": 2
+   },
+   "years": [
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Volkswagen-Golf",
+   "commands": 57,
+   "signals": 83,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 32,
+    "Control": 10,
+    "Trips": 10,
+    "Battery": 9,
+    "Tires": 9,
+    "Movement": 6,
+    "Fuel": 4,
+    "Fluids": 2,
+    "Climate": 1
+   },
+   "years": [
+    1974,
+    1975,
+    1976,
+    1977,
+    1978,
+    1979,
+    1980,
+    1981,
+    1982,
+    1983,
+    1984,
+    1985,
+    1986,
+    1987,
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Volkswagen-ID.4",
+   "commands": 251,
+   "signals": 290,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 211,
+    "Drivetrain": 25,
+    "Climate": 17,
+    "Engine": 15,
+    "Trips": 12,
+    "Movement": 5,
+    "Control": 3,
+    "GPS": 2
+   },
+   "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Volkswagen-Jetta",
+   "commands": 89,
+   "signals": 119,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Tires": 28,
+    "Climate": 20,
+    "Engine": 14,
+    "Battery": 14,
+    "Trips": 7,
+    "Movement": 5,
+    "Stats": 5,
+    "ECU": 4,
+    "Fluids": 4,
+    "Transmission": 4,
+    "Control": 3,
+    "Fuel": 3,
+    "DTCs": 3,
+    "Orientation": 2,
+    "GPS": 2,
+    "Clocks": 1
+   },
+   "years": [
+    1979,
+    1980,
+    1981,
+    1982,
+    1983,
+    1984,
+    1985,
+    1986,
+    1987,
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Volkswagen-Polo",
+   "commands": 29,
+   "signals": 29,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Stats": 8,
+    "Trips": 5,
+    "Tires": 4,
+    "Movement": 4,
+    "Engine": 2,
+    "Fuel": 2,
+    "Climate": 2,
+    "Fluids": 2
+   },
+   "years": [
+    1975,
+    1976,
+    1977,
+    1978,
+    1979,
+    1980,
+    1981,
+    1982,
+    1983,
+    1984,
+    1985,
+    1986,
+    1987,
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Volkswagen-Tiguan",
+   "commands": 116,
+   "signals": 142,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Engine": 72,
+    "Movement": 18,
+    "Trips": 13,
+    "Battery": 10,
+    "Control": 10,
+    "Tires": 9,
+    "Fuel": 6,
+    "Fluids": 2,
+    "Climate": 1,
+    "Transmission": 1
+   },
+   "years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "Volkswagen-e-Golf",
+   "commands": 9,
+   "signals": 12,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Battery": 10,
+    "Trips": 2
+   },
+   "years": [
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020
+   ]
+  },
+  {
+   "name": "Volvo",
+   "commands": 2,
+   "signals": 2,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Control": 1,
+    "Battery": 1
+   },
+   "years": []
+  },
+  {
+   "name": "Volvo-XC40-Recharge",
+   "commands": 2,
+   "signals": 2,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Control": 1,
+    "Battery": 1
+   },
+   "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "name": "smart",
+   "commands": 2,
+   "signals": 10,
+   "services": [
+    "22"
+   ],
+   "groups": {
+    "Orientation": 5,
+    "Movement": 4,
+    "Control": 1
+   },
+   "years": []
+  }
+ ]
+}
