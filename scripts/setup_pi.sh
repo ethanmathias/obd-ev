@@ -72,8 +72,10 @@ sudo cp "$tmp_units"/*.timer   /etc/systemd/system/
 rm -rf "$tmp_units"
 sudo systemctl daemon-reload
 sudo systemctl enable obd-ev-firstboot.service
-sudo systemctl enable obd-ev-provision.service
 sudo systemctl enable obd-ev.service
+# obd-ev-provision is deliberately NOT enabled here. It puts wlan0 into AP
+# mode, which would disconnect whoever is building the card. setup_kit.sh
+# arms it once the rest of the kit is verified.
 sudo systemctl enable obd-ev-upload.timer
 
 echo "[8/8] default env file"

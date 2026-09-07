@@ -74,6 +74,12 @@ if [ "$(id -u)" -eq 0 ]; then
 fi
 sudo -v
 
+# Hold off the participant setup portal for the whole build. It puts wlan0
+# into AP mode, which would disconnect this very SSH session. The unit refuses
+# to start while this file exists, so even a reboot part-way through is safe.
+sudo mkdir -p /var/lib/obd-ev
+sudo touch /var/lib/obd-ev/setup-in-progress
+
 # -- 1. everything we need to ask ------------------------------------------
 
 step 1 "Kit details"
@@ -173,6 +179,9 @@ step 5 "Verification"
 # The participant must get the setup portal, so this card must not look
 # already-provisioned from testing.
 sudo rm -f /var/lib/obd-ev/provisioned.json
+# Arm the portal for first boot. It still cannot start yet -- the
+# setup-in-progress lock is released at the very end of this script.
+sudo systemctl enable obd-ev-provision.service >/dev/null 2>&1 || true
 set +e
 "$VENV_DIR/bin/python" "$REPO_DIR/scripts/preflight.py"
 preflight_status=$?
@@ -198,12 +207,23 @@ cat <<SUMMARY
 SUMMARY
 
 if [ "$preflight_status" -eq 0 ]; then
+    # Release the lock last: from here on, a reboot raises the participant
+    # setup access point, which is what should happen on the kit's first boot.
+    sudo rm -f /var/lib/obd-ev/setup-in-progress
     echo "  ${green}${bold}This kit is ready to ship.${reset}"
+    echo
+    echo "  ${bold}Note:${reset} the setup WiFi will now come up on the next boot,"
+    echo "  taking over wlan0. If you need more SSH time on this Pi first:"
+    echo "    sudo touch /var/lib/obd-ev/setup-in-progress   # hold it off"
+    echo "    sudo rm /var/lib/obd-ev/setup-in-progress      # re-arm before shipping"
     echo
     echo "  Bench test before it goes out: plug into a car, then"
     echo "    journalctl -u obd-ev -f"
 else
+    # Leave the lock in place: an unfinished kit must not seize wlan0 and lock
+    # you out of the card you are still working on.
     echo "  ${yellow}${bold}Not ready.${reset} Fix the FAIL items above and re-run this script."
+    echo "  The setup WiFi stays held off until this script completes cleanly."
 fi
 echo
 exit "$preflight_status"

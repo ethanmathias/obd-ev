@@ -58,6 +58,35 @@ It also clears `/var/lib/obd-ev/provisioned.json`, so the participant gets the
 WiFi setup portal on first boot even though you connected the Pi to your own
 network while building it.
 
+### The setup portal is held off while you build
+
+`obd-ev-provision.service` puts `wlan0` into access-point mode. If it started
+while you were still building the card it would disconnect your own SSH
+session, so `setup_kit.sh` creates `/var/lib/obd-ev/setup-in-progress` before
+it does anything, and the unit refuses to start while that file exists — even
+across a reboot. The lock is released only when the script completes cleanly,
+which is also when the portal is armed for the participant's first boot.
+
+If a run fails part-way, the lock stays in place. That is deliberate: an
+unfinished kit must not seize the radio and lock you out of the card you are
+still working on.
+
+Need more SSH time on a finished kit:
+
+```bash
+sudo touch /var/lib/obd-ev/setup-in-progress   # hold the AP off
+sudo rm /var/lib/obd-ev/setup-in-progress      # re-arm before shipping
+```
+
+If a kit has already seized `wlan0` and you still have a shell:
+
+```bash
+sudo systemctl stop obd-ev-provision
+sudo nmcli connection down obd-ev-setup
+sudo nmcli connection delete obd-ev-setup
+sudo touch /var/lib/obd-ev/setup-in-progress
+```
+
 ### The vehicle step
 
 ```

@@ -6,6 +6,10 @@ Wants=NetworkManager.service
 # re-provision (the participant changed their password, or the kit is being
 # reissued): rm /var/lib/obd-ev/provisioned.json and reboot.
 ConditionPathExists=!/var/lib/obd-ev/provisioned.json
+# Never raise the access point while a kit is still being built. Doing so
+# takes wlan0 into AP mode and disconnects the researcher's own SSH session.
+# scripts/setup_kit.sh creates this file first and removes it when it is done.
+ConditionPathExists=!/var/lib/obd-ev/setup-in-progress
 
 [Service]
 Type=simple

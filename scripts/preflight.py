@@ -267,10 +267,14 @@ def check_storage(cfg):
 def check_provisioning():
     section("Participant WiFi")
     marker = Path("/var/lib/obd-ev/provisioned.json")
+    lock = Path("/var/lib/obd-ev/setup-in-progress")
     if marker.exists():
         record("WARN", "a home network is already provisioned",
                "the setup portal will NOT run for the participant. Remove "
                f"{marker} before shipping.")
+    elif lock.exists():
+        record("PASS", "setup portal armed, held off while setup runs",
+               "setup_kit.sh removes the hold when it finishes cleanly")
     else:
         record("PASS", "setup portal will run on first boot")
     if len(os.environ.get("OBD_EV_AP_PASSWORD", "")) >= 8:
