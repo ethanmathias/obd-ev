@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
-# One-shot provisioning for a fresh Raspberry Pi OS Lite install.
-# Idempotent: safe to re-run.
+# System provisioning for a fresh Raspberry Pi OS Lite install: packages,
+# interfaces, virtualenv, services. Idempotent, safe to re-run.
 #
-# This sets up the device side of the kit. After this completes, run
-# `scripts/image_setup.sh` once to configure rclone, then bake the SD card
-# image for distribution.
+# You normally do not run this directly. `scripts/setup_kit.sh` calls it as
+# one step of building a kit, and also handles the kit id, vehicle, cloud
+# upload and verification. Run this alone only to repair those parts of an
+# existing card.
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
@@ -96,7 +97,8 @@ ENVEOF
 fi
 
 echo
-echo "Done. Next:"
-echo "  1. scripts/image_setup.sh                 # configure rclone"
-echo "  2. scripts/fetch_signalset.py --list <make>  # find the vehicle"
-echo "  3. scripts/fetch_signalset.py <Make-Model> --year <YYYY> --summary"
+echo "System provisioning done."
+if [ -z "${OBD_EV_FROM_SETUP_KIT:-}" ]; then
+    echo "To build a complete kit (vehicle, cloud upload, checks), use:"
+    echo "  ./scripts/setup_kit.sh"
+fi

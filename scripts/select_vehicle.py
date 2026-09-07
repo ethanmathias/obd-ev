@@ -149,7 +149,7 @@ def discover():
                   key=lambda p: p.name)
 
 
-def show(profiles, heading="Vehicle profiles on this image"):
+def show(profiles, heading="Vehicle profiles on this image", searchable=False):
     if not profiles:
         print("No vehicle profiles on this image.\n"
               "Browse the catalogue:  scripts/select_vehicle.py --all")
@@ -162,6 +162,10 @@ def show(profiles, heading="Vehicle profiles on this image"):
               f"{commands:>4} commands  {p.year_label}{tag}")
     print("  0) (no profile)                  generic Mode 01, works on any "
           "OBD-II vehicle")
+    if searchable:
+        catalogue_size = len(load_index())
+        if catalogue_size:
+            print(f"  s) search all {catalogue_size} known vehicles")
 
 
 def ask_year(profile):
@@ -309,9 +313,25 @@ def main() -> int:
         show(choices)
         return 1
 
-    show(choices, heading)
+    searchable = not (args.all or args.search)
+    show(choices, heading, searchable)
     while True:
-        raw = input(f"\nSelect [0-{len(choices)}]: ").strip()
+        prompt = f"\nSelect [0-{len(choices)}{'/s' if searchable else ''}]: "
+        raw = input(prompt).strip()
+        if raw.lower() == "s" and searchable and load_index():
+            query = input("  Search: ").strip()
+            installed = {p.name for p in profiles}
+            choices = ([p for p in profiles
+                        if not query or query.lower() in p.name.lower()]
+                       + catalogue(query, installed))
+            if not choices:
+                print(f"  Nothing matches {query!r}.")
+                choices, searchable = profiles, True
+                show(choices, "Vehicle profiles on this image", True)
+                continue
+            searchable = False
+            show(choices, f"Matching {query!r}" if query else "All known vehicles")
+            continue
         if raw == "0":
             describe_none()
             write_env(None, None)

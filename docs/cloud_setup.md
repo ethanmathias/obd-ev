@@ -5,8 +5,8 @@ option and there is no reason to abandon it.
 
 There is exactly one rule that makes it work across a fleet:
 
-> **Every kit needs its own authorization.** Authorize once on the master image
-> to prove the setup works, then re-authorize each SD card after flashing.
+> **Every kit needs its own authorization.** Building each card from scratch
+> with `scripts/setup_kit.sh` does this automatically.
 
 ## Why that rule exists
 
@@ -23,42 +23,32 @@ failure happens weeks after imaging.
 Giving each kit its own token costs about a minute per card and removes the
 problem entirely. Nothing else about Box changes.
 
-## 1. Master image — once
+## You get this for free
 
-```bash
-./scripts/image_setup.sh
-```
+`scripts/setup_kit.sh` builds each SD card from scratch, and step 4 of that
+script runs `rclone config` on that card. So each kit ends up with its own
+credential without you doing anything extra, and the failure above cannot
+happen. The script also runs a real test upload before declaring the kit ready.
 
-Choose `box`, name the remote **`obd-ev`**, complete the browser login, and
-verify:
+Name the remote exactly **`obd-ev`** when it prompts, and pick `box`. The Pi
+has no browser, so answer **n** to "Use auto config?" and run the command it
+prints on your laptop.
 
-```bash
-rclone lsd obd-ev:
-rclone mkdir obd-ev:obd-ev-uploads
-```
+## The one case that still needs care
 
-Then bake the image. This authorization is a template — every card will replace
-it.
-
-## 2. Each SD card — once per kit
-
-After flashing and setting `OBD_EV_DEVICE_ID` in `/etc/default/obd-ev`:
+If you *clone* a finished card instead of building a new one, both copies hold
+the same token and one will stop uploading. Give the copy its own:
 
 ```bash
 ./scripts/authorize_kit.sh
 ```
 
-It re-runs the Box login for this kit only, then verifies a real upload. The Pi
-has no browser, so rclone prints a command to run on your laptop and you paste
-the result back — the same flow you already used, just repeated per card.
+It re-runs the login for that kit only, refuses to pass if the token did not
+actually change, and verifies a real upload.
 
-The script refuses to pass if the token did not actually change, which is the
-one mistake that silently recreates the original problem.
+### Confirming no two kits share a credential
 
-### Confirm no two kits share a credential
-
-Each run records a short fingerprint of that kit's token (never the token
-itself):
+Each kit records a short fingerprint of its token — never the token itself:
 
 ```bash
 cat /var/lib/obd-ev/upload-authorized.json
@@ -67,15 +57,12 @@ cat /var/lib/obd-ev/upload-authorized.json
 ```json
 {
  "device_id": "P003",
- "remote": "obd-ev:obd-ev-uploads",
  "token_fingerprint": "06ef1fb86217",
- "authorized_at": "2026-09-04T10:22:41-04:00"
+ "authorized_at": "2026-09-07T10:22:41-04:00"
 }
 ```
 
-Note the fingerprint in your build log as you image each card. **Every kit must
-show a different one.** Two matching kits means one was cloned after being
-authorized, and one of them will stop uploading.
+Note it in your build log per card. **Every kit must show a different one.**
 
 ## Two Box caveats to plan around
 

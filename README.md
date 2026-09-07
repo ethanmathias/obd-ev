@@ -62,8 +62,9 @@ obd-ev/
 │       ├── portal.html          #   the page the participant sees
 │       └── wpa.js               #   in-browser PBKDF2 -> WPA2 PMK
 ├── scripts/
-│   ├── setup_pi.sh              # one-shot Pi provisioning
-│   ├── image_setup.sh           # researcher: configure rclone
+│   ├── setup_kit.sh             # build one SD card, start to finish
+│   ├── setup_pi.sh              # system provisioning (called by setup_kit)
+│   ├── image_setup.sh           # reconfigure rclone on an existing card
 │   ├── fetch_signalset.py       # vendor a vehicle profile from OBDb
 │   ├── select_vehicle.py        # pick this kit's car from a list
 │   ├── build_index.py           # refresh the OBDb vehicle catalogue
@@ -85,6 +86,19 @@ obd-ev/
     ├── deployment.md            # researcher imaging guide
     └── participant.md           # what to put in the box
 ```
+
+## Building a kit
+
+One script per SD card — no master image to clone:
+
+```bash
+git clone https://github.com/ethanmathias/obd-ev && cd obd-ev
+./scripts/setup_kit.sh
+```
+
+It asks for the kit id, setup-WiFi password and vehicle up front, installs
+everything, walks you through the cloud login, verifies the result, and prints
+what to write on the label. Safe to re-run.
 
 ## Two audiences, two docs
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Researcher-side imaging step. Run this ONCE per device (or on a master image)
-# to configure rclone with credentials for the upload destination.
+# Configure rclone for the upload destination.
 #
-# The BLE OBD adapter is configured in config.yaml.
+# `scripts/setup_kit.sh` does this as part of building a kit, so you only need
+# this to repair or change the destination on a card that already exists.
 set -euo pipefail
 
 echo "=== rclone configuration ==="

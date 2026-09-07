@@ -8,174 +8,98 @@ The study workflow is:
 3. When the Pi joins the participant's home WiFi, pending CSVs upload to the
    rclone cloud remote and move locally to `logs/uploaded/`.
 
-## One-time master image
+## Build a kit
 
-1. **Flash Raspberry Pi OS Lite (64-bit).** Use `rpi-imager`. Set any
-   username, enable SSH, and configure your *own* WiFi (not the
-   participant's) so you can finish setup over the network. The setup script
-   installs services for whichever user runs it.
+One script per SD card, start to finish. There is no master image.
 
-2. **Clone and provision.**
+1. **Flash Raspberry Pi OS Lite (64-bit)** with `rpi-imager`. Set a username,
+   enable SSH, and configure your own WiFi so you can reach the Pi.
+
+2. **Clone and run:**
    ```bash
-   ssh <username>@raspberrypi.local
-   git clone https://github.com/ethanmathias/obd-ev
-   cd obd-ev
-   ./scripts/setup_pi.sh
-   sudo reboot
-   ```
-   `setup_pi.sh` prints a randomly generated **setup-AP password** and stores
-   it in `/etc/default/obd-ev`. Write it down — it goes on the kit label.
-
-3. **Configure the BLE OBD adapter.**
-   ```bash
-   cp -n config.yaml.example config.yaml
-   nano config.yaml
-   ```
-   ```yaml
-   obd:
-     ble_address: 8C:DE:52:DD:FD:37   # adapter MAC, or null to discover by name
-     ble_name: VEEPEAK
+   ssh <user>@raspberrypi.local
+   git clone https://github.com/ethanmathias/obd-ev && cd obd-ev
+   ./scripts/setup_kit.sh
    ```
 
-4. **Add the vehicle profiles.** This is the step that decides how much data
-   you actually collect. Generic Mode 01 yields about ten values; a
-   vehicle-specific OBDb signalset yields hundreds, including the EV
-   parameters that matter.
+That is the whole process. Expect 10-15 minutes, most of it unattended package
+installation. The script asks for everything up front, then leaves you alone
+until the cloud login, which needs a browser on your laptop.
 
-   Fetch **one profile per vehicle model in the study**, into the master image,
-   so any kit can be assigned to any of those cars later without re-imaging:
-   ```bash
-   ./scripts/select_vehicle.py --search bolt      # search the catalogue
-   ./scripts/fetch_signalset.py Chevrolet-Bolt-EUV --year 2023 --summary
-   ./scripts/fetch_signalset.py Hyundai-IONIQ-5   --year 2024 --summary
-   ```
-   `vehicles/index.json` is the catalogue of every OBDb vehicle that actually
-   has data — 205 of 733 repos; the rest are empty placeholders. Regenerate it
-   with `./scripts/build_index.py` when you want to pick up new models.
-   Each writes `vehicles/<Make-Model>.json`. Read the `--summary` output before
-   committing to a model: coverage varies enormously. A 2024 IONIQ 5 exposes
-   381 signals including steering, yaw and acceleration; a Bolt EUV exposes 107,
-   of which 96 are battery module voltages and only one is a non-battery signal.
+It is safe to re-run: every step is idempotent, so if something fails you fix
+it and run the script again rather than starting the card over.
 
-   Leave `config.yaml`'s `vehicle:` block alone — which car a given kit is for
-   is set per participant, below. Set it in `config.yaml` only if every kit in
-   the study is the same model.
+### Why not a master image
 
-   If a model isn't in OBDb, or its repo exists but has no commands yet (Tesla
-   and Rivian are currently empty stubs), skip it: that kit falls back to
-   generic Mode 01 automatically.
+Cloning an image copies one cloud credential onto every kit. Box and Google
+Drive both rotate OAuth refresh tokens — when one device refreshes, the copies
+every other kit holds stop working. The failure is silent and shows up weeks
+later as missing data from unattended devices.
 
-5. **Configure cloud upload.**
-   ```bash
-   ./scripts/image_setup.sh
-   ```
-   - Name the remote **`obd-ev`** and pick `box` or `drive`.
-   - Verify with `rclone lsd obd-ev:`.
-   - **Read [docs/cloud_setup.md](cloud_setup.md) first if you are imaging more
-     than one or two kits** — the interactive login stores a credential that
-     breaks when cloned across a fleet.
+Building each card fresh gives it its own credential, so the problem cannot
+occur. It costs about ten minutes of mostly unattended time per kit, which is
+a good trade below a few dozen kits.
 
-6. **Test the full pipeline.**
-   ```bash
-   sudo systemctl start obd-ev
-   journalctl -u obd-ev -f
-   ```
-   Confirm a CSV appears in `~/obd-ev/logs/` and that the column count matches
-   the signalset summary. Then force an upload:
-   ```bash
-   sudo systemctl start obd-ev-upload
-   ```
+If you *do* clone a card, run `scripts/authorize_kit.sh` on the copy to give it
+its own credential.
 
-7. **Clear the provisioning marker before imaging**, so the setup portal runs
-   on the participant's first boot:
-   ```bash
-   sudo rm -f /var/lib/obd-ev/provisioned.json
-   sudo journalctl --vacuum-time=1d
-   ```
+### What the script does
 
-8. **Shut down and clone the SD card** with `dd`, Pi Imager, or
-   [PiShrink](https://github.com/Drewsif/PiShrink).
+| Step | |
+|---|---|
+| 1. Kit details | Asks for the kit id and setup-WiFi password, writes `/etc/default/obd-ev` |
+| 2. Vehicle | Pick from a list; downloads the profile if it isn't local yet |
+| 3. System | apt packages, I2C and UART, virtualenv, gpsd, systemd units |
+| 4. Cloud | `rclone config`, then a real test upload |
+| 5. Verify | Runs `preflight.py`; exits non-zero if the kit isn't shippable |
+| 6. Label | Prints the setup network name and password for the label |
 
-## Per-participant customization
+It also clears `/var/lib/obd-ev/provisioned.json`, so the participant gets the
+WiFi setup portal on first boot even though you connected the Pi to your own
+network while building it.
 
-1. Flash the master image to a fresh SD card.
-2. Set the kit identifier and setup-AP password in `/etc/default/obd-ev`:
-   ```sh
-   # Appears in every CSV row, in the upload path, and in the setup network
-   # name (OBD-EV-Setup-P003).
-   OBD_EV_DEVICE_ID=P003
+### The vehicle step
 
-   # Password for this kit's setup network. Goes on the label.
-   OBD_EV_AP_PASSWORD=<printed on the kit label>
-   ```
+```
+Vehicle profiles on this image:
 
-3. **Pick the vehicle from a list** rather than typing it:
-   ```bash
-   ./scripts/select_vehicle.py
-   ```
-   ```
-   Vehicle profiles on this image:
+  1) Chevrolet-Bolt-EUV               107 signals   107 commands  2022-2023
+  2) Hyundai-IONIQ-5                  389 signals    34 commands  2021-2027
+  0) (no profile)                  generic Mode 01, works on any OBD-II vehicle
 
-     1) Chevrolet-Bolt-EUV          107 signals  107 commands  2022-2023
-     2) Hyundai-IONIQ-5             381 signals   33 commands  2021-2027
-     0) (no profile)              generic Mode 01, works on any OBD-II vehicle
-
-   Select [0-2]: 1
-   Model year [2022, 2023]: 2023
-   ```
-   It shows what will be collected, validates the model year against the
-   vehicle's known generations, and writes `OBD_EV_VEHICLE` /
-   `OBD_EV_VEHICLE_YEAR` without disturbing the rest of the file.
-
-   Use the picker rather than editing by hand. A mistyped vehicle name is the
-   worst failure mode in this whole setup because it is **silent**: the kit
-   falls back to generic Mode 01 and collects a fraction of the data with
-   nothing visibly wrong. Choose `0` deliberately if the participant's car
-   isn't supported.
-
-   `--all` or `--search <term>` widens the list to the whole catalogue rather
-   than just what is on the image; picking one that isn't installed downloads
-   it first, so that step needs network.
-
-   Scriptable equivalents: `--set Chevrolet-Bolt-EUV --year 2023`, `--none`,
-   `--list`.
-4. **Give this kit its own cloud authorization:**
-   ```bash
-   ./scripts/authorize_kit.sh
-   ```
-   Every kit needs its own — the master image's token is shared, and Box and
-   Drive invalidate a token when another device refreshes it, which silently
-   stops uploads on every other kit. The script verifies a real upload and
-   records a token fingerprint; note it in your build log and confirm no two
-   kits match. See [docs/cloud_setup.md](cloud_setup.md).
-5. **Run the preflight check.** It exits non-zero if anything would stop this
-   kit collecting or uploading:
-   ```bash
-   ./scripts/preflight.py
-   ```
-   It verifies the vehicle profile actually resolves, the IMU answers on I2C,
-   gpsd is producing fixes, the upload credential is this kit's own, the
-   services are enabled, and that the setup portal will still run for the
-   participant. Every check is something with no visible symptom in the field.
-
-6. **Label the kit** with the setup network name and setup password.
-7. Ship it. Participant WiFi credentials are never handled by you — the
-   participant enters them on the device itself.
-
-These variables override `config.yaml`, because `config.yaml` is baked into the
-master image and this file is not. A name with no matching file in `vehicles/`
-logs an error and falls back to generic Mode 01 rather than taking the kit
-offline, so a typo costs vehicle signals but never a whole drive. Confirm which
-path a kit took on first boot:
-
-```bash
-journalctl -u obd-ev | grep -E "vehicle profile|falling back"
+Select [0-2]: 1
+Model year [2022, 2023]: 2023
 ```
 
-> `obd-ev-wifi.conf` on the boot partition still exists, and
-> `scripts/firstboot_wifi.sh` still applies it. That path writes a plaintext
-> passphrase to a FAT partition, so use it **only for your own lab network
-> during imaging**, never for participant credentials.
+Selection is from a list rather than typed, because a mistyped vehicle name is
+the worst failure in this setup: it is **silent**, and the kit quietly falls
+back to generic Mode 01 and collects a fraction of the data.
+
+Searching spans the full OBDb catalogue (`vehicles/index.json`, 205 vehicles
+that actually have data out of 733 repos), and picking one that isn't on the
+card downloads it. Choose `0` deliberately when the participant's car isn't
+supported.
+
+Re-run just this step later without rebuilding the card:
+
+```bash
+./scripts/select_vehicle.py            # or --all / --search bolt
+sudo systemctl restart obd-ev
+```
+
+### Adding a vehicle to the catalogue
+
+`vehicles/index.json` is a snapshot. If OBDb has added a model since:
+
+```bash
+./scripts/build_index.py
+```
+
+### Ship it
+
+Label the kit with the setup network name and password the script printed.
+Participant WiFi credentials are never handled by you — the participant enters
+them on the device itself.
 
 ## How participant WiFi onboarding works
 
@@ -286,18 +210,16 @@ On most cars the Pi loses power the moment the ignition goes off, so in practice
 A car parked for a week with the port still live produces one idle part, not
 hundreds of files.
 
-## Cloud credentials for a fleet
+## Cloud credentials
 
-Box is fine — keep it. The one rule is that **each kit needs its own
-authorization**, because Box and Drive rotate OAuth refresh tokens: when one
-device refreshes, every other device holding a copy of that token stops working,
-silently.
+Because each card is built from scratch, each runs its own `rclone config` and
+gets its own credential. Nothing further is needed.
 
-So: authorize once on the master image, then run `scripts/authorize_kit.sh` on
-each card after flashing. About a minute per kit.
+The one exception is cloning: if you copy a finished card rather than building
+a new one, both hold the same token and one will stop uploading. Run
+`scripts/authorize_kit.sh` on the copy.
 
-Full detail, including how to confirm no two kits share a credential:
-**[docs/cloud_setup.md](cloud_setup.md)**.
+Setup details and alternatives to Box: **[docs/cloud_setup.md](cloud_setup.md)**.
 
 ## Quick checks in the field
 
