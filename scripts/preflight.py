@@ -192,6 +192,24 @@ def check_bluetooth(cfg):
     section("Bluetooth / OBD adapter")
     active = run("systemctl", "is-active", "--quiet", "bluetooth").returncode == 0
     record("PASS" if active else "FAIL", "bluetooth service running")
+
+    # The service can be perfectly healthy while the radio is rfkill-blocked or
+    # unpowered, in which case the OBD adapter never appears and the only
+    # symptom is a connect error buried in the journal.
+    blocked = run("rfkill", "list", "bluetooth")
+    if "Soft blocked: yes" in blocked.stdout or "Hard blocked: yes" in blocked.stdout:
+        record("FAIL", "Bluetooth radio is rfkill-blocked",
+               "sudo rfkill unblock bluetooth  -- the OBD adapter cannot be "
+               "seen until this is cleared")
+    elif blocked.returncode == 0 and blocked.stdout.strip():
+        record("PASS", "Bluetooth radio not blocked")
+
+    powered = run("bluetoothctl", "show")
+    if "Powered: yes" in powered.stdout:
+        record("PASS", "Bluetooth controller powered")
+    elif powered.returncode == 0 and powered.stdout.strip():
+        record("FAIL", "Bluetooth controller not powered",
+               "sudo bluetoothctl power on")
     if cfg.obd.ble_address:
         record("PASS", f"adapter pinned to {cfg.obd.ble_address}")
     else:

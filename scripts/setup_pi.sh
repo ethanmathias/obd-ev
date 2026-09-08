@@ -79,6 +79,13 @@ sudo sed -i "s|^DEVICES=.*|DEVICES=\"$GPS_DEVICE\"|" /etc/default/gpsd
 sudo sed -i 's|^GPSD_OPTIONS=.*|GPSD_OPTIONS="-n"|' /etc/default/gpsd
 sudo systemctl enable --now gpsd
 
+echo "[4b/8] unblock Bluetooth"
+# A soft rfkill block survives reboots and makes the OBD adapter simply never
+# appear -- bleak reports "No powered Bluetooth adapters found" while the
+# bluetooth service itself looks perfectly healthy.
+sudo rfkill unblock bluetooth 2>/dev/null || true
+sudo systemctl enable --now bluetooth >/dev/null 2>&1 || true
+
 echo "[5/8] state directory"
 sudo mkdir -p /var/lib/obd-ev
 sudo chmod 755 /var/lib/obd-ev
