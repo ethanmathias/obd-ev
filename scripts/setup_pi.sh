@@ -33,6 +33,17 @@ else
     sudo raspi-config nonint do_serial 2
 fi
 
+# On a Pi 5 the header UART also needs dtparam=uart0=on. Its console lives on
+# the separate debug connector, so enable_uart=1 alone evicts nothing and
+# /dev/ttyAMA0 never appears -- which looks exactly like a dead GPS.
+CONFIG_TXT=/boot/firmware/config.txt
+[ -f "$CONFIG_TXT" ] || CONFIG_TXT=/boot/config.txt
+if [ -f "$CONFIG_TXT" ] && ! grep -qE '^\s*dtparam=uart0=on' "$CONFIG_TXT"; then
+    echo "  adding dtparam=uart0=on to $CONFIG_TXT (needs a reboot)"
+    echo 'dtparam=uart0=on' | sudo tee -a "$CONFIG_TXT" >/dev/null
+    UART_REBOOT_NEEDED=1
+fi
+
 echo "[3/8] python deps"
 python3 -m venv --system-site-packages "$VENV_DIR"
 "$VENV_DIR/bin/python" -m pip install --upgrade pip
@@ -102,6 +113,10 @@ ENVEOF
 fi
 
 echo
+if [ -n "${UART_REBOOT_NEEDED:-}" ]; then
+    echo "NOTE: dtparam=uart0=on was just added. /dev/ttyAMA0 (the GPS) will"
+    echo "      not exist until you reboot."
+fi
 echo "System provisioning done."
 if [ -z "${OBD_EV_FROM_SETUP_KIT:-}" ]; then
     echo "To build a complete kit (vehicle, cloud upload, checks), use:"

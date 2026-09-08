@@ -132,6 +132,24 @@ def check_gps(cfg):
     if not cfg.gps.enabled:
         record("WARN", "GPS disabled in config")
         return
+    # The serial device first: if it is missing, gpsd will look "running" and
+    # simply never produce a fix, which is indistinguishable from bad sky view.
+    device = "/dev/ttyAMA0"
+    gpsd_defaults = Path("/etc/default/gpsd")
+    if gpsd_defaults.exists():
+        for line in gpsd_defaults.read_text().splitlines():
+            if line.startswith("DEVICES="):
+                found = line.split("=", 1)[1].strip().strip('"').split()
+                if found:
+                    device = found[0]
+    if Path(device).exists():
+        record("PASS", f"serial device {device} present")
+    else:
+        record("FAIL", f"{device} does not exist",
+               "on a Pi 5 the header UART needs dtparam=uart0=on in "
+               "/boot/firmware/config.txt, then a reboot")
+        return
+
     active = run("systemctl", "is-active", "--quiet", "gpsd").returncode == 0
     record("PASS" if active else "FAIL", "gpsd running",
            "" if active else "sudo systemctl enable --now gpsd")

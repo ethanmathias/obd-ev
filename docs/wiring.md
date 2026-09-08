@@ -12,8 +12,12 @@ Pin numbers are physical positions on the 40-pin header.
 | RX  | 8 (GPIO14 / TXD) |
 
 Device path on Pi 5 is `/dev/ttyAMA0`. Do **not** use `/dev/serial0` — on Pi 5
-it can point at the debug UART instead of the header. `setup_kit.sh` disables
-the serial console for you.
+it points at the debug UART, not the header.
+
+Pi 5 also needs `dtparam=uart0=on` in `/boot/firmware/config.txt` and a reboot;
+`enable_uart=1` alone is not enough, because the console lives on the separate
+debug connector so there is nothing to evict. `setup_kit.sh` adds this, but if
+`/dev/ttyAMA0` is missing that is the first thing to check.
 
 ## IMU — GY-521 (MPU-6050)
 
