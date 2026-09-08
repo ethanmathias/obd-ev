@@ -19,7 +19,8 @@ STATE_DIR="/var/lib/obd-ev"
 MARKER="$STATE_DIR/upload-authorized.json"
 
 # Pick up per-kit settings (device id, remote) the same way the services do.
-[ -f /etc/default/obd-ev ] && . /etc/default/obd-ev
+# shellcheck disable=SC1091
+[ -r /etc/default/obd-ev ] && . /etc/default/obd-ev || true
 DEVICE_ID="${OBD_EV_DEVICE_ID:-$(hostname)}"
 
 rc() { rclone --config "$RCLONE_CONF" "$@"; }

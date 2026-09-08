@@ -53,8 +53,13 @@ random_password() {
 }
 
 env_get() {                   # current value of a key, if the file exists
+    # Must never fail: this is called from `default=$(env_get ...)`, and under
+    # `set -e` a failing command substitution in an assignment kills the
+    # script. The file is root-owned, so try an unprivileged read, then sudo,
+    # then give up quietly.
     [ -f "$ENV_FILE" ] || return 0
-    sed -n "s/^$1=//p" "$ENV_FILE" | tail -1
+    { cat "$ENV_FILE" 2>/dev/null || sudo -n cat "$ENV_FILE" 2>/dev/null || true; } \
+        | sed -n "s/^$1=//p" | tail -1
 }
 
 # --------------------------------------------------------------------------
@@ -105,7 +110,12 @@ OBD_EV_RCLONE_CONF=$HOME/.config/rclone/rclone.conf
 # Password for the "OBD-EV-Setup-$DEVICE_ID" network the participant joins.
 OBD_EV_AP_PASSWORD=$AP_PASSWORD
 ENVEOF
-sudo chmod 600 "$ENV_FILE"
+# Readable by the user who runs the tooling, not world-readable. 600 would
+# lock out preflight.py, authorize_kit.sh and this script's own re-runs; the
+# only secret in here is the setup-AP password, which is printed on the label
+# anyway. systemd reads EnvironmentFile as root regardless.
+sudo chown root:"$(id -gn)" "$ENV_FILE"
+sudo chmod 640 "$ENV_FILE"
 
 # -- 2. the vehicle ---------------------------------------------------------
 

@@ -138,7 +138,8 @@ OBD_EV_RCLONE_CONF=$INSTALL_HOME/.config/rclone/rclone.conf
 # PRINT THIS ON THE KIT LABEL.
 OBD_EV_AP_PASSWORD=$ap_password
 ENVEOF
-    sudo chmod 600 /etc/default/obd-ev
+    sudo chown root:"$(id -gn "$INSTALL_USER")" /etc/default/obd-ev
+    sudo chmod 640 /etc/default/obd-ev
     echo
     echo "  Setup-AP password for this device: $ap_password"
     echo "  (also in /etc/default/obd-ev; put it on the kit label)"

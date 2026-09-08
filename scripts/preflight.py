@@ -333,8 +333,15 @@ def main() -> int:
 
     # /etc/default/obd-ev is what the services read; mirror it here.
     env_file = Path("/etc/default/obd-ev")
-    if env_file.exists():
-        for line in env_file.read_text().splitlines():
+    try:
+        env_text = env_file.read_text() if env_file.exists() else ""
+    except OSError as exc:
+        # Root-owned and unreadable: report it rather than crashing, since
+        # every later check depends on what is in here.
+        print(f"  {YELLOW}WARN{RESET}  cannot read {env_file}: {exc}")
+        env_text = ""
+    if env_text:
+        for line in env_text.splitlines():
             line = line.strip()
             if line and not line.startswith("#") and "=" in line:
                 key, value = line.split("=", 1)
