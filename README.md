@@ -86,6 +86,7 @@ src/obd_ev/
 scripts/
   setup_kit.sh        build one SD card, start to finish
   select_vehicle.py   pick this kit's car        preflight.py   pre-ship checks
+  sensors.py          live GPS + IMU readings
   fetch_signalset.py  vendor a profile           build_index.py catalogue
   upload.sh           rclone upload              authorize_kit.sh  cloned cards
 tests/            decoder, portal, logger, naming

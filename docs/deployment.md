@@ -145,6 +145,7 @@ network, with a one-minute timer as backstop. Shipped trips move to
 
 ```bash
 ./scripts/preflight.py                       # everything, exits non-zero on failure
+./scripts/sensors.py                         # live GPS + IMU readings
 journalctl -u obd-ev -f                      # is it logging?
 cat /var/lib/obd-ev/provisioned.json         # did the participant set WiFi?
 journalctl -u obd-ev | grep -i 'retiring\|falling back'   # unanswered commands
@@ -161,3 +162,22 @@ sudo journalctl --vacuum-time=1d
 ```
 
 Then re-flash and rebuild for the next participant.
+
+## Checking the sensors
+
+```bash
+./scripts/sensors.py            # both, 1 Hz          --gps / --imu / --once
+```
+
+```
+22:44:00  GPS  fix=3D  sats=9   38.033554, -78.507980  alt 182.4m  speed 0.1 m/s  age 0.3s
+22:44:00  IMU  accel   0.12  -0.05   9.79 m/s2   gyro  0.01  0.00 -0.02 deg/s   |a|max  9.81  n=98
+```
+
+This drives the same reader classes the logger uses, so a clean run means the
+logging path works, not just that something is on the bus. `n=` is the number
+of IMU samples since the previous line — if it stays 0 the sensor isn't
+responding.
+
+Lower-level alternatives if you need them: `cgps -s` or `gpspipe -w` for GPS,
+`i2cdetect -y 1` to confirm the IMU answers at `0x68`.
