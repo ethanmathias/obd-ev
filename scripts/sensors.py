@@ -20,8 +20,14 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
-from obd_ev.venv import reexec_if_needed    # noqa: E402
+from obd_ev.venv import in_venv, reexec_if_needed, venv_dir  # noqa: E402
 reexec_if_needed()                           # mpu6050/bleak live in .venv
+
+if venv_dir().exists() and not in_venv():
+    print(f"WARNING: running under {sys.executable}, not the project venv at\n"
+          f"         {venv_dir()}. Packages installed there (mpu6050, bleak)\n"
+          f"         will look missing. Try: {venv_dir()}/bin/python "
+          f"scripts/sensors.py", file=sys.stderr)
 
 from obd_ev import config as cfgmod          # noqa: E402
 from obd_ev.gps_reader import GPSReader      # noqa: E402

@@ -1,4 +1,5 @@
 import logging
+import sys
 import threading
 import time
 from dataclasses import dataclass
@@ -65,7 +66,10 @@ class IMUReader:
         try:
             from mpu6050 import mpu6050
         except ImportError:
-            log.error("mpu6050-raspberrypi not installed; IMU disabled")
+            log.error("mpu6050-raspberrypi not importable under %s; IMU "
+                      "disabled. It is installed in the project venv -- run "
+                      "via .venv/bin/python, not the system interpreter.",
+                      sys.executable)
             return
 
         try:

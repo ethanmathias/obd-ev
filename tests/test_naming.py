@@ -188,3 +188,40 @@ class TestVehicleSelection(unittest.TestCase):
             self.assertIn("vehicle_speed_kph", reader.field_names())
         finally:
             reader.adapter.close()
+
+
+class TestVenvDetection(unittest.TestCase):
+    """Scripts run by path start on the system interpreter, where bleak and
+    mpu6050 are not installed. Getting this wrong reads as broken hardware."""
+
+    def test_in_venv_compares_prefix_not_interpreter_path(self):
+        import obd_ev.venv as v
+        # .venv/bin/python is a symlink chain that ends at the system
+        # interpreter, so comparing resolved interpreter paths reports
+        # "already in the venv" when we are not. sys.prefix does not.
+        original = v.venv_dir
+        try:
+            v.venv_dir = lambda: Path(sys.prefix)
+            self.assertTrue(v.in_venv())
+            v.venv_dir = lambda: Path(sys.prefix) / "definitely-not-here"
+            self.assertFalse(v.in_venv())
+        finally:
+            v.venv_dir = original
+
+    def test_reexec_is_a_noop_when_already_inside(self):
+        import obd_ev.venv as v
+        original = v.venv_dir
+        try:
+            v.venv_dir = lambda: Path(sys.prefix)
+            v.reexec_if_needed()          # must return, not exec
+        finally:
+            v.venv_dir = original
+
+    def test_reexec_respects_the_guard(self):
+        import os
+        import obd_ev.venv as v
+        os.environ["OBD_EV_NO_REEXEC"] = "1"
+        try:
+            v.reexec_if_needed()          # must return, not exec
+        finally:
+            os.environ.pop("OBD_EV_NO_REEXEC", None)
