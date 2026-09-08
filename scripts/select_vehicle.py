@@ -201,13 +201,28 @@ def describe(profile, year):
               f"vehicle.exclude_paths\n  in config.yaml.")
 
 
+def read_env_lines():
+    """The env file is root-owned; fall back to sudo rather than crashing."""
+    if not ENV_FILE.exists():
+        return None
+    try:
+        return ENV_FILE.read_text().splitlines()
+    except PermissionError:
+        result = subprocess.run(["sudo", "cat", str(ENV_FILE)],
+                                capture_output=True, text=True)
+        if result.returncode == 0:
+            return result.stdout.splitlines()
+        print(f"warning: cannot read {ENV_FILE}; other settings in it would be "
+              f"lost, so refusing to rewrite it", file=sys.stderr)
+        raise SystemExit(1)
+
+
 def write_env(vehicle, year):
     """Update the two keys in place, preserving the rest of the file."""
-    lines = []
-    if ENV_FILE.exists():
-        lines = ENV_FILE.read_text().splitlines()
-    else:
+    lines = read_env_lines()
+    if lines is None:
         print(f"note: {ENV_FILE} does not exist yet; creating it")
+        lines = []
 
     wanted = {}
     if vehicle:
@@ -235,6 +250,12 @@ def write_env(vehicle, year):
     except PermissionError:
         subprocess.run(["sudo", "tee", str(ENV_FILE)], input=body, text=True,
                        stdout=subprocess.DEVNULL, check=True)
+        # Leave it readable by the tooling that has to consult it later.
+        group = subprocess.run(["id", "-gn"], capture_output=True,
+                               text=True).stdout.strip()
+        if group:
+            subprocess.run(["sudo", "chown", f"root:{group}", str(ENV_FILE)])
+        subprocess.run(["sudo", "chmod", "640", str(ENV_FILE)])
     print(f"\nWrote {ENV_FILE}:")
     for key in ("OBD_EV_VEHICLE", "OBD_EV_VEHICLE_YEAR"):
         value = wanted.get(key)
