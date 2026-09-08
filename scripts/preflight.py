@@ -23,6 +23,9 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
+from obd_ev.venv import reexec_if_needed  # noqa: E402
+reexec_if_needed()   # otherwise bleak/mpu6050 are reported missing wrongly
+
 GREEN, YELLOW, RED, DIM, RESET = (
     ("\033[32m", "\033[33m", "\033[31m", "\033[2m", "\033[0m")
     if sys.stdout.isatty() else ("", "", "", "", ""))

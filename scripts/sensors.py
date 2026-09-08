@@ -20,6 +20,9 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
+from obd_ev.venv import reexec_if_needed    # noqa: E402
+reexec_if_needed()                           # mpu6050/bleak live in .venv
+
 from obd_ev import config as cfgmod          # noqa: E402
 from obd_ev.gps_reader import GPSReader      # noqa: E402
 from obd_ev.imu_reader import IMUReader      # noqa: E402
@@ -29,18 +32,27 @@ FIX = {0: "none", 1: "none", 2: "2D", 3: "3D"}
 
 def gps_line(sample):
     fix = FIX.get(sample.get("fix_mode") or 0, "?")
-    sats = sample.get("gps_sats") or 0
+    used = sample.get("gps_sats_used") or 0
+    visible = sample.get("gps_sats_visible") or 0
+    snr = sample.get("gps_snr_max") or 0
     age = sample.get("gps_age_s")
+    # used/visible together say much more than either alone: 0/16 means the
+    # antenna hears plenty but has locked none, 0/0 means it hears nothing.
+    counts = f"sats={used}/{visible} snr={snr:<4.1f}"
+
     lat, lon = sample.get("lat"), sample.get("lon")
     if lat is None or lon is None:
-        return (f"GPS  fix={fix:<4} sats={sats:<2}  no position yet"
-                f"        age {age}s")
+        hint = "" if visible else "   (antenna hears nothing)"
+        return f"GPS  fix={fix:<4} {counts}  no position yet{hint}   age {age}s"
+
     alt = sample.get("alt")
     speed = sample.get("speed_gps")
-    return (f"GPS  fix={fix:<4} sats={sats:<2}  {lat:.6f}, {lon:.6f}"
-            f"  alt {alt if alt is None else round(alt, 1)}m"
-            f"  speed {speed if speed is None else round(speed, 2)} m/s"
-            f"  age {age}s")
+    # A fix no satellite is marked as contributing to is not one to trust.
+    weak = "  WEAK" if used == 0 else ""
+    return (f"GPS  fix={fix:<4} {counts}  {lat:.6f}, {lon:.6f}"
+            f"  alt {'?' if alt is None else round(alt, 1)}m"
+            f"  speed {'?' if speed is None else round(speed, 2)} m/s"
+            f"  age {age}s{weak}")
 
 
 def imu_line(sample):

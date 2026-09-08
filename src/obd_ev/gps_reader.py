@@ -9,7 +9,8 @@ from .config import GPSConfig
 log = logging.getLogger(__name__)
 
 FIELDS = ["lat", "lon", "alt", "speed_gps", "heading", "fix_mode",
-          "gps_sats", "gps_time", "gps_age_s"]
+          "gps_sats_used", "gps_sats_visible", "gps_snr_max",
+          "gps_time", "gps_age_s"]
 
 # Column documentation for signals.csv.
 DESCRIPTIONS = [
@@ -19,7 +20,10 @@ DESCRIPTIONS = [
     ("speed_gps", "Ground speed from GPS", "metersPerSecond"),
     ("heading", "Course over ground", "degrees"),
     ("fix_mode", "Fix quality: 0=none, 1=no fix, 2=2D, 3=3D", "scalar"),
-    ("gps_sats", "Satellites used in the fix", "scalar"),
+    ("gps_sats_used", "Satellites contributing to the fix", "scalar"),
+    ("gps_sats_visible", "Satellites the receiver can hear at all", "scalar"),
+    ("gps_snr_max", "Strongest satellite signal; ~30+ is needed to lock",
+     "scalar"),
     ("gps_time", "Receiver UTC, independent of the Pi clock", "unknown"),
     ("gps_age_s", "Age of this fix when the row was written", "seconds"),
 ]
@@ -43,7 +47,12 @@ class GPSReader:
     def __init__(self, cfg: GPSConfig):
         self.cfg = cfg
         self._sample = GPSSample()
-        self._sats = 0
+        # Used vs visible are different questions: used tells you the fix
+        # quality, visible tells you whether the antenna works at all. A fix
+        # with 0 used but many visible is a weak fix worth distrusting.
+        self._sats_used = 0
+        self._sats_visible = 0
+        self._snr_max = 0.0
         self._lock = threading.Lock()
         self._stop = threading.Event()
         self._thread: Optional[threading.Thread] = None
@@ -82,8 +91,12 @@ class GPSReader:
                 # Satellites used is the honest signal-quality number; a fix
                 # can persist on stale ephemeris long after the sky is lost.
                 sats = getattr(report, "satellites", None) or []
+                snrs = [getattr(s, "ss", 0) or 0 for s in sats]
                 with self._lock:
-                    self._sats = sum(1 for s in sats if getattr(s, "used", False))
+                    self._sats_used = sum(
+                        1 for s in sats if getattr(s, "used", False))
+                    self._sats_visible = len(sats)
+                    self._snr_max = max(snrs) if snrs else 0.0
                 continue
             if kind != "TPV":
                 continue
@@ -103,7 +116,8 @@ class GPSReader:
     def latest(self) -> Dict[str, Optional[float]]:
         with self._lock:
             s = self._sample
-            sats = self._sats
+            used, visible, snr = (self._sats_used, self._sats_visible,
+                                  self._snr_max)
         return {
             "lat": s.lat,
             "lon": s.lon,
@@ -111,7 +125,9 @@ class GPSReader:
             "speed_gps": s.speed_gps,
             "heading": s.heading,
             "fix_mode": s.fix_mode,
-            "gps_sats": sats,
+            "gps_sats_used": used,
+            "gps_sats_visible": visible,
+            "gps_snr_max": round(snr, 1),
             "gps_time": s.gps_time,
             # How old this fix is. Without it a row silently repeats the last
             # good position for as long as the receiver is blocked.
