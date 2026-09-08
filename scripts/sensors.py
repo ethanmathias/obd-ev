@@ -81,16 +81,20 @@ def main() -> int:
         imu.start()
 
     if want_gps:
-        print("Waiting for gpsd... a cold start takes 30s-2min and needs sky view.")
+        print("Waiting for gpsd... a cold start takes 30s-2min and needs sky view.",
+              flush=True)
     period = 1.0 / max(args.hz, 0.01)
     try:
         while True:
             time.sleep(period)
             stamp = time.strftime("%H:%M:%S")
+            # flush: stdout is block-buffered when piped or redirected, so
+            # without this the tool looks dead under `| head`, `tee`, or
+            # `timeout`, which kills it before anything is written.
             if gps is not None:
-                print(f"{stamp}  {gps_line(gps.latest())}")
+                print(f"{stamp}  {gps_line(gps.latest())}", flush=True)
             if imu is not None:
-                print(f"{stamp}  {imu_line(imu.latest())}")
+                print(f"{stamp}  {imu_line(imu.latest())}", flush=True)
             if args.once:
                 break
     except KeyboardInterrupt:
