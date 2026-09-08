@@ -179,10 +179,14 @@ def check_imu(cfg):
     if not cfg.imu.enabled:
         record("WARN", "IMU disabled in config")
         return
-    if not shutil.which("i2cdetect"):
+    # i2c-tools installs into /usr/sbin, which is not on a non-login shell's
+    # PATH -- so a plain which() reports it missing on a kit that has it.
+    i2cdetect = shutil.which("i2cdetect") or shutil.which(
+        "i2cdetect", path="/usr/sbin:/sbin:/usr/local/sbin")
+    if not i2cdetect:
         record("WARN", "i2cdetect not installed", "sudo apt install i2c-tools")
         return
-    out = run("i2cdetect", "-y", "1")
+    out = run(i2cdetect, "-y", "1")
     addr = f"{cfg.imu.i2c_address:02x}"
     if addr in out.stdout:
         record("PASS", f"IMU present at 0x{addr}")

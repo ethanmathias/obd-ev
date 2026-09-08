@@ -90,7 +90,13 @@ class GPSReader:
             if kind == "SKY":
                 # Satellites used is the honest signal-quality number; a fix
                 # can persist on stale ephemeris long after the sky is lost.
-                sats = getattr(report, "satellites", None) or []
+                # gpsd emits SKY reports with no satellite list at all
+                # (observed on a NEO-6M). Treating those as "0 satellites"
+                # wipes the counts from the previous good report, which is
+                # what made a receiver hearing 16 satellites read as 0/0.
+                sats = getattr(report, "satellites", None)
+                if not sats:
+                    continue
                 snrs = [getattr(s, "ss", 0) or 0 for s in sats]
                 with self._lock:
                     self._sats_used = sum(
