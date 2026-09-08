@@ -33,16 +33,41 @@ else
     sudo raspi-config nonint do_serial 2
 fi
 
-# On a Pi 5 the header UART also needs dtparam=uart0=on. Its console lives on
-# the separate debug connector, so enable_uart=1 alone evicts nothing and
-# /dev/ttyAMA0 never appears -- which looks exactly like a dead GPS.
+# Which device the GPS lands on depends on the board, and getting it wrong
+# looks exactly like a dead GPS.
+#
+#   Pi 5   the header UART is a full PL011 at /dev/ttyAMA0, but the console
+#          lives on the separate debug connector so enable_uart=1 evicts
+#          nothing -- it must be switched on explicitly.
+#   Pi 4   and earlier: the PL011 is taken by Bluetooth, and GPIO14/15 gets
+#          the mini UART at /dev/ttyS0. We keep Bluetooth (the OBD adapter is
+#          BLE), so the GPS uses the mini UART.
 CONFIG_TXT=/boot/firmware/config.txt
 [ -f "$CONFIG_TXT" ] || CONFIG_TXT=/boot/config.txt
-if [ -f "$CONFIG_TXT" ] && ! grep -qE '^\s*dtparam=uart0=on' "$CONFIG_TXT"; then
-    echo "  adding dtparam=uart0=on to $CONFIG_TXT (needs a reboot)"
-    echo 'dtparam=uart0=on' | sudo tee -a "$CONFIG_TXT" >/dev/null
-    UART_REBOOT_NEEDED=1
-fi
+PI_MODEL="$(tr -d '\0' < /proc/device-tree/model 2>/dev/null || echo unknown)"
+
+case "$PI_MODEL" in
+    *"Raspberry Pi 5"*)
+        GPS_DEVICE=/dev/ttyAMA0
+        if [ -f "$CONFIG_TXT" ] && ! grep -qE '^[[:space:]]*dtparam=uart0=on' "$CONFIG_TXT"; then
+            echo "  Pi 5: adding dtparam=uart0=on to $CONFIG_TXT (needs a reboot)"
+            printf '\n[all]\ndtparam=uart0=on\n' | sudo tee -a "$CONFIG_TXT" >/dev/null
+            UART_REBOOT_NEEDED=1
+        fi
+        ;;
+    *)
+        # /dev/serial0 is the kernel's own alias for the header UART and is
+        # correct on Pi 4 and earlier (it points at ttyS0, the mini UART --
+        # the PL011 there is bound to Bluetooth and enumerates as ttyAMA1).
+        if [ -e /dev/serial0 ]; then
+            GPS_DEVICE="/dev/$(basename "$(readlink -f /dev/serial0)")"
+        else
+            GPS_DEVICE=/dev/ttyS0
+        fi
+        ;;
+esac
+echo "  board: $PI_MODEL"
+echo "  GPS device: $GPS_DEVICE"
 
 echo "[3/8] python deps"
 python3 -m venv --system-site-packages "$VENV_DIR"
@@ -50,7 +75,7 @@ python3 -m venv --system-site-packages "$VENV_DIR"
 "$VENV_DIR/bin/python" -m pip install -r "$REPO_DIR/requirements.txt"
 
 echo "[4/8] gpsd default device"
-sudo sed -i 's|^DEVICES=.*|DEVICES="/dev/ttyAMA0"|' /etc/default/gpsd
+sudo sed -i "s|^DEVICES=.*|DEVICES=\"$GPS_DEVICE\"|" /etc/default/gpsd
 sudo sed -i 's|^GPSD_OPTIONS=.*|GPSD_OPTIONS="-n"|' /etc/default/gpsd
 sudo systemctl enable --now gpsd
 
@@ -114,8 +139,11 @@ fi
 
 echo
 if [ -n "${UART_REBOOT_NEEDED:-}" ]; then
-    echo "NOTE: dtparam=uart0=on was just added. /dev/ttyAMA0 (the GPS) will"
+    echo "NOTE: dtparam=uart0=on was just added. $GPS_DEVICE (the GPS) will"
     echo "      not exist until you reboot."
+elif [ ! -e "$GPS_DEVICE" ]; then
+    echo "NOTE: $GPS_DEVICE does not exist yet -- reboot, then check with"
+    echo "      ls -l /dev/serial*  and  cgps -s"
 fi
 echo "System provisioning done."
 if [ -z "${OBD_EV_FROM_SETUP_KIT:-}" ]; then

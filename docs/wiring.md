@@ -11,13 +11,30 @@ Pin numbers are physical positions on the 40-pin header.
 | TX  | 10 (GPIO15 / RXD) |
 | RX  | 8 (GPIO14 / TXD) |
 
-Device path on Pi 5 is `/dev/ttyAMA0`. Do **not** use `/dev/serial0` — on Pi 5
-it points at the debug UART, not the header.
+**The device path differs by board**, and getting it wrong looks exactly like a
+dead GPS. `setup_pi.sh` picks it for you; this is what it picks and why.
 
-Pi 5 also needs `dtparam=uart0=on` in `/boot/firmware/config.txt` and a reboot;
-`enable_uart=1` alone is not enough, because the console lives on the separate
-debug connector so there is nothing to evict. `setup_kit.sh` adds this, but if
-`/dev/ttyAMA0` is missing that is the first thing to check.
+| Board | GPS device | Notes |
+|---|---|---|
+| Pi 4 and earlier | `/dev/ttyS0` | the mini UART. `/dev/serial0` points here |
+| Pi 5 | `/dev/ttyAMA0` | needs `dtparam=uart0=on` in config.txt, plus a reboot |
+
+On Pi 4 the PL011 is taken by **Bluetooth** (it enumerates as `ttyAMA1`), so
+GPIO14/15 gets the mini UART. Leave it that way — the OBD adapter is BLE, and
+freeing the PL011 with `dtoverlay=disable-bt` would cost you the adapter.
+`enable_uart=1` also pins the core clock, which is what makes the mini UART's
+baud rate stable.
+
+On Pi 5 the console lives on the separate debug connector, so `enable_uart=1`
+evicts nothing and the header UART must be switched on explicitly. `dtparam=uart0=on`
+is a no-op on Pi 4.
+
+If the GPS is silent, check which device actually exists:
+
+```bash
+ls -l /dev/serial* /dev/ttyS* /dev/ttyAMA*
+grep DEVICES /etc/default/gpsd
+```
 
 ## IMU — GY-521 (MPU-6050)
 
