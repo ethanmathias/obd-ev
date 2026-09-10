@@ -211,6 +211,17 @@ def check_bluetooth(cfg):
     elif blocked.returncode == 0 and blocked.stdout.strip():
         record("PASS", "Bluetooth radio not blocked")
 
+    conf = Path("/etc/bluetooth/main.conf")
+    if conf.exists():
+        le_only = any(line.strip().replace(" ", "").lower() == "controllermode=le"
+                      for line in conf.read_text().splitlines())
+        if le_only:
+            record("PASS", "controller is LE-only")
+        else:
+            record("WARN", "controller is in dual mode",
+                   "BlueZ may try classic Bluetooth and fail with "
+                   "br-connection-profile-unavailable. Fix: ./scripts/setup_pi.sh")
+
     powered = run("bluetoothctl", "show")
     if "Powered: yes" in powered.stdout:
         record("PASS", "Bluetooth controller powered")

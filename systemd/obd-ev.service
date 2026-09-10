@@ -9,6 +9,10 @@ User=@INSTALL_USER@
 WorkingDirectory=@REPO_DIR@
 EnvironmentFile=-/etc/default/obd-ev
 Environment=PYTHONPATH=@REPO_DIR@/src
+# '+' runs this as root regardless of User= above. It unblocks rfkill and puts
+# the controller in LE-only mode, so a kit repairs its own Bluetooth state on
+# every boot instead of needing manual intervention in the field.
+ExecStartPre=+@REPO_DIR@/scripts/bt_prepare.sh
 ExecStart=@VENV_DIR@/bin/python -m obd_ev.main --config @REPO_DIR@/config.yaml
 Restart=on-failure
 RestartSec=5
