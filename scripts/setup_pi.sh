@@ -79,7 +79,25 @@ sudo sed -i "s|^DEVICES=.*|DEVICES=\"$GPS_DEVICE\"|" /etc/default/gpsd
 sudo sed -i 's|^GPSD_OPTIONS=.*|GPSD_OPTIONS="-n"|' /etc/default/gpsd
 sudo systemctl enable --now gpsd
 
-echo "[4b/8] unblock Bluetooth"
+echo "[4b/8] Bluetooth: LE-only controller mode"
+# The OBD adapter is GATT/BLE and nothing else on this kit uses Bluetooth.
+# Left in dual mode, BlueZ's transport-agnostic Device1.Connect() can pick
+# BR/EDR for an address it has classic information about, and the connect dies
+# with "br-connection-profile-unavailable" even though the LE scan found the
+# adapter perfectly well.
+BT_CONF=/etc/bluetooth/main.conf
+if [ -f "$BT_CONF" ] && ! grep -qE '^[[:space:]]*ControllerMode[[:space:]]*=[[:space:]]*le' "$BT_CONF"; then
+    if grep -qE '^[[:space:]]*#?[[:space:]]*ControllerMode' "$BT_CONF"; then
+        sudo sed -i 's|^[[:space:]]*#\?[[:space:]]*ControllerMode.*|ControllerMode = le|' "$BT_CONF"
+    else
+        sudo sed -i '0,/^\[General\]/s//[General]\nControllerMode = le/' "$BT_CONF"
+    fi
+    echo "  set ControllerMode = le"
+    sudo systemctl restart bluetooth || true
+fi
+grep -hE '^[[:space:]]*ControllerMode' "$BT_CONF" 2>/dev/null | sed 's/^/  /'
+
+echo "[4c/8] unblock Bluetooth"
 # A soft rfkill block survives reboots and makes the OBD adapter simply never
 # appear -- bleak reports "No powered Bluetooth adapters found" while the
 # bluetooth service itself looks perfectly healthy.

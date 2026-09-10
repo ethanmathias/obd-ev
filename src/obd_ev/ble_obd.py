@@ -98,6 +98,29 @@ class OBDLinkDown(RuntimeError):
     """The link is up but the adapter has stopped answering; reconnect."""
 
 
+def _forget_cached_device(address: str) -> None:
+    """Drop BlueZ's cached record for an address.
+
+    BlueZ's Device1.Connect() is transport-agnostic: for an address it holds
+    BR/EDR information about it will try classic profiles and fail with
+    "br-connection-profile-unavailable", even when the LE scan that found the
+    device worked perfectly. Removing the cached device makes BlueZ re-learn it
+    from the next LE advertisement. `ControllerMode = le` in
+    /etc/bluetooth/main.conf prevents this properly; this is the in-field
+    recovery for kits that predate that setting.
+    """
+    for args in (["disconnect", address], ["remove", address]):
+        try:
+            subprocess.run(["bluetoothctl", *args], capture_output=True,
+                           text=True, timeout=10)
+        except (OSError, subprocess.SubprocessError) as exc:
+            log.debug("bluetoothctl %s failed: %s", args[0], exc)
+
+
+def _is_bredr_failure(exc: Exception) -> bool:
+    return "br-connection" in str(exc)
+
+
 class BleElm327:
     def __init__(self, cfg: "OBDConfig", raw_frames: bool = False):
         self.cfg = cfg
@@ -165,7 +188,20 @@ class BleElm327:
                 raise RuntimeError("BLE OBD adapter not found")
             log.info("connecting to BLE OBD adapter %s (%s)", device.name, device.address)
             self.client = BleakClient(device, timeout=self.cfg.timeout)
-            await self.client.connect()
+            try:
+                await self.client.connect()
+            except Exception as exc:
+                if not _is_bredr_failure(exc):
+                    raise
+                # BlueZ tried classic Bluetooth for a BLE-only adapter. Forget
+                # the cached record and try once more over LE.
+                log.warning("BlueZ attempted a BR/EDR connection (%s); "
+                            "forgetting the cached device and retrying over LE",
+                            exc)
+                _forget_cached_device(device.address)
+                await asyncio.sleep(2)
+                self.client = BleakClient(device, timeout=self.cfg.timeout)
+                await self.client.connect()
 
         self.write_uuid, self.notify_uuid = self._select_characteristics()
         self.notify_event = asyncio.Event()
