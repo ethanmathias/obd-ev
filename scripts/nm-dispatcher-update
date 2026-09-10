@@ -1,0 +1,8 @@
+#!/bin/sh
+# NetworkManager dispatcher hook: check for updates when the kit gets a
+# network. Rate limiting, the "is a trip running" check and the opt-in switch
+# all live in self_update.sh; this just fires it.
+#
+# $1 = interface, $2 = action
+[ "$2" = "up" ] || exit 0
+exec systemctl start --no-block obd-ev-update.service

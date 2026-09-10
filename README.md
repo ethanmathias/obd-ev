@@ -89,6 +89,8 @@ scripts/
   sensors.py          live GPS + IMU readings
   fetch_signalset.py  vendor a profile           build_index.py catalogue
   upload.sh           rclone upload              authorize_kit.sh  cloned cards
+  self_update.sh      pull + apply, on connect   post_update.sh    apply an update
+  obd_watch.py        live decoded OBD signals   bt_prepare.sh     BT state repair
 tests/            decoder, portal, logger, naming
 vehicles/         vendored OBDb profiles + catalogue
 ```

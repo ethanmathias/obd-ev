@@ -1,0 +1,12 @@
+[Unit]
+Description=obd-ev self-update
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+# Runs as root: it reinstalls systemd units and touches /etc. The git
+# operations inside drop to the repo owner.
+EnvironmentFile=-/etc/default/obd-ev
+ExecStart=@REPO_DIR@/scripts/self_update.sh
+TimeoutStartSec=600

@@ -118,6 +118,10 @@ sudo cp "$REPO_DIR/systemd/obd-ev-portal-dns.conf" \
 # the timer; a participant may only be in range for a minute after parking.
 sudo install -m 755 "$REPO_DIR/scripts/nm-dispatcher-upload" \
         /etc/NetworkManager/dispatcher.d/90-obd-ev-upload
+# Self-update on connect. Inert unless OBD_EV_AUTO_UPDATE=1 is set in
+# /etc/default/obd-ev -- see scripts/self_update.sh before enabling it.
+sudo install -m 755 "$REPO_DIR/scripts/nm-dispatcher-update" \
+        /etc/NetworkManager/dispatcher.d/91-obd-ev-update
 
 echo "[7/8] install systemd units"
 tmp_units="$(mktemp -d)"

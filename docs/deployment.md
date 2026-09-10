@@ -141,6 +141,56 @@ Uploads fire on the NetworkManager dispatcher hook the moment the Pi joins a
 network, with a one-minute timer as backstop. Shipped trips move to
 `logs/uploaded/<trip>/`, pruned to the most recent 64.
 
+## Remote updates
+
+Kits can pull and apply updates themselves when they next have internet, which
+is how you fix something on a kit sitting in a participant's driveway.
+
+**Off by default.** Enable per kit in `/etc/default/obd-ev`:
+
+```sh
+OBD_EV_AUTO_UPDATE=1
+OBD_EV_UPDATE_BRANCH=deploy        # default: whatever branch the kit is on
+OBD_EV_UPDATE_MIN_INTERVAL=3600    # seconds between checks
+```
+
+> **Understand the blast radius before enabling this.** Anyone who can push to
+> that branch gets root on every kit running it, including ones in
+> participants' vehicles. Point it at a branch you promote to deliberately —
+> `deploy`, not `main` — so a work-in-progress commit cannot reach the fleet.
+
+A NetworkManager hook fires `obd-ev-update.service` on connect. `self_update.sh`
+then:
+
+1. exits immediately unless `OBD_EV_AUTO_UPDATE=1`
+2. rate-limits to `OBD_EV_UPDATE_MIN_INTERVAL` (wifi flaps a lot)
+3. **defers while a trip is running** — `obd_connected=1` in the live CSV means
+   restarting the logger would lose the drive
+4. refuses if the working tree is dirty, or if the update is not a fast-forward
+5. pulls, runs `post_update.sh`, restarts the logger
+6. runs preflight, and **rolls back to the previous commit** if it fails
+
+`post_update.sh` does the parts a plain `git pull` cannot: reinstall systemd
+units (they are copies in `/etc/systemd/system`, which is the usual reason an
+update seems not to apply), refresh pip dependencies if `requirements.txt`
+changed, reinstall the dispatcher hooks, and fix up Bluetooth. It deliberately
+does not run apt — that is `setup_pi.sh`'s job.
+
+Apply an update by hand on a kit you can reach:
+
+```bash
+cd ~/obd-ev && git pull
+sudo ./scripts/post_update.sh
+sudo systemctl restart obd-ev
+```
+
+Or force a full self-update cycle regardless of the switches:
+
+```bash
+sudo ./scripts/self_update.sh --force
+journalctl -u obd-ev-update --no-pager -n 30
+```
+
 ## Field checks
 
 ```bash
