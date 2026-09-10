@@ -21,7 +21,7 @@ step is idempotent, so a failure means fix-and-rerun, not start over.
 |---|---|
 | 1 Kit details | kit id + setup-WiFi password → `/etc/default/obd-ev` |
 | 2 Vehicle | pick from a list, `s` searches all 205 known cars |
-| 3 System | apt, I2C/UART, virtualenv, gpsd, systemd units |
+| 3 System | apt, I2C/UART, virtualenv, gpsd, Bluetooth, systemd units |
 | 4 Cloud | `rclone config`, then a real test upload |
 | 5 Verify | `preflight.py`; non-zero exit if not shippable |
 | 6 Label | prints the setup network name and password |
@@ -46,6 +46,15 @@ Change it later without rebuilding:
 
 ```bash
 ./scripts/select_vehicle.py && sudo systemctl restart obd-ev
+```
+
+Searching spans `vehicles/index.json`, the catalogue of every OBDb vehicle that
+actually has data — 205 of 733 repos; the rest are empty placeholders. Picking
+one that is not on the card downloads it, so that step needs network. Refresh
+the catalogue when OBDb adds models:
+
+```bash
+./scripts/build_index.py
 ```
 
 ## Cloud upload
@@ -216,13 +225,53 @@ journalctl -u obd-ev-update --no-pager -n 30
 ## Field checks
 
 ```bash
-./scripts/preflight.py                       # everything, exits non-zero on failure
-./scripts/sensors.py                         # live GPS + IMU readings
-journalctl -u obd-ev -f                      # is it logging?
-cat /var/lib/obd-ev/provisioned.json         # did the participant set WiFi?
-journalctl -u obd-ev | grep -i 'retiring\|falling back'   # unanswered commands
-sudo systemctl start obd-ev-upload           # force an upload
+./scripts/preflight.py            # everything, exits non-zero on failure
+./scripts/sensors.py              # live GPS + IMU        --gps / --imu / --once
+./scripts/obd_watch.py            # live decoded vehicle signals    --all / --once
+journalctl -u obd-ev -f           # connection and trip events
+sudo systemctl start obd-ev-upload
 ```
+
+`sensors.py` and `obd_watch.py` both use the same code the logger uses, so a
+clean run means the logging path works, not merely that something is on the bus.
+
+```
+23:12:53  GPS  fix=2D   sats=3/13 snr=26.0  38.034426, -78.510212  alt 397.9m  speed 0.28 m/s  age 0.19s
+23:12:53  IMU  accel   1.01   8.17   4.80 m/s2   gyro  -0.74   0.27  -0.74 deg/s   |a|max  9.57  n=58
+```
+
+- `sats=3/13` is **used/visible**. `0/13` means the antenna hears plenty but has
+  locked nothing; `0/0` means it hears nothing at all.
+- `snr` is the strongest signal. Roughly **30+** is needed to use a satellite.
+- A fix with 0 used satellites is tagged `WEAK` and should not be trusted — you
+  will see the position drift and a non-zero speed while stationary.
+- `n=` is IMU samples since the previous line. If it stays 0 the sensor is not
+  responding. Resting magnitude should be ~9.8 m/s² (gravity).
+
+`obd_watch.py` reads the trip CSV rather than opening its own BLE connection,
+because only one connection to the adapter is allowed — a tool that grabbed it
+would force you to stop the logger and stop testing the real thing.
+
+Lower level, if you need it: `cgps -s` or `gpspipe -w` for GPS, and
+`i2cdetect -y 1` (in `/usr/sbin`) to confirm the IMU answers at `0x68`.
+
+## When something does not work
+
+Every entry here is a failure seen on real hardware.
+
+| Symptom | Cause and fix |
+|---|---|
+| `br-connection-profile-unavailable` or `br-connection-create-socket` | BlueZ tried **classic** Bluetooth for a BLE adapter. `Device1.Connect()` is transport-agnostic and picks BR/EDR for an address it holds classic info about. Fix: `ControllerMode = le` in `/etc/bluetooth/main.conf` — `setup_pi.sh` sets it, and `bt_prepare.sh` re-applies it on every service start. The logger also self-heals by running `bluetoothctl remove` and retrying over LE. |
+| `No powered Bluetooth adapters found` | Radio is rfkill soft-blocked. `sudo rfkill unblock bluetooth`. The `bluetooth` service looks perfectly healthy in this state, which is why preflight checks rfkill separately. |
+| `BLE OBD adapter not found` | The dongle does not advertise a name containing `obd.ble_name` (default `VEEPEAK`). Scan for the real name, then pin `obd.ble_address`. |
+| Connects, then `every command went unanswered; resetting` | The vehicle is not awake. An EV must be in **READY**, not accessory mode, or the HV systems will not answer diagnostics. |
+| Repeated `retiring command …` | Those PIDs genuinely are not on this trim. Their columns stay blank; harmless. |
+| GPS device missing (`/dev/ttyS0` or `/dev/ttyAMA0`) | Wrong device for the board. Pi 4 uses `/dev/ttyS0` (mini UART; the PL011 is Bluetooth). Pi 5 uses `/dev/ttyAMA0` and needs `dtparam=uart0=on` plus a reboot. `setup_pi.sh` picks the right one — see [wiring.md](wiring.md). |
+| gpsd running but never a fix | Needs sky view. Cold start is 30 s–2 min. Check `snr` in `sensors.py`. |
+| `no I2C device at 0x68` | IMU wiring — SDA pin 3, SCL pin 5. Note many boards sold as MPU-6050 are actually MPU-6500 (`WHO_AM_I` returns `0x70`); the driver works either way. |
+| Uploads stop weeks in | Two kits sharing one cloud token. Each card built by `setup_kit.sh` gets its own; a *cloned* card needs `authorize_kit.sh`. Compare `token_fingerprint` in `/var/lib/obd-ev/upload-authorized.json` across kits. |
+| Participant gets no setup page | `/var/lib/obd-ev/provisioned.json` still exists from your testing. Remove it before shipping. |
+| Kit stops self-updating | `not a fast-forward` — `deploy` diverged from `main`. Treat `deploy` as merge-only. |
 
 ## When a kit comes back
 
@@ -235,21 +284,3 @@ sudo journalctl --vacuum-time=1d
 
 Then re-flash and rebuild for the next participant.
 
-## Checking the sensors
-
-```bash
-./scripts/sensors.py            # both, 1 Hz          --gps / --imu / --once
-```
-
-```
-22:44:00  GPS  fix=3D  sats=9   38.033554, -78.507980  alt 182.4m  speed 0.1 m/s  age 0.3s
-22:44:00  IMU  accel   0.12  -0.05   9.79 m/s2   gyro  0.01  0.00 -0.02 deg/s   |a|max  9.81  n=98
-```
-
-This drives the same reader classes the logger uses, so a clean run means the
-logging path works, not just that something is on the bus. `n=` is the number
-of IMU samples since the previous line — if it stays 0 the sensor isn't
-responding.
-
-Lower-level alternatives if you need them: `cgps -s` or `gpspipe -w` for GPS,
-`i2cdetect -y 1` to confirm the IMU answers at `0x68`.
