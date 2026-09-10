@@ -54,6 +54,7 @@ fi
 
 # -- is there anything to take? ---------------------------------------------
 branch="${OBD_EV_UPDATE_BRANCH:-$(git_as rev-parse --abbrev-ref HEAD)}"
+current="$(git_as rev-parse --abbrev-ref HEAD)"
 before="$(git_as rev-parse HEAD)"
 
 if ! git_as fetch --quiet origin "$branch" 2>/dev/null; then
@@ -62,17 +63,29 @@ if ! git_as fetch --quiet origin "$branch" 2>/dev/null; then
 fi
 remote="$(git_as rev-parse "origin/$branch" 2>/dev/null)"
 [ -z "$remote" ] && { log "no such branch origin/$branch"; exit 0; }
-[ "$before" = "$remote" ] && exit 0
+[ "$before" = "$remote" ] && [ "$current" = "$branch" ] && exit 0
 
+# Refuse before touching anything: a kit with local edits is one someone was
+# debugging, and silently discarding that would be worse than not updating.
 if [ -n "$(git_as status --porcelain --untracked-files=no)" ]; then
     log "local modifications present -- refusing to update"
     exit 1
 fi
 
-log "updating $branch: ${before:0:8} -> ${remote:0:8}"
-if ! git_as merge --ff-only "origin/$branch" --quiet; then
-    log "not a fast-forward -- refusing to update"
-    exit 1
+if [ "$current" != "$branch" ]; then
+    # A kit built from main needs to move onto the release branch once, so
+    # that later updates are ordinary fast-forwards of a tracking branch.
+    log "switching from $current to $branch"
+    if ! git_as checkout -B "$branch" --track "origin/$branch" --quiet; then
+        log "could not check out $branch"
+        exit 1
+    fi
+else
+    log "updating $branch: ${before:0:8} -> ${remote:0:8}"
+    if ! git_as merge --ff-only "origin/$branch" --quiet; then
+        log "not a fast-forward -- refusing to update"
+        exit 1
+    fi
 fi
 
 # -- apply, verify, roll back if it broke -----------------------------------
@@ -88,7 +101,8 @@ fi
 
 log "preflight FAILED after update -- rolling back to ${before:0:8}"
 sed -n 's/^  FAIL/    FAIL/p' /tmp/obd-ev-update-preflight
-git_as reset --hard "$before" --quiet
+git_as checkout -B "$current" --quiet "$before" 2>/dev/null \
+    || git_as reset --hard "$before" --quiet
 "$REPO_DIR/scripts/post_update.sh" || true
 systemctl restart obd-ev
 log "rolled back"

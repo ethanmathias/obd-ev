@@ -159,6 +159,28 @@ OBD_EV_UPDATE_MIN_INTERVAL=3600    # seconds between checks
 > participants' vehicles. Point it at a branch you promote to deliberately —
 > `deploy`, not `main` — so a work-in-progress commit cannot reach the fleet.
 
+### Release workflow
+
+`main` is where you work; `deploy` is what the kits run. Nothing reaches a kit
+until you merge:
+
+```bash
+git checkout deploy
+git merge main            # or: git merge main --ff-only
+git push origin deploy
+git checkout main
+```
+
+Kits pick that up the next time they have internet and are not mid-drive. A
+kit built from `main` moves itself onto `deploy` on its first update and
+fast-forwards from then on.
+
+To see what the fleet is running versus what you have staged:
+
+```bash
+git log --oneline deploy..main      # merged into main, not yet released
+```
+
 A NetworkManager hook fires `obd-ev-update.service` on connect. `self_update.sh`
 then:
 
